@@ -512,8 +512,6 @@ function calculateRatio() {
 // ==========================================
 // 3. MATH ENGINE FOR CALC 2 (Full Chain)
 // ==========================================
-
-// FIXED: Renamed to match your HTML's onclick="runFullChainCalc()"
 function runFullChainCalc() {
   const target = document.getElementById('itemSelect').value;
   const targetRate = parseFloat(document.getElementById('calcRate').value) || 1;
@@ -521,28 +519,36 @@ function runFullChainCalc() {
   if (!target || !recipes[target]) return;
 
   let rawCounts = {};
-  let machineCounts = {};
+  let assemblerCounts = {};
+  let processorCounts = {};
 
-  // Logic to calculate how many items/machines are needed per second
   function processRecipe(itemName, ratePerSec) {
     const item = recipes[itemName];
     if (!item) return;
 
     if (item.raw) {
-      rawCounts[itemName] = (rawCounts[itemName] || 0) + ratePerSec;
+      // Logic: If a mine produces 1 item every X seconds, 
+      // we need (Rate * CycleTime) total mines to keep up.
+      // Assuming a base cycle of 2s for raw extractors; adjust if your game differs.
+      const rawCycleTime = 2; 
+      rawCounts[itemName] = (rawCounts[itemName] || 0) + (ratePerSec * rawCycleTime);
       return;
     }
 
-    // This assumes 1 machine produces 1 item per cycle (defaulting to 1s if machine not in machineData)
-    // You can adjust this math if your specific game machines have different base speeds
-    const machineBase = Object.values(machineData).find(m => item.machine.includes(m.name)) || {time: 1};
-    const machinesNeeded = ratePerSec * machineBase.time;
-    
-    machineCounts[item.machine] = (machineCounts[item.machine] || 0) + machinesNeeded;
+    // Find machine stats to calculate total machine count instead of rate
+    const machineName = item.machine;
+    const machineStats = Object.values(machineData).find(m => machineName.includes(m.name)) || {time: 1};
+    const totalNeeded = ratePerSec * machineStats.time;
+
+    // Separate Assemblers from other machines (Furnaces, Cutters, Mixers, etc.)
+    if (machineName.toLowerCase().includes('assembler')) {
+      assemblerCounts[machineName] = (assemblerCounts[machineName] || 0) + totalNeeded;
+    } else {
+      processorCounts[machineName] = (processorCounts[machineName] || 0) + totalNeeded;
+    }
 
     if (item.inputs) {
       item.inputs.forEach(input => {
-        // Assuming 1:1 input ratio; multiply ratePerSec by recipe requirements if they differ
         processRecipe(input, ratePerSec); 
       });
     }
