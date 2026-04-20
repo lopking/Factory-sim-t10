@@ -372,6 +372,89 @@
       <div class="calc-result" id="calcResult"></div>
     </div>
   </div>
+	<div class="sec-title">🏭 Full Fluid Garnet → Refined Ingot Chain (Balanced Example)</div>
+
+  <div class="card" style="margin-bottom:28px;">
+    <div class="card-head cyan">Complete chain — what to build to run non-stop</div>
+    <div class="card-body">
+      <div style="font-family:Share Tech Mono,monospace;font-size:11px;color:var(--dim);margin-bottom:14px;">
+        Starting from mines → Fluid Garnet → Light/Heavy Fluid Garnet → refining ingots. Quantities are per 1 Tumbler at full speed.
+      </div>
+
+      <!-- Row 1: Sources -->
+      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Sources</div>
+      <div class="chain-flow" style="margin-bottom:16px;">
+        <div class="chain-node cn-mine">
+          <div class="cn-name">Ore Mine</div>
+          <div class="cn-count">20</div>
+          <div class="cn-label">per Tumbler</div>
+        </div>
+        <div class="chain-arrow">+</div>
+        <div class="chain-node cn-extract">
+          <div class="cn-name">Extractor</div>
+          <div class="cn-count">1.56</div>
+          <div class="cn-label">→ use 2</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Processing -->
+      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Processing</div>
+      <div class="chain-flow" style="margin-bottom:16px;flex-wrap:wrap;gap:6px;">
+        <div class="chain-node cn-machine2">
+          <div class="cn-name">Fluid Reactor</div>
+          <div class="cn-count">1</div>
+          <div class="cn-label">→ Fluid Garnet</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-machine">
+          <div class="cn-name">Multi-Flow Mixer</div>
+          <div class="cn-count">1.875</div>
+          <div class="cn-label">→ use 2</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-machine" style="border-color:rgba(255,215,0,0.4);">
+          <div class="cn-name" style="color:var(--gold);">Tumbler</div>
+          <div class="cn-count" style="color:var(--gold);">1</div>
+          <div class="cn-label">Refined Ingot ✓</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Also Needed -->
+      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Also Required for Fluid Supply</div>
+      <div class="chain-flow" style="gap:6px;">
+        <div class="chain-node cn-extract">
+          <div class="cn-name">Extractor</div>
+          <div class="cn-count">6.94</div>
+          <div class="cn-label">for Pressure Filter</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-machine2">
+          <div class="cn-name">Pressure Filter</div>
+          <div class="cn-count">1</div>
+          <div class="cn-label">→ Purified Alto</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-machine">
+          <div class="cn-name">Dist. Tower</div>
+          <div class="cn-count">2.38</div>
+          <div class="cn-label">→ use 3</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-machine" style="border-color:rgba(255,215,0,0.4);">
+          <div class="cn-name" style="color:var(--gold);">Mixer feeds</div>
+          <div class="cn-count" style="color:var(--gold);">0.75</div>
+          <div class="cn-label">← per tower</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center;padding:20px;color:var(--dim);font-family:Share Tech Mono,monospace;font-size:10px;letter-spacing:2px;border-top:1px solid var(--border);">
+  FACTORY SIM · MACHINE RATIO REFERENCE · TIER 10
+</footer>
+
 
 <script>
 const machineData = {
