@@ -682,21 +682,41 @@
   <!-- ═══════════════════════════════════════════════ -->
   <!--  SECTION 4 — CALCULATOR                         -->
   <!-- ═══════════════════════════════════════════════ -->
-<div class="panel">
-    <p style="margin-bottom: 10px; color: var(--dim);">Select an item to calculate total raw materials needed:</p>
-    <select id="calcTarget" style="padding: 10px; background: var(--panel2); color: var(--text); border: 1px solid var(--border); width: 300px;">
-      <option value="Olympus Dyson Axiom">Olympus Dyson Axiom (Tier 10)</option>
-      <option value="Godspark">Godspark</option>
-      <option value="Eveready Petroleum">Eveready Petroleum</option>
-      </select>
-    <input type="number" id="calcAmount" value="1" min="1" style="padding: 10px; background: var(--panel2); color: var(--text); border: 1px solid var(--border); width: 80px;">
-    <button class="btn" onclick="runCalculation()">Calculate Total</button>
+ <div class="sec-title gold">🧮 Machine Scale Calculator</div>
+
+  <div class="card" style="margin-bottom:28px;">
+    <div class="card-head gold">How many mines/extractors do I need for N machines?</div>
+    <div class="card-body">
+      <div class="calc-row">
+        <div class="calc-group">
+          <label>Select Machine</label>
+          <select id="calcMachine">
+            <option value="single">Single Assembler (3.125s)</option>
+            <option value="dual">Dual Assembler (1.875s)</option>
+            <option value="quad">Quad Assembler (1.875s)</option>
+            <option value="triple">Triple Assembler (1.667s)</option>
+            <option value="accel">Accelerator (1.429s)</option>
+            <option value="workstation">Workstation (1.429s)</option>
+            <option value="quint">Quintuple Assembler (2.5s)</option>
+            <option value="spectrum">Spectrum Cutter (0.5s)</option>
+            <option value="reactor">Fluid Reactor (1.0s)</option>
+            <option value="filter">Pressure Filter (1.5s)</option>
+            <option value="distill">Distillation Tower (0.25s)</option>
+            <option value="formInj">Form Injector (0.75s)</option>
+            <option value="mixer">Multi-Flow Mixer (0.25s)</option>
+            <option value="tumbler">Tumbler (0.25s)</option>
+          </select>
+        </div>
+        <div class="calc-group">
+          <label>Number of Machines</label>
+          <input type="number" id="calcCount" value="1" min="1" max="500" style="width:100px;">
+        </div>
+        <button class="calc-btn" onclick="calculate()">Calculate →</button>
+      </div>
+      <div class="calc-result" id="calcResult"></div>
+    </div>
   </div>
 
-  <div class="panel" id="resultsArea" style="display: none;">
-    <h3 style="color: var(--gold); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">RAW MATERIALS REQUIRED:</h3>
-    <div id="outputList"></div>
-  </div>
   <!-- ═══════════════════════════════════════════════ -->
   <!--  SECTION 5 — VISUAL FULL CHAIN                  -->
   <!-- ═══════════════════════════════════════════════ -->
@@ -784,252 +804,68 @@
 </footer>
 
 <script>
-const recipes = {
-  // RAW RESOURCES
-  'Vein Petroleum':       { raw:true, icon:'💧', source:'Petroleum Extractor',       type:'fluid', price:'$15SpD' },
-  'Aqueous Alto':         { raw:true, icon:'💧', source:'Aqueous Alto Extractor',     type:'fluid', price:'$20SpD' },
-  'Mesossential Wood':    { raw:true, icon:'🌳', source:'Mesossential Tree Farm',     type:'mine',  price:'$1.50cD' },
-  'Terrastrix Ore':       { raw:true, icon:'⛏', source:'Terrastrix Ore Mine',        type:'mine',  price:'$2.50cD' },
-  'Stratosteel Ore':      { raw:true, icon:'⛏', source:'Stratosteel Ore Mine',       type:'mine',  price:'$30cD' },
-  'Coreodeon Ore':        { raw:true, icon:'⛏', source:'Coreodeon Ore Mine',         type:'mine',  price:'$30cD' },
-  'Aerelium Crystal':     { raw:true, icon:'💎', source:'Aerelium Crystal Mine',      type:'mine',  price:'$30cD' },
-  'Chromastone Crystal':  { raw:true, icon:'🔮', source:'Chromastone Mine',           type:'mine',  price:'$50cD' },
-  'Used Filter':          { raw:true, icon:'♻', source:'Byproduct of Pressure Filter', type:'byproduct', price:'$400cD', note:'Produced by same machine — recycle it' },
-
-  // ── WOOD CHAIN ──
-  'Mesossential Wood Boards': { machine:'T10+ Cutter',     icon:'🪵', price:'$40cD',     inputs:['Mesossential Wood'] },
-  'Pressurized Meso Wood':    { machine:'Press',           icon:'🟫', price:'$6.50cD',   inputs:['Mesossential Wood Boards'] },
-  'Meso Wood Shreds':         { machine:'T10+ Cutter',     icon:'🪵', price:'$8.50cD',   inputs:['Pressurized Meso Wood'] },
-  'Mesossential Sap':         { machine:'T10+ Furnace',    icon:'🟤', price:'$20.50cD',  inputs:['Pressurized Meso Wood'] },
-  'Meso Wood Panel':          { machine:'T10+ Assembler',  icon:'🟫', price:'$220cD',    inputs:['Pressurized Meso Wood'] },
-  'Meso Wood Sheet':          { machine:'Press',          icon:'🟫', price:'$32.50cD',  inputs:['Meso Wood Panel'] },
-  'Meso Fiber Filter':        { machine:'T10+ Assembler',  icon:'🟨', price:'$500cD',    inputs:['Meso Wood Sheet'] },
-  'Meso Polyhedron':          { machine:'T10+ Triple Assembler', icon:'🔷', price:'$2500cD', inputs:['Meso Wood Panel','Meso Wood Panel','Meso Wood Panel'], note:'3x Meso Wood Panel' },
-  'Ascendeso Wood Panel':     { machine:'T10+ Form Injector',   icon:'🔵', price:'$1100cD',  inputs:['Radiating Alto','Meso Wood Panel'] },
-  'Ascendeso Wood Sheet':     { machine:'Press',                icon:'🔵', price:'$1450cD',  inputs:['Ascendeso Wood Panel'] },
-  'Ascendeso Fiber Filter':   { machine:'T10+ Assembler',        icon:'🔵', price:'$1950cD',  inputs:['Ascendeso Wood Sheet'] },
-  'Enamel':                   { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$77.50cD', inputs:['Meso Wood Shreds','Aerelium Compound'] },
-  'Hardened Charm Casing':    { machine:'102+ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
-
-  // ── AERELIUM CHAIN ──
-  'Aerelium Shard':           { machine:'T10+ Grinder',           icon:'✨', price:'$1.50cD',  inputs:['Aerelium Crystal'] },
-  'Aerelium Glitter Dust':    { machine:'T10+ Spindle',          icon:'✨', price:'$50cD',    inputs:['Aerelium Shard'] },
-  'Aerelium Dust Cluster':    { machine:'T10+ Mechanical Mortar', icon:'✨', price:'$1.80cD',  inputs:['Aerelium Shard'] },
-  'Aerelium Compound':        { machine:'T10+ Furnace',           icon:'✨', price:'$2.25cD',  inputs:['Aerelium Dust Cluster'] },
-  'Aerelium Gem':             { machine:'T10+ Laser Cutter',      icon:'💎', price:'$60cD',    inputs:['Aerelium Crystal'] },
-  'Concentrated Aerelium Gem':{ machine:'T10+ Energy Concentrator',icon:'💎',price:'$130cD',   inputs:['Aerelium Gem'] },
-  'Aerelium Charm':           { machine:'T10+ Assembler',         icon:'🔮', price:'$350cD',   inputs:['Concentrated Aerelium Gem'] },
-
-  // ── CHROMASTONE CHAIN ──
-  'Chromastone Gem':             { machine:'T10+ Laser Cutter',        icon:'🔮', price:'$100cD',   inputs:['Chromastone Crystal'] },
-  'Concentrated Chromastone Gem':{ machine:'T10+ Energy Concentrator', icon:'🔮', price:'$110cD',   inputs:['Chromastone Gem'] },
-  'Chromastone Dye':             { machine:'T10+ Furnace',             icon:'🟣', price:'$19.50cD', inputs:['Concentrated Chromastone Gem'] },
-  'Chromastone Charm':           { machine:'T10+ Assembler',           icon:'🔮', price:'$650cD',   inputs:['Concentrated Chromastone Gem'] },
-  'Chromastone Spark':           { machine:'T10+ Spindle',            icon:'⚡', price:'$95.50cD', inputs:['Chromastone Charm'] },
-  'Reatomized Chromastone':      { machine:'T10+ Accelerator',         icon:'🔮', price:'$52.50cD', inputs:['Chromastone Crystal','Mesossential Sap'] },
-
-  // ── GEMS & DYES ──
-  'Red Gem':              { machine:'T10+ Spectrum Cutter',      icon:'🔴', price:'$160cD',   inputs:['Chromastone Gem'] },
-  'Green Gem':            { machine:'T10+ Spectrum Cutter',      icon:'🟢', price:'$160cD',   inputs:['Chromastone Gem'] },
-  'Blue Gem':             { machine:'T10+ Spectrum Cutter',      icon:'🔵', price:'$160cD',   inputs:['Chromastone Gem'] },
-  'Concentrated Red Gem': { machine:'T10+ Energy Concentrator',   icon:'🔴', price:'$340cD',   inputs:['Red Gem'] },
-  'Concentrated Green Gem':{ machine:'T10+ Energy Concentrator',  icon:'🟢', price:'$340cD',   inputs:['Green Gem'] },
-  'Concentrated Blue Gem':{ machine:'T10+ Energy Concentrator',   icon:'🔵', price:'$340cD',   inputs:['Blue Gem'] },
-  'Red Dye':              { machine:'T10+ Furnace',               icon:'🔴', price:'$46.50cD', inputs:['Concentrated Red Gem'] },
-  'Green Dye':            { machine:'T10+ Furnace',               icon:'🟢', price:'$46.50cD', inputs:['Concentrated Green Gem'] },
-  'Blue Dye':             { machine:'T10+ Furnace',               icon:'🔵', price:'$46.50cD', inputs:['Concentrated Blue Gem'] },
-  'Cyan Dye':             { machine:'T10+ Dual Assembler',        icon:'🟦', price:'$1650cD',  inputs:['Blue Dye','Green Dye'] },
-  'Purple Dye':           { machine:'T10+ Dual Assembler',        icon:'🟣', price:'$1650cD',  inputs:['Red Dye','Blue Dye'] },
-  'Essential Chroma Dye': { machine:'T10+ Accelerator',           icon:'🌈', price:'$72.50cD', inputs:['Mesossential Sap','Chromastone Dye'] },
-  'Godspark':             { machine:'T10+ Triple Assembler',      icon:'⚡', price:'$1.44NvD', inputs:['Chromastone Spark','Aerelium Charm','Cyan Dye'] },
-  'Godspark Charm':       { machine:'T10+ Dual Assembler',        icon:'⚡', price:'$5.25NvD', inputs:['Godspark','Hardened Charm Casing'] },
-
-  // ── PETROLEUM & ALTO FLUID CHAIN ──
-  'Eveready Petroleum':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$27.5SpD',
-                             inputs:['Meso Fiber Filter','Vein Petroleum','Used Filter'],
-                             note:'500L Vein Petroleum → 500L Eveready + Used Filter (byproduct)' },
-  'Treated Alto Fluid':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$35SpD',
-                             inputs:['Meso Fiber Filter','Aqueous Alto','Used Filter'],
-                             note:'500L Aqueous Alto → 500L Treated Alto + Used Filter (byproduct)' },
-  'Light Fraction':       { machine:'T10+ Distillation Tower', icon:'🧪', price:'$27.5SpD',
-                             inputs:['Eveready Petroleum'],
-                             note:'35L Eveready → 15L Heavy + 15L Medium + 15L Light' },
-  'Medium Fraction':      { machine:'T10+ Distillation Tower', icon:'🧪', price:'$30SpD',
-                             inputs:['Eveready Petroleum'],
-                             note:'35L Eveready → 15L Heavy + 15L Medium + 15L Light' },
-  'Heavy Fraction':       { machine:'T10+ Distillation Tower', icon:'🧪', price:'$32.5SpD',
-                             inputs:['Eveready Petroleum'],
-                             note:'35L Eveready → 15L Heavy + 15L Medium + 15L Light' },
-  'Alto Thinner':         { machine:'T10+ Distillation Tower', icon:'🧪', price:'$35SpD',
-                             inputs:['Treated Alto Fluid'],
-                             note:'35L Treated → 15L Primer + 15L Essence + 15L Thinner' },
-  'Alto Essence':         { machine:'T10+ Distillation Tower', icon:'🧪', price:'$37.5SpD',
-                             inputs:['Treated Alto Fluid'],
-                             note:'35L Treated → 15L Primer + 15L Essence + 15L Thinner' },
-  'Alto Primer':          { machine:'T10+ Distillation Tower', icon:'🧪', price:'$40SpD',
-                             inputs:['Treated Alto Fluid'],
-                             note:'35L Treated → 15L Primer + 15L Essence + 15L Thinner' },
-  'Rough Garnet':         { machine:'T10+ Grinder',             icon:'💠', price:'$800SpD',  inputs:['Aerelium Compound'] },
-  'Fluid Garnet':         { machine:'T10+ Fluid Reactor',      icon:'💠', price:'$25.5SpD',
-                             inputs:['Rough Garnet','Vein Petroleum'],
-                             note:'Rough Garnet + 125L Vein Petroleum → 150L Fluid Garnet' },
-  'Balancer Solution':    { machine:'T10+ Fluid Reactor',      icon:'⚗', price:'$625SpD',
-                             inputs:['Essential Chroma Dye','Vein Petroleum'],
-                             note:'Essential Chroma Dye + 125L Vein Petroleum → 150L Balancer' },
-  'Light Fluid Garnet':   { machine:'T10+ Multi-Flow Mixer',   icon:'💎', price:'$800SpD',
-                             inputs:['Balancer Solution','Fluid Garnet','Light Fraction'],
-                             note:'20L each → 50L Light Fluid Garnet' },
-  'Heavy Fluid Garnet':   { machine:'T10+ Multi-Flow Mixer',   icon:'💎', price:'$850SpD',
-                             inputs:['Balancer Solution','Fluid Garnet','Heavy Fraction'],
-                             note:'20L each → 50L Heavy Fluid Garnet' },
-  'Alto Blend':           { machine:'T10+ Multi-Flow Mixer',   icon:'⚗', price:'$950SpD',
-                             inputs:['Alto Thinner','Alto Primer','Balancer Solution'],
-                             note:'20L each → 50L Alto Blend' },
-  'Purified Alto Blend':  { machine:'T10+ Pressure Filter',    icon:'⚗', price:'$2150cD',
-                             inputs:['Ascendeso Fiber Filter','Alto Blend','Used Filter'],
-                             note:'500L Alto Blend → 500L Purified + Used Filter (byproduct)' },
-  'Energized Alto Blend': { machine:'T10+ Fluid Reactor',      icon:'⚡', price:'$3.20cD',
-                             inputs:['Reatomized Chromastone','Purified Alto Blend'],
-                             note:'Reatomized Chromastone + 125L Purified → 150L Energized' },
-  'Cloudy Alloy Mix':     { machine:'T10+ Multi-Flow Mixer',   icon:'🌫', price:'$4.15cD',
-                             inputs:['Fine Residue','Energized Alto Blend','Medium Fraction'],
-                             note:'20L Fine Residue + 20L EAB + 20L Medium Fraction' },
-  'Radiating Alto':       { machine:'T10+ Liquid Caster',      icon:'☢', price:'$15.50cD',  inputs:['Alto Essence'], note:'200L Alto Essence → Radiating Alto (solid)' },
-  'Crossed Alto Alloy':   { machine:'T10+ Liquid Caster',      icon:'⬡', price:'$1NvD',     inputs:['Cloudy Alloy Mix'], note:'200L Cloudy Alloy Mix → Crossed Alto Alloy (solid)' },
-
-  // ── ORE PROCESSING ──
-  'Terrastrix Gravel':    { machine:'T10+ Ore Crusher',  icon:'🪨', price:'$6.50cD',  inputs:['Terrastrix Ore'] },
-  'Primed Terrastrix':    { machine:'T10+ Mixer',        icon:'🟩', price:'$23.50cD', inputs:['Terrastrix Gravel','Aerelium Dust Cluster'] },
-  'Saturated Terrastrix': { machine:'T10+ Mixer',        icon:'🟩', price:'$250cD',   inputs:['Terrastrix Gravel','Aerelium Glitter Dust'] },
-  'Terrastrix Node':      { machine:'T10+ Induction Smelter', icon:'🟩', price:'$630cD',  inputs:['Primed Terrastrix'] },
-  'Living Terrastrix':    { machine:'T10+ Induction Smelter', icon:'🟩', price:'$680cD',  inputs:['Saturated Terrastrix'] },
-  'Tough Terrastrix Ingot':{ machine:'T10+ Alloy Smelter',    icon:'🟩', price:'$2400cD', inputs:['Living Terrastrix','Terrastrix Node'] },
-  'Terrastrix Ingot':     { machine:'T10+ Tumbler',          icon:'🟩', price:'$3600cD',
-                             inputs:['Tough Terrastrix Ingot','Heavy Fluid Garnet'],
-                             note:'+ 30L Heavy Fluid Garnet | also yields Rough Residue' },
-  'Refined Terrastrix Ingot': { machine:'T10+ Tumbler',      icon:'🟩', price:'$4500cD',
-                             inputs:['Terrastrix Ingot','Light Fluid Garnet'],
-                             note:'+ 30L Light Fluid Garnet | also yields Fine Residue' },
-  'Terrastrix Sand':      { machine:'T10+ Grinder',           icon:'🟩', price:'$1500cD', inputs:['Terrastrix Ingot'] },
-  'Enriched Terrastrix Sand':{ machine:'T10+ Spindle',       icon:'🟩', price:'$2050cD', inputs:['Terrastrix Sand'] },
-  'Rough Residue':        { machine:'T10+ Tumbler',          icon:'♻', price:'$100SpD', inputs:['Tough Terrastrix Ingot','Heavy Fluid Garnet'], note:'Byproduct when making Terrastrix Ingot' },
-  'Fine Residue':         { machine:'T10+ Tumbler',          icon:'♻', price:'$250SpD', inputs:['Terrastrix Ingot','Light Fluid Garnet'], note:'Byproduct when making Refined Ingot' },
-
-  'Stratosteel Gravel':   { machine:'T10+ Ore Crusher',       icon:'🩶', price:'$7.50cD',  inputs:['Stratosteel Ore'] },
-  'Primed Stratosteel':   { machine:'T10+ Mixer',             icon:'🩶', price:'$270cD',   inputs:['Stratosteel Gravel','Aerelium Dust Cluster'] },
-  'Saturated Stratosteel':{ machine:'T10+ Mixer',             icon:'🩶', price:'$290cD',   inputs:['Stratosteel Gravel','Aerelium Glitter Dust'] },
-  'Stratosteel Node':     { machine:'T10+ Induction Smelter', icon:'🩶', price:'$720cD',   inputs:['Primed Stratosteel'] },
-  'Living Stratosteel':   { machine:'T10+ Induction Smelter', icon:'🩶', price:'$750cD',   inputs:['Saturated Stratosteel'] },
-  'Tough Stratosteel Ingot':{ machine:'T10+ Alloy Smelter',   icon:'🩶', price:'$2550cD',  inputs:['Living Stratosteel','Stratosteel Node'] },
-  'Stratosteel Ingot':    { machine:'T10+ Tumbler',          icon:'🩶', price:'$3700cD',  inputs:['Tough Stratosteel Ingot','Heavy Fluid Garnet'], note:'+ 30L Heavy Fluid Garnet' },
-  'Refined Stratosteel Ingot':{ machine:'T10+ Tumbler',      icon:'🩶', price:'$5050cD',  inputs:['Stratosteel Ingot','Light Fluid Garnet'], note:'+ 30L Light Fluid Garnet' },
-  'Stratosteel Sand':     { machine:'T10+ Grinder',           icon:'🩶', price:'$1700cD',  inputs:['Stratosteel Ingot'] },
-  'Enriched Stratosteel Sand':{ machine:'T10+ Spindle',      icon:'🩶', price:'$2250cD',  inputs:['Stratosteel Sand'] },
-
-  'Coreodeon Gravel':     { machine:'T10+ Ore Crusher',       icon:'🔷', price:'$7.50cD',  inputs:['Coreodeon Ore'] },
-  'Primed Coreodeon':     { machine:'T10+ Mixer',             icon:'🔷', price:'$270cD',   inputs:['Coreodeon Gravel','Aerelium Dust Cluster'] },
-  'Saturated Coreodeon':  { machine:'T10+ Mixer',             icon:'🔷', price:'$290cD',   inputs:['Coreodeon Gravel','Aerelium Glitter Dust'] },
-  'Coreodeon Node':       { machine:'T10+ Induction Smelter', icon:'🔷', price:'$720cD',   inputs:['Primed Coreodeon'] },
-  'Living Coreodeon':     { machine:'T10+ Induction Smelter', icon:'🔷', price:'$750cD',   inputs:['Saturated Coreodeon'] },
-  'Tough Coreodeon Ingot':{ machine:'T10+ Alloy Smelter',     icon:'🔷', price:'$2550cD',  inputs:['Living Coreodeon','Coreodeon Node'] },
-  'Coreodeon Ingot':      { machine:'T10+ Tumbler',          icon:'🔷', price:'$3700cD',  inputs:['Tough Coreodeon Ingot','Heavy Fluid Garnet'], note:'+ 30L Heavy Fluid Garnet' },
-  'Refined Coreodeon Ingot':{ machine:'T10+ Tumbler',        icon:'🔷', price:'$5050cD',  inputs:['Coreodeon Ingot','Light Fluid Garnet'], note:'+ 30L Light Fluid Garnet' },
-
-  // ── ALLOY INGOTS ──
-  'Terrasteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.05NvD', inputs:['Refined Terrastrix Ingot','Enriched Stratosteel Sand'] },
-  'Stratostrix Alloy Ingot': { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Stratosteel Ingot','Enriched Terrastrix Sand'] },
-  'Coreostrix Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
-  'Coreosteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.2NvD',  inputs:['Refined Coreodeon Ingot','Enriched Stratosteel Sand'] },
-
-  // ── END-GAME ──
-  'Alto Alloy Core':       { machine:'T10+ Dual Assembler',      icon:'⚙', price:'$7.05NvD', inputs:['Crossed Alto Alloy','Crossed Alto Alloy'], note:'2x Crossed Alto Alloy → Alto Alloy Core' },
-  'Gravisphere':           { machine:'T10+ Dual Assembler',      icon:'🌐', price:'$12.5NvD', inputs:['Concentrated Chromastone Gem','Alto Alloy Core'] },
-  'Cloudy Sphere Field':   { machine:'T10+ Workstation',         icon:'🌐', price:'$25NvD',   inputs:['Gravisphere'] },
-  'Terra Mechanical Gear': { machine:'T10+ Triple Assembler',    icon:'⚙', price:'$20.5NvD', inputs:['Refined Coreodeon Mechanism','Terrasteel Alloy Gear','Red Dye'] },
-  'Strato Mechanical Gear':{ machine:'T10+ Triple Assembler',    icon:'⚙', price:'$21.5NvD', inputs:['Refined Coreodeon Mechanism','Stratostrix Alloy Gear','Green Dye'] },
-  'Refined Coreodeon Mechanism':{ machine:'T10+ Assembler',      icon:'⚙', price:'$1.15NvD', inputs:['Refined Coreodeon Gear'] },
-  'Refined Coreodeon Gear':{ machine:'T10+ Gear Press',          icon:'⚙', price:'$7200cD',  inputs:['Refined Coreodeon Plate'] },
-  'Refined Coreodeon Plate':{ machine:'Press',                  icon:'🔷', price:'$6150cD',  inputs:['Refined Coreodeon Ingot'] },
-  'Terrasteel Alloy Plate':{ machine:'Press',                   icon:'🟫', price:'$1.3NvD',  inputs:['Terrasteel Alloy Ingot'] },
-  'Terrasteel Alloy Gear': { machine:'T10+ Gear Press',          icon:'⚙', price:'$1.55NvD', inputs:['Terrasteel Alloy Plate'] },
-  'Stratostrix Alloy Plate':{ machine:'Press',                  icon:'🟫', price:'$1.35NvD', inputs:['Stratostrix Alloy Ingot'] },
-  'Stratostrix Alloy Gear':{ machine:'T10+ Gear Press',          icon:'⚙', price:'$1.6NvD',  inputs:['Stratostrix Alloy Plate'] },
-  'Dome Gyroscope':        { machine:'T10+ Triple Assembler',    icon:'🔄', price:'$35.5NvD', inputs:['Refined Terrastrix Ring','Refined Stratosteel Ring','Bunch of Coreodeon Screws'] },
-  'Refined Terrastrix Ring':{ machine:'T10+ Assembler',          icon:'⭕', price:'$9950cD',  inputs:['Refined Terrastrix Pipe'] },
-  'Refined Terrastrix Pipe':{ machine:'T10+ Rolling Machine',    icon:'🟢', price:'$6950cD',  inputs:['Refined Terrastrix Plate'] },
-  'Refined Terrastrix Plate':{ machine:'Press',                 icon:'🟩', price:'$5750cD',  inputs:['Refined Terrastrix Ingot'] },
-  'Refined Stratosteel Ring':{ machine:'T10+ Assembler',         icon:'⭕', price:'$1.2NvD',  inputs:['Refined Stratosteel Pipe'] },
-  'Refined Stratosteel Pipe':{ machine:'T10+ Rolling Machine',   icon:'🩶', price:'$7250cD',  inputs:['Refined Stratosteel Plate'] },
-  'Refined Stratosteel Plate':{ machine:'Press',                icon:'🩶', price:'$6150cD',  inputs:['Refined Stratosteel Ingot'] },
-  'Bunch of Coreodeon Screws':{ machine:'T10+ Spindle',         icon:'🔩', price:'—',        inputs:['Refined Coreodeon Screw'] },
-  'Refined Coreodeon Screw':{ machine:'T10+ Assembler',          icon:'🔩', price:'$8400cD',  inputs:['Refined Coreodeon Rod'] },
-  'Refined Coreodeon Rod': { machine:'T10+ Extruder',            icon:'🔷', price:'$6250cD',  inputs:['Refined Coreodeon Ingot'] },
-  'Terra Alloy Axiom':     { machine:'T10+ Dual Assembler',      icon:'⭐', price:'$50NvD',   inputs:['Terrasteel Alloy Gyroscope','Large Terrasteel Alloy Gyroscope'] },
-  'Terrasteel Alloy Gyroscope':  { machine:'T10+ Dual Assembler',icon:'🔄', price:'$8.45NvD', inputs:['Terrasteel Alloy Ring','Terrasteel Alloy Screw'] },
-  'Large Terrasteel Alloy Gyroscope':{ machine:'T10+ Dual Assembler',icon:'🔄', price:'$10.5NvD', inputs:['Large Terrasteel Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
-  'Terrasteel Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2NvD',    inputs:['Terrasteel Alloy Pipe'] },
-  'Terrasteel Alloy Pipe': { machine:'T10+ Rolling Machine',     icon:'🟫', price:'$1.45NvD', inputs:['Terrasteel Alloy Plate'] },
-  'Terrasteel Alloy Rod':  { machine:'T10+ Extruder',            icon:'🟫', price:'$1.35NvD', inputs:['Terrasteel Alloy Ingot'] },
-  'Terrasteel Alloy Screw':{ machine:'T10+ Assembler',           icon:'🔩', price:'$1.9NvD',  inputs:['Terrasteel Alloy Rod'] },
-  'Large Terrasteel Alloy Ring':{ machine:'T10+ Rolling Machine',icon:'⭕', price:'$1.65NvD', inputs:['Terrasteel Alloy Rod'] },
-  'Coreosteel Alloy Rod':  { machine:'T10+ Extruder',            icon:'🟫', price:'$1.45NvD', inputs:['Coreosteel Alloy Ingot'] },
-  'Coreosteel Alloy Screw':{ machine:'T10+ Assembler',           icon:'🔩', price:'$1.95NvD', inputs:['Coreosteel Alloy Rod'] },
-  'Bunch of Coreosteel Alloy Screws':{ machine:'T10+ Spindle',  icon:'🔩', price:'$2.65NvD', inputs:['Coreosteel Alloy Screw'] },
-  'Refined Coreodeon Bearing':{ machine:'T10+ Dual Assembler',   icon:'🔘', price:'$5.25NvD', inputs:['Refined Coreodeon Sleeve','Refined Coreodeon Ring'] },
-  'Refined Coreodeon Sleeve':{ machine:'T10+ Assembler',         icon:'🔷', price:'$1.25NvD', inputs:['Circular Coreodeon Plate'] },
-  'Refined Coreodeon Ring':{ machine:'T10+ Assembler',           icon:'⭕', price:'$1.1NvD',  inputs:['Refined Coreodeon Pipe'] },
-  'Refined Coreodeon Pipe':{ machine:'T10+ Rolling Machine',     icon:'🔷', price:'$7250cD',  inputs:['Refined Coreodeon Plate'] },
-  'Circular Coreodeon Plate':{ machine:'T10+ Workstation',       icon:'🔷', price:'$7650cD',  inputs:['Refined Coreodeon Plate'] },
-  'Dome Field':            { machine:'T10+ Triple Assembler',    icon:'🌐', price:'$225NvD',  inputs:['Purple Dye','Dome Gyroscope','Cloudy Sphere Field'] },
-  'Celestial Supergear':   { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$290NvD',  inputs:['Refined Coreodeon Bearing','Strato Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
-  'Divine Supergear':      { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$300NvD',  inputs:['Refined Coreodeon Bearing','Terra Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
-  'Coreostrix Alloy Ingot':{ machine:'T10+ Alloy Smelter',       icon:'🔷', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
-  'Coreostrix Alloy Plate':{ machine:'Press',                   icon:'🔷', price:'$1.35NvD', inputs:['Coreostrix Alloy Ingot'] },
-  'Coreostrix Alloy Pipe': { machine:'T10+ Rolling Machine',     icon:'🔷', price:'$1.5NvD',  inputs:['Coreostrix Alloy Plate'] },
-  'Coreostrix Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2.05NvD', inputs:['Coreostrix Alloy Pipe'] },
-  'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
-  'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
+const machineData = {
+  single:      { name:'Single Assembler',      time:3.125, mines:1.6,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  dual:        { name:'Dual Assembler',         time:1.875, mines:2.67,    extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  quad:        { name:'Quad Assembler',         time:1.875, mines:2.67,    extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  triple:      { name:'Triple Assembler',       time:1.667, mines:3.0,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  accel:       { name:'Accelerator',            time:1.429, mines:3.5,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  workstation: { name:'Workstation',            time:1.429, mines:3.5,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  quint:       { name:'Quintuple Assembler',    time:2.5,   mines:2.0007,  extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  spectrum:    { name:'Spectrum Cutter',        time:0.5,   mines:20,      extractors:0,    mineLabel:'Chromastone mines', extractLabel:'' },
+  reactor:     { name:'Fluid Reactor',          time:1.0,   mines:5,       extractors:2.604,mineLabel:'ore mines',  extractLabel:'fluid extractors' },
+  filter:      { name:'Pressure Filter',        time:1.5,   mines:3.33,    extractors:6.94, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
+  distill:     { name:'Distillation Tower',     time:0.25,  mines:0,       extractors:0,    mineLabel:'',           extractLabel:'' },
+  formInj:     { name:'Form Injector',          time:0.75,  mines:6.67,    extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
+  mixer:       { name:'Multi-Flow Mixer',       time:0.25,  mines:0,       extractors:0,    mineLabel:'',           extractLabel:'' },
+  tumbler:     { name:'Tumbler',                time:0.25,  mines:20,      extractors:1.56, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
 };
-// 2. THE MATH ENGINE
-function runCalculation() {
-  const target = document.getElementById('calcTarget').value;
-  const amount = parseInt(document.getElementById('calcAmount').value);
-  let totals = {};
 
-  // Recursive function to dig down to the raw materials
-  function dig(itemName, qty) {
-    const recipe = recipes[itemName];
-    if (!recipe) return;
+function calculate() {
+  const key = document.getElementById('calcMachine').value;
+  const n = parseFloat(document.getElementById('calcCount').value) || 1;
+  const m = machineData[key];
+  const res = document.getElementById('calcResult');
 
-    if (recipe.raw) {
-      totals[itemName] = (totals[itemName] || 0) + qty;
-      return;
-    }
+  const totalMines = m.mines * n;
+  const totalExt   = m.extractors * n;
+  const minesRound = Math.ceil(totalMines);
+  const extRound   = Math.ceil(totalExt);
 
-    if (recipe.inputs) {
-      recipe.inputs.forEach(inputName => {
-        dig(inputName, qty); // Note: If items yield more than 1, you'd divide here
-      });
-    }
+  let html = `<div style="font-family:Share Tech Mono,monospace;font-size:12px;line-height:2.2;">`;
+  html += `<div class="cr-line">Running <em style="font-size:18px;color:var(--gold)">${n}</em> <strong>${m.name}</strong> machines at full speed:</div>`;
+  html += `<div style="height:8px;"></div>`;
+
+  if (totalMines > 0) {
+    html += `<div class="cr-line">
+      🟢 <span class="cr-num">${totalMines.toFixed(2)}</span>
+      <span style="color:var(--text)">${m.mineLabel} needed</span>
+      <span class="cr-sep">|</span>
+      <span style="color:var(--green)">Round up → <strong style="color:#fff">${minesRound} mines</strong></span>
+    </div>`;
   }
 
-  // Start digging
-  dig(target, amount);
-
-  // Show the results on screen
-  const outputList = document.getElementById('outputList');
-  outputList.innerHTML = '';
-  
-  for (const [material, totalQty] of Object.entries(totals)) {
-    outputList.innerHTML += `
-      <div class="result-item">
-        <span style="color: var(--green);">${recipes[material].icon} ${material}</span>
-        <span style="color: var(--accent); font-weight: bold;">x${totalQty}</span>
-      </div>
-    `;
+  if (totalExt > 0) {
+    html += `<div class="cr-line">
+      🟠 <span class="cr-num">${totalExt.toFixed(2)}</span>
+      <span style="color:var(--text)">${m.extractLabel} needed</span>
+      <span class="cr-sep">|</span>
+      <span style="color:var(--orange)">Round up → <strong style="color:#fff">${extRound} extractors</strong></span>
+    </div>`;
   }
-  
-  document.getElementById('resultsArea').style.display = 'block';
+
+  if (totalMines === 0 && totalExt === 0) {
+    html += `<div style="color:var(--dim)">This machine is fed by other machines (no direct mine input needed).</div>`;
+  }
+
+  html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--dim);">
+    Cycle time: <em>${m.time}s</em> per machine
+    · Total throughput: <em>${(n / m.time).toFixed(2)}</em> items/second
+  </div>`;
+  html += `</div>`;
+
+  res.innerHTML = html;
+  res.classList.add('show');
 }
 </script>
 </body>
