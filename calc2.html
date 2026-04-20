@@ -1,348 +1,81 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Factory Sim — Machine Ratios</title>
+<title>Factory Sim — Calculators</title>
 <style>
+  /* Use your exact same CSS from index.html here */
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
-
-  :root {
-    --bg: #080b0f;
-    --panel: #0d1117;
-    --panel2: #111720;
-    --border: #1c2530;
-    --accent: #00e5ff;
-    --green: #39ff14;
-    --orange: #ff8c42;
-    --purple: #bf7fff;
-    --gold: #ffd700;
-    --red: #ff4466;
-    --text: #c8d8e8;
-    --dim: #4a5a6a;
-  }
-
+  :root { --bg: #080b0f; --panel: #0d1117; --panel2: #111720; --border: #1c2530; --accent: #00e5ff; --green: #39ff14; --orange: #ff8c42; --purple: #bf7fff; --gold: #ffd700; --text: #c8d8e8; --dim: #4a5a6a; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Exo 2', sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,229,255,0.012) 3px, rgba(0,229,255,0.012) 4px);
-    pointer-events: none;
-    z-index: 999;
-  }
-
-  /* ── HEADER ── */
-  header {
-    padding: 28px 32px 22px;
-    border-bottom: 2px solid var(--accent);
-    background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f);
-    position: relative;
-    overflow: hidden;
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent) 40%, var(--purple) 60%, transparent);
-  }
-  header .glow {
-    position: absolute; top: -80px; left: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 160px;
-    background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%);
-    pointer-events: none;
-  }
-  h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 26px; font-weight: 900;
-    letter-spacing: 4px; text-transform: uppercase;
-    color: var(--accent);
-    text-shadow: 0 0 24px rgba(0,229,255,0.5);
-  }
-  .btn { font-family: 'Orbitron', sans-serif; padding: 10px 20px; background: rgba(0,229,255,0.1); border: 1px solid var(--accent); color: var(--accent); cursor: pointer; text-decoration: none; }
-  .btn:hover { background: rgba(0,229,255,0.22); }
-  .panel { background: var(--panel); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
-  .result-item { font-family: 'Share Tech Mono', monospace; padding: 5px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
-  .subtitle { font-family: 'Share Tech Mono', monospace; color: var(--dim); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
-
-  /* ── LAYOUT ── */
+  body { background: var(--bg); color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 13px; min-height: 100vh; }
+  
+  header { padding: 28px 32px 22px; border-bottom: 2px solid var(--accent); background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f); position: relative; overflow: hidden; }
+  header .glow { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 700px; height: 160px; background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%); pointer-events: none; }
+  h1 { font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 24px rgba(0,229,255,0.5); }
+  
   .container { max-width: 1300px; margin: 0 auto; padding: 28px 20px 60px; }
-
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
-  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .row-1 { grid-template-columns: 1fr; }
-
-  /* ── CARDS ── */
-  .card {
+  .card { background: var(--panel); border: 1px solid var(--border); margin-bottom: 28px; }
+  .card-head { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .card-head.gold  { background: rgba(255,215,0,0.08); color: var(--gold); border-bottom-color: rgba(255,215,0,0.2); }
+  .card-head.cyan  { background: rgba(0,229,255,0.08); color: var(--accent); border-bottom-color: rgba(0,229,255,0.2); }
+  .card-body { padding: 20px; }
+  
+  .calc-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 15px;}
+  .calc-group { display: flex; flex-direction: column; gap: 5px; }
+  .calc-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); text-transform: uppercase; }
+  select, input { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; outline: none; font-family: 'Share Tech Mono', monospace; }
+  .controls {
     background: var(--panel);
     border: 1px solid var(--border);
-    padding: 0;
-    overflow: hidden;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
   }
-
-  .card-head {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase;
-    padding: 10px 16px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .card-head.cyan  { background: rgba(0,229,255,0.08); color: var(--accent);  border-bottom: 1px solid rgba(0,229,255,0.2); }
-  .card-head.green { background: rgba(57,255,20,0.08);  color: var(--green);   border-bottom: 1px solid rgba(57,255,20,0.2); }
-  .card-head.orange{ background: rgba(255,140,66,0.08); color: var(--orange);  border-bottom: 1px solid rgba(255,140,66,0.2); }
-  .card-head.purple{ background: rgba(191,127,255,0.08);color: var(--purple);  border-bottom: 1px solid rgba(191,127,255,0.2); }
-  .card-head.gold  { background: rgba(255,215,0,0.08);  color: var(--gold);    border-bottom: 1px solid rgba(255,215,0,0.2); }
-
-  .card-body { padding: 14px 16px; }
-
-  /* ── MACHINE TABLE ── */
-  .mtable { width: 100%; border-collapse: collapse; }
-  .mtable th {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--dim); padding: 6px 10px; text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  .mtable td {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px; padding: 8px 10px;
-    border-bottom: 1px solid rgba(28,37,48,0.7);
-    vertical-align: middle;
-  }
-  .mtable tr:last-child td { border-bottom: none; }
-  .mtable tr:hover td { background: rgba(0,229,255,0.03); }
-
-  .mname { color: #fff; font-weight: 600; }
-  .mtime { color: var(--accent); }
-  .mmines { color: var(--green); }
-  .mextract { color: var(--orange); }
-
-  /* ── RATIO BARS ── */
-  .ratio-item {
-    margin-bottom: 14px;
-  }
-  .ratio-item:last-child { margin-bottom: 0; }
-
-  .ratio-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px; color: var(--text);
-    margin-bottom: 6px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .ratio-label .from { color: var(--purple); }
-  .ratio-label .to   { color: var(--accent); }
-  .ratio-label .val  { color: var(--gold); font-weight: 700; font-size: 13px; }
-
-  .ratio-track {
-    height: 8px; background: var(--panel2);
-    border: 1px solid var(--border); position: relative; overflow: hidden;
-  }
-  .ratio-fill {
-    height: 100%; position: absolute; top: 0; left: 0;
-    background: linear-gradient(90deg, var(--purple), var(--accent));
-    transition: width 0.6s cubic-bezier(.4,0,.2,1);
-  }
-
-  /* ── CHAIN FLOW ── */
-  .chain-flow {
-    display: flex; flex-wrap: wrap;
-    align-items: center; gap: 0;
-  }
-
-  .chain-node {
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    padding: 10px 14px;
-    text-align: center;
-    min-width: 110px;
-    position: relative;
-  }
-  .chain-node .cn-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 9px; letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 4px;
-  }
-  .chain-node .cn-count {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 22px; font-weight: 700; line-height: 1;
-  }
-  .chain-node .cn-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--dim); margin-top: 2px;
-  }
-
-  .chain-arrow {
-    font-size: 18px; color: var(--orange);
-    padding: 0 6px; flex-shrink: 0;
-  }
-
-  .cn-mine  { border-color: rgba(57,255,20,0.4);  }
-  .cn-mine .cn-name  { color: var(--green); }
-  .cn-mine .cn-count { color: var(--green); }
-
-  .cn-extract { border-color: rgba(255,140,66,0.4); }
-  .cn-extract .cn-name  { color: var(--orange); }
-  .cn-extract .cn-count { color: var(--orange); }
-
-  .cn-machine { border-color: rgba(0,229,255,0.4);  }
-  .cn-machine .cn-name  { color: var(--accent); }
-  .cn-machine .cn-count { color: var(--accent); }
-
-  .cn-machine2 { border-color: rgba(191,127,255,0.4); }
-  .cn-machine2 .cn-name  { color: var(--purple); }
-  .cn-machine2 .cn-count { color: var(--purple); }
-
-  /* ── CALCULATOR ── */
-  .calc-row {
-    display: flex; gap: 12px; align-items: flex-end; margin-bottom: 16px; flex-wrap: wrap;
-  }
-  .calc-group { display: flex; flex-direction: column; gap: 5px; }
-  .calc-group label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--dim); letter-spacing: 1px; text-transform: uppercase;
-  }
-  select, input[type=number] {
+  .ctrl-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 200px; }
+  .calc-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); text-transform: uppercase; }
+  select, input { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; outline: none; font-family: 'Share Tech Mono', monospace; }
+  
+  select, input[type=text] {
     background: var(--panel2);
     border: 1px solid var(--border);
     color: var(--text);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    padding: 8px 12px;
-    outline: none;
-    min-width: 160px;
+    font-size: 12px; padding: 9px 13px;
+    outline: none; width: 100%;
     transition: border-color 0.2s;
   }
-  select:focus, input[type=number]:focus { border-color: var(--accent); }
+  select:focus, input:focus { border-color: var(--accent); }
   select option { background: #111720; }
 
-  .calc-btn {
-    background: rgba(0,229,255,0.1);
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-family: 'Orbitron', monospace;
-    font-size: 10px; letter-spacing: 2px;
-    padding: 8px 20px; cursor: pointer;
-    text-transform: uppercase; transition: all 0.2s;
-  }
-  .calc-btn:hover { background: rgba(0,229,255,0.2); }
+  .btn { background: rgba(0,229,255,0.1); border: 1px solid var(--accent); color: var(--accent); font-family: 'Orbitron', monospace; font-size: 10px; padding: 8px 20px; cursor: pointer; text-transform: uppercase; text-decoration: none;}
+  .btn:hover { background: rgba(0,229,255,0.2); }
+  .btn-primary { background: rgba(0,229,255,0.1); border-color: var(--accent); color: var(--accent); }
+  .btn-primary:hover { background: rgba(0,229,255,0.22); }
+  .btn-ghost { background: transparent; border-color: var(--border); color: var(--dim); }
+  .btn-ghost:hover { border-color: var(--purple); color: var(--purple); }
 
-  .calc-result {
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    padding: 14px 16px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    line-height: 2;
-    min-height: 60px;
-    display: none;
-  }
-  .calc-result.show { display: block; }
-  .cr-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .cr-num  { font-size: 20px; font-weight: 700; color: var(--gold); }
-  .cr-unit { color: var(--dim); }
-  .cr-sep  { color: var(--border); margin: 0 4px; }
-
-  /* ── NOTE BOX ── */
-  .note {
-    background: rgba(255,140,66,0.07);
-    border-left: 3px solid var(--orange);
-    padding: 10px 14px; margin-bottom: 20px;
-    font-size: 12px; color: #ffb87a;
-    font-family: 'Share Tech Mono', monospace;
-    line-height: 1.7;
-  }
-
-  .info-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-  .info-tile {
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    padding: 12px 14px;
-  }
-  .info-tile .it-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--dim); letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 4px;
-  }
-  .info-tile .it-val {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 18px; font-weight: 700;
-  }
-  .info-tile .it-sub {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--dim); margin-top: 2px;
-  }
-
-  /* section title */
-  .sec-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px; font-weight: 700; letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 7px 14px;
-    margin-bottom: 16px;
-    border-left: 3px solid var(--accent);
-    background: linear-gradient(90deg, rgba(0,229,255,0.07), transparent);
-    color: var(--accent);
-  }
-  .sec-title.green  { border-color: var(--green);  background: linear-gradient(90deg,rgba(57,255,20,.07),transparent); color:var(--green); }
-  .sec-title.orange { border-color: var(--orange); background: linear-gradient(90deg,rgba(255,140,66,.07),transparent); color:var(--orange); }
-  .sec-title.purple { border-color: var(--purple); background: linear-gradient(90deg,rgba(191,127,255,.07),transparent); color:var(--purple); }
-  .sec-title.gold   { border-color: var(--gold);   background: linear-gradient(90deg,rgba(255,215,0,.07),transparent); color:var(--gold); }
-
-  /* highlight */
-  em { font-style: normal; color: var(--gold); }
-  strong { color: #fff; }
-
-  @media(max-width:700px) {
-    .row, .row-3 { grid-template-columns: 1fr; }
-    h1 { font-size: 18px; }
-    .chain-flow { flex-direction: column; align-items: flex-start; }
-    .chain-arrow { transform: rotate(90deg); }
-  }
+  .grid { display: flex; gap: 20px; margin-top: 15px; }
+  .col { flex: 1; background: var(--panel2); border: 1px solid var(--border); padding: 15px;}
+  h3 { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--accent); margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;}
+  .item-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); font-family: 'Share Tech Mono', monospace;}
 </style>
 </head>
 <body>
+
 <header>
   <div class="glow"></div>
-  <h1>⚙ Factory Sim — Calculator</h1>
-	<div class="subtitle">Auto-Calculator</div>
-  <table>
-   <th>
-    <div style="margin-top: 15px;">
-     <a href="index.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	LIST
-     </a>
-    </th>
-    <th>
-     <td></td>
-     <td style="width: 30px;"></td> <!-- Acts as space -->
-     <td></td>
-    </th>
-    <th>
-     <div style="margin-top: 15px;">
-      <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	RATIOS
-      </a>
-     </div>
-    </th>
-   </table>
+  <h1>⚙ Factory Sim — Calculators</h1>
+  <div style="margin-top: 15px;">
+    <a href="index.html" class="btn" style="display: inline-block;">← BACK TO VIEWER</a>
+  </div>
 </header>
+
 <div class="container">
 
-  <div class="card" style="margin-bottom:28px;">
-    <div class="card-head gold">How many mines/extractors do I need for N machines?</div>
+  <div class="card">
+    <div class="card-head gold">📊 Machine Ratio Calculator (Mines per Machine)</div>
     <div class="card-body">
       <div class="calc-row">
         <div class="calc-group">
@@ -362,102 +95,292 @@
             <option value="formInj">Form Injector (0.75s)</option>
             <option value="mixer">Multi-Flow Mixer (0.25s)</option>
             <option value="tumbler">Tumbler (0.25s)</option>
-          </select>
+            </select>
         </div>
         <div class="calc-group">
           <label>Number of Machines</label>
-          <input type="number" id="calcCount" value="1" min="1" max="500" style="width:100px;">
+          <input type="number" id="calcCount" value="1" min="1" style="width:100px;">
         </div>
-        <button class="calc-btn" onclick="calculate()">Calculate →</button>
+        <button class="btn" onclick="calculateRatio()">Calculate Ratios →</button>
       </div>
-      <div class="calc-result" id="calcResult"></div>
+      <div id="ratioResult" style="font-family: 'Share Tech Mono', monospace; color: var(--gold); margin-top: 10px;"></div>
     </div>
   </div>
-	<div class="sec-title">🏭 Full Fluid Garnet → Refined Ingot Chain (Balanced Example)</div>
 
-  <div class="card" style="margin-bottom:28px;">
-    <div class="card-head cyan">Complete chain — what to build to run non-stop</div>
-    <div class="card-body">
-      <div style="font-family:Share Tech Mono,monospace;font-size:11px;color:var(--dim);margin-bottom:14px;">
-        Starting from mines → Fluid Garnet → Light/Heavy Fluid Garnet → refining ingots. Quantities are per 1 Tumbler at full speed.
+  <div class="card">
+    <div class="card-head cyan">🧮 Full Factory Chain Calculator</div>
+   <div class="controls">
+    <div class="ctrl-group" style="max-width:380px;">
+      <label>Select Item to View Chain</label>
+      <select id="itemSelect" onchange="renderTree()">
+          <optgroup label="🧪 Fluids & Filtration">
+          <option>Eveready Petroleum</option>
+          <option>Treated Alto Fluid</option>
+          <option>Fluid Garnet</option>
+          <option>Balancer Solution</option>
+          <option>Light Fluid Garnet</option>
+          <option>Heavy Fluid Garnet</option>
+          <option>Light Fraction</option>
+          <option>Medium Fraction</option>
+          <option>Heavy Fraction</option>
+          <option>Alto Thinner</option>
+          <option>Alto Essence</option>
+          <option>Alto Primer</option>
+          <option>Alto Blend</option>
+          <option>Purified Alto Blend</option>
+          <option>Energized Alto Blend</option>
+          <option>Cloudy Alloy Mix</option>
+          <option>Radiating Alto</option>
+          <option>Crossed Alto Alloy</option>
+          <option>Essential Chroma Dye</option>
+          <option>Reatomized Chromastone</option>
+        </optgroup>
+        <optgroup label="🪵 Wood Chain">
+          <option>Meso Fiber Filter</option>
+          <option>Ascendeso Fiber Filter</option>
+          <option>Meso Wood Panel</option>
+          <option>Meso Polyhedron</option>
+          <option>Ascendeso Wood Panel</option>
+          <option>Enamel</option>
+          <option>Hardened Charm Casing</option>
+        </optgroup>
+        <optgroup label="💎 Gems & Dyes">
+          <option>Chromastone Dye</option>
+          <option>Chromastone Spark</option>
+          <option>Chromastone Charm</option>
+          <option>Aerelium Charm</option>
+          <option>Godspark</option>
+          <option>Godspark Charm</option>
+          <option>Cyan Dye</option>
+          <option>Purple Dye</option>
+          <option>Red Dye</option>
+          <option>Green Dye</option>
+          <option>Blue Dye</option>
+        </optgroup>
+        <optgroup label="⛏ Ore Chains">
+          <option>Terrastrix Ingot</option>
+          <option>Stratosteel Ingot</option>
+          <option>Coreodeon Ingot</option>
+          <option>Refined Terrastrix Ingot</option>
+          <option>Refined Stratosteel Ingot</option>
+          <option>Refined Coreodeon Ingot</option>
+        </optgroup>
+        <optgroup label="🔩 Alloy Ingots">
+          <option>Terrasteel Alloy Ingot</option>
+          <option>Stratostrix Alloy Ingot</option>
+          <option>Coreostrix Alloy Ingot</option>
+          <option>Coreosteel Alloy Ingot</option>
+          <option>Enriched Terrastrix Sand</option>
+          <option>Enriched Stratosteel Sand</option>
+        </optgroup>
+        <optgroup label="🏆 End-Game">
+          <option>Alto Alloy Core</option>
+          <option>Gravisphere</option>
+          <option>Cloudy Sphere Field</option>
+          <option>Terra Mechanical Gear</option>
+          <option>Strato Mechanical Gear</option>
+          <option>Dome Gyroscope</option>
+          <option>Terra Alloy Axiom</option>
+          <option>Dome Field</option>
+          <option>Celestial Supergear</option>
+          <option>Divine Supergear</option>
+          <option>Olympus Tri-Axiom</option>
+          <option>Olympus Dyson Axiom</option>
+        </optgroup>
+      </select>
+        </div>
+        <div class="calc-group">
+          <label>Target Output (Items per Sec)</label>
+          <input type="number" id="calcRate" value="1" step="0.1" style="width:100px;">
+        </div>
+        <button class="btn" onclick="runFullChainCalc()">Calculate Full Factory →</button>
       </div>
 
-      <!-- Row 1: Sources -->
-      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Sources</div>
-      <div class="chain-flow" style="margin-bottom:16px;">
-        <div class="chain-node cn-mine">
-          <div class="cn-name">Ore Mine</div>
-          <div class="cn-count">20</div>
-          <div class="cn-label">per Tumbler</div>
-        </div>
-        <div class="chain-arrow">+</div>
-        <div class="chain-node cn-extract">
-          <div class="cn-name">Extractor</div>
-          <div class="cn-count">1.56</div>
-          <div class="cn-label">→ use 2</div>
-        </div>
-      </div>
-
-      <!-- Row 2: Processing -->
-      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Processing</div>
-      <div class="chain-flow" style="margin-bottom:16px;flex-wrap:wrap;gap:6px;">
-        <div class="chain-node cn-machine2">
-          <div class="cn-name">Fluid Reactor</div>
-          <div class="cn-count">1</div>
-          <div class="cn-label">→ Fluid Garnet</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node cn-machine">
-          <div class="cn-name">Multi-Flow Mixer</div>
-          <div class="cn-count">1.875</div>
-          <div class="cn-label">→ use 2</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node cn-machine" style="border-color:rgba(255,215,0,0.4);">
-          <div class="cn-name" style="color:var(--gold);">Tumbler</div>
-          <div class="cn-count" style="color:var(--gold);">1</div>
-          <div class="cn-label">Refined Ingot ✓</div>
-        </div>
-      </div>
-
-      <!-- Row 3: Also Needed -->
-      <div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Also Required for Fluid Supply</div>
-      <div class="chain-flow" style="gap:6px;">
-        <div class="chain-node cn-extract">
-          <div class="cn-name">Extractor</div>
-          <div class="cn-count">6.94</div>
-          <div class="cn-label">for Pressure Filter</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node cn-machine2">
-          <div class="cn-name">Pressure Filter</div>
-          <div class="cn-count">1</div>
-          <div class="cn-label">→ Purified Alto</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node cn-machine">
-          <div class="cn-name">Dist. Tower</div>
-          <div class="cn-count">2.38</div>
-          <div class="cn-label">→ use 3</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node cn-machine" style="border-color:rgba(255,215,0,0.4);">
-          <div class="cn-name" style="color:var(--gold);">Mixer feeds</div>
-          <div class="cn-count" style="color:var(--gold);">0.75</div>
-          <div class="cn-label">← per tower</div>
-        </div>
+      <div class="grid" id="chainResultsArea" style="display: none;">
+        <div class="col" id="machineList"><h3>🏭 Factory Machines</h3><div class="content"></div></div>
+        <div class="col" id="rawList"><h3>⛏️ Raw Extractors/Mines</h3><div class="content"></div></div>
       </div>
     </div>
   </div>
 
 </div>
 
-<footer style="text-align:center;padding:20px;color:var(--dim);font-family:Share Tech Mono,monospace;font-size:10px;letter-spacing:2px;border-top:1px solid var(--border);">
-  FACTORY SIM · MACHINE RATIO REFERENCE · TIER 10
-</footer>
-
-
 <script>
+// ==========================================
+// 1. DATA DICTIONARIES
+// ==========================================
+
+const recipes = {
+  // RAW RESOURCES
+  'Vein Petroleum':       { raw:true, icon:'💧', source:'Petroleum Extractor',       type:'fluid', price:'$15SpD' },
+  'Aqueous Alto':         { raw:true, icon:'💧', source:'Aqueous Alto Extractor',     type:'fluid', price:'$20SpD' },
+  'Mesossential Wood':    { raw:true, icon:'🌳', source:'Mesossential Tree Farm',     type:'mine',  price:'$1.50cD' },
+  'Terrastrix Ore':       { raw:true, icon:'⛏', source:'Terrastrix Ore Mine',        type:'mine',  price:'$2.50cD' },
+  'Stratosteel Ore':      { raw:true, icon:'⛏', source:'Stratosteel Ore Mine',       type:'mine',  price:'$30cD' },
+  'Coreodeon Ore':        { raw:true, icon:'⛏', source:'Coreodeon Ore Mine',         type:'mine',  price:'$30cD' },
+  'Aerelium Crystal':     { raw:true, icon:'💎', source:'Aerelium Crystal Mine',      type:'mine',  price:'$30cD' },
+  'Chromastone Crystal':  { raw:true, icon:'🔮', source:'Chromastone Mine',           type:'mine',  price:'$50cD' },
+  'Used Filter':          { raw:true, icon:'♻', source:'Byproduct of Pressure Filter', type:'byproduct', price:'$400cD', note:'Produced by same machine — recycle it' },
+
+  // ── WOOD CHAIN ──
+  'Mesossential Wood Boards': { machine:'T10+ Cutter',     icon:'🪵', price:'$40cD',     inputs:['Mesossential Wood'] },
+  'Pressurized Meso Wood':    { machine:'Press',           icon:'🟫', price:'$6.50cD',   inputs:['Mesossential Wood Boards'] },
+  'Meso Wood Shreds':         { machine:'T10+ Cutter',     icon:'🪵', price:'$8.50cD',   inputs:['Pressurized Meso Wood'] },
+  'Mesossential Sap':         { machine:'T10+ Furnace',    icon:'🟤', price:'$20.50cD',  inputs:['Pressurized Meso Wood'] },
+  'Meso Wood Panel':          { machine:'T10+ Assembler',  icon:'🟫', price:'$220cD',    inputs:['Pressurized Meso Wood'] },
+  'Meso Wood Sheet':          { machine:'Press',          icon:'🟫', price:'$32.50cD',  inputs:['Meso Wood Panel'] },
+  'Meso Fiber Filter':        { machine:'T10+ Assembler',  icon:'🟨', price:'$500cD',    inputs:['Meso Wood Sheet'] },
+  'Meso Polyhedron':          { machine:'T10+ Triple Assembler', icon:'🔷', price:'$2500cD', inputs:['Meso Wood Panel','Meso Wood Panel','Meso Wood Panel'] },
+  'Ascendeso Wood Panel':     { machine:'T10+ Form Injector',   icon:'🔵', price:'$1100cD',  inputs:['Radiating Alto','Meso Wood Panel'] },
+  'Ascendeso Wood Sheet':     { machine:'Press',                icon:'🔵', price:'$1450cD',  inputs:['Ascendeso Wood Panel'] },
+  'Ascendeso Fiber Filter':   { machine:'T10+ Assembler',        icon:'🔵', price:'$1950cD',  inputs:['Ascendeso Wood Sheet'] },
+  'Enamel':                   { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$77.50cD', inputs:['Meso Wood Shreds','Aerelium Compound'] },
+  'Hardened Charm Casing':    { machine:'102+ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
+
+  // ── AERELIUM CHAIN ──
+  'Aerelium Shard':           { machine:'T10+ Grinder',            icon:'✨', price:'$1.50cD',  inputs:['Aerelium Crystal'] },
+  'Aerelium Glitter Dust':    { machine:'T10+ Spindle',          icon:'✨', price:'$50cD',    inputs:['Aerelium Shard'] },
+  'Aerelium Dust Cluster':    { machine:'T10+ Mechanical Mortar', icon:'✨', price:'$1.80cD',  inputs:['Aerelium Shard'] },
+  'Aerelium Compound':        { machine:'T10+ Furnace',            icon:'✨', price:'$2.25cD',  inputs:['Aerelium Dust Cluster'] },
+  'Aerelium Gem':             { machine:'T10+ Laser Cutter',       icon:'💎', price:'$60cD',    inputs:['Aerelium Crystal'] },
+  'Concentrated Aerelium Gem':{ machine:'T10+ Energy Concentrator',icon:'💎',price:'$130cD',   inputs:['Aerelium Gem'] },
+  'Aerelium Charm':           { machine:'T10+ Assembler',          icon:'🔮', price:'$350cD',   inputs:['Concentrated Aerelium Gem'] },
+
+  // ── CHROMASTONE CHAIN ──
+  'Chromastone Gem':             { machine:'T10+ Laser Cutter',        icon:'🔮', price:'$100cD',   inputs:['Chromastone Crystal'] },
+  'Concentrated Chromastone Gem':{ machine:'T10+ Energy Concentrator', icon:'🔮', price:'$110cD',   inputs:['Chromastone Gem'] },
+  'Chromastone Dye':             { machine:'T10+ Furnace',             icon:'🟣', price:'$19.50cD', inputs:['Concentrated Chromastone Gem'] },
+  'Chromastone Charm':           { machine:'T10+ Assembler',           icon:'🔮', price:'$650cD',   inputs:['Concentrated Chromastone Gem'] },
+  'Chromastone Spark':           { machine:'T10+ Spindle',             icon:'⚡', price:'$95.50cD', inputs:['Chromastone Charm'] },
+  'Reatomized Chromastone':      { machine:'T10+ Accelerator',         icon:'🔮', price:'$52.50cD', inputs:['Chromastone Crystal','Mesossential Sap'] },
+
+  // ── GEMS & DYES ──
+  'Red Gem':              { machine:'T10+ Spectrum Cutter',      icon:'🔴', price:'$160cD',   inputs:['Chromastone Gem'] },
+  'Green Gem':            { machine:'T10+ Spectrum Cutter',      icon:'🟢', price:'$160cD',   inputs:['Chromastone Gem'] },
+  'Blue Gem':             { machine:'T10+ Spectrum Cutter',      icon:'🔵', price:'$160cD',   inputs:['Chromastone Gem'] },
+  'Concentrated Red Gem': { machine:'T10+ Energy Concentrator',  icon:'🔴', price:'$340cD',   inputs:['Red Gem'] },
+  'Concentrated Green Gem':{ machine:'T10+ Energy Concentrator', icon:'🟢', price:'$340cD',   inputs:['Green Gem'] },
+  'Concentrated Blue Gem':{ machine:'T10+ Energy Concentrator',  icon:'🔵', price:'$340cD',   inputs:['Blue Gem'] },
+  'Red Dye':              { machine:'T10+ Furnace',              icon:'🔴', price:'$46.50cD', inputs:['Concentrated Red Gem'] },
+  'Green Dye':            { machine:'T10+ Furnace',              icon:'🟢', price:'$46.50cD', inputs:['Concentrated Green Gem'] },
+  'Blue Dye':             { machine:'T10+ Furnace',              icon:'🔵', price:'$46.50cD', inputs:['Concentrated Blue Gem'] },
+  'Cyan Dye':             { machine:'T10+ Dual Assembler',        icon:'🟦', price:'$1650cD',  inputs:['Blue Dye','Green Dye'] },
+  'Purple Dye':           { machine:'T10+ Dual Assembler',        icon:'🟣', price:'$1650cD',  inputs:['Red Dye','Blue Dye'] },
+  'Essential Chroma Dye': { machine:'T10+ Accelerator',           icon:'🌈', price:'$72.50cD', inputs:['Mesossential Sap','Chromastone Dye'] },
+  'Godspark':             { machine:'T10+ Triple Assembler',      icon:'⚡', price:'$1.44NvD', inputs:['Chromastone Spark','Aerelium Charm','Cyan Dye'] },
+  'Godspark Charm':       { machine:'T10+ Dual Assembler',        icon:'⚡', price:'$5.25NvD', inputs:['Godspark','Hardened Charm Casing'] },
+
+  // ── PETROLEUM & ALTO FLUID CHAIN ──
+  'Eveready Petroleum':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$27.5SpD', inputs:['Meso Fiber Filter','Vein Petroleum','Used Filter'] },
+  'Treated Alto Fluid':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$35SpD', inputs:['Meso Fiber Filter','Aqueous Alto','Used Filter'] },
+  'Light Fraction':       { machine:'T10+ Distillation Tower', icon:'🧪', price:'$27.5SpD', inputs:['Eveready Petroleum'] },
+  'Medium Fraction':      { machine:'T10+ Distillation Tower', icon:'🧪', price:'$30SpD', inputs:['Eveready Petroleum'] },
+  'Heavy Fraction':       { machine:'T10+ Distillation Tower', icon:'🧪', price:'$32.5SpD', inputs:['Eveready Petroleum'] },
+  'Alto Thinner':         { machine:'T10+ Distillation Tower', icon:'🧪', price:'$35SpD', inputs:['Treated Alto Fluid'] },
+  'Alto Essence':         { machine:'T10+ Distillation Tower', icon:'🧪', price:'$37.5SpD', inputs:['Treated Alto Fluid'] },
+  'Alto Primer':          { machine:'T10+ Distillation Tower', icon:'🧪', price:'$40SpD', inputs:['Treated Alto Fluid'] },
+  'Rough Garnet':         { machine:'T10+ Grinder',             icon:'💠', price:'$800SpD',  inputs:['Aerelium Compound'] },
+  'Fluid Garnet':         { machine:'T10+ Fluid Reactor',      icon:'💠', price:'$25.5SpD', inputs:['Rough Garnet','Vein Petroleum'] },
+  'Balancer Solution':    { machine:'T10+ Fluid Reactor',      icon:'⚗', price:'$625SpD', inputs:['Essential Chroma Dye','Vein Petroleum'] },
+  'Light Fluid Garnet':   { machine:'T10+ Multi-Flow Mixer',   icon:'💎', price:'$800SpD', inputs:['Balancer Solution','Fluid Garnet','Light Fraction'] },
+  'Heavy Fluid Garnet':   { machine:'T10+ Multi-Flow Mixer',   icon:'💎', price:'$850SpD', inputs:['Balancer Solution','Fluid Garnet','Heavy Fraction'] },
+  'Alto Blend':           { machine:'T10+ Multi-Flow Mixer',   icon:'⚗', price:'$950SpD', inputs:['Alto Thinner','Alto Primer','Balancer Solution'] },
+  'Purified Alto Blend':  { machine:'T10+ Pressure Filter',    icon:'⚗', price:'$2150cD', inputs:['Ascendeso Fiber Filter','Alto Blend','Used Filter'] },
+  'Energized Alto Blend': { machine:'T10+ Fluid Reactor',      icon:'⚡', price:'$3.20cD', inputs:['Reatomized Chromastone','Purified Alto Blend'] },
+  'Cloudy Alloy Mix':     { machine:'T10+ Multi-Flow Mixer',   icon:'🌫', price:'$4.15cD', inputs:['Fine Residue','Energized Alto Blend','Medium Fraction'] },
+  'Radiating Alto':       { machine:'T10+ Liquid Caster',      icon:'☢', price:'$15.50cD',  inputs:['Alto Essence'] },
+  'Crossed Alto Alloy':   { machine:'T10+ Liquid Caster',      icon:'⬡', price:'$1NvD',     inputs:['Cloudy Alloy Mix'] },
+
+  // ── ORE PROCESSING ──
+  'Terrastrix Gravel':    { machine:'T10+ Ore Crusher',  icon:'🪨', price:'$6.50cD',  inputs:['Terrastrix Ore'] },
+  'Primed Terrastrix':    { machine:'T10+ Mixer',        icon:'🟩', price:'$23.50cD', inputs:['Terrastrix Gravel','Aerelium Dust Cluster'] },
+  'Saturated Terrastrix': { machine:'T10+ Mixer',        icon:'🟩', price:'$250cD',   inputs:['Terrastrix Gravel','Aerelium Glitter Dust'] },
+  'Terrastrix Node':      { machine:'T10+ Induction Smelter', icon:'🟩', price:'$630cD',  inputs:['Primed Terrastrix'] },
+  'Living Terrastrix':    { machine:'T10+ Induction Smelter', icon:'🟩', price:'$680cD',  inputs:['Saturated Terrastrix'] },
+  'Tough Terrastrix Ingot':{ machine:'T10+ Alloy Smelter',    icon:'🟩', price:'$2400cD', inputs:['Living Terrastrix','Terrastrix Node'] },
+  'Terrastrix Ingot':     { machine:'T10+ Tumbler',          icon:'🟩', price:'$3600cD', inputs:['Tough Terrastrix Ingot','Heavy Fluid Garnet'] },
+  'Refined Terrastrix Ingot': { machine:'T10+ Tumbler',      icon:'🟩', price:'$4500cD', inputs:['Terrastrix Ingot','Light Fluid Garnet'] },
+  'Terrastrix Sand':      { machine:'T10+ Grinder',           icon:'🟩', price:'$1500cD', inputs:['Terrastrix Ingot'] },
+  'Enriched Terrastrix Sand':{ machine:'T10+ Spindle',       icon:'🟩', price:'$2050cD', inputs:['Terrastrix Sand'] },
+  'Rough Residue':        { machine:'T10+ Tumbler',          icon:'♻', price:'$100SpD', inputs:['Tough Terrastrix Ingot','Heavy Fluid Garnet'] },
+  'Fine Residue':         { machine:'T10+ Tumbler',          icon:'♻', price:'$250SpD', inputs:['Terrastrix Ingot','Light Fluid Garnet'] },
+
+  'Stratosteel Gravel':   { machine:'T10+ Ore Crusher',       icon:'🩶', price:'$7.50cD',  inputs:['Stratosteel Ore'] },
+  'Primed Stratosteel':   { machine:'T10+ Mixer',             icon:'🩶', price:'$270cD',   inputs:['Stratosteel Gravel','Aerelium Dust Cluster'] },
+  'Saturated Stratosteel':{ machine:'T10+ Mixer',             icon:'🩶', price:'$290cD',   inputs:['Stratosteel Gravel','Aerelium Glitter Dust'] },
+  'Stratosteel Node':     { machine:'T10+ Induction Smelter', icon:'🩶', price:'$720cD',   inputs:['Primed Stratosteel'] },
+  'Living Stratosteel':   { machine:'T10+ Induction Smelter', icon:'🩶', price:'$750cD',   inputs:['Saturated Stratosteel'] },
+  'Tough Stratosteel Ingot':{ machine:'T10+ Alloy Smelter',   icon:'🩶', price:'$2550cD',  inputs:['Living Stratosteel','Stratosteel Node'] },
+  'Stratosteel Ingot':    { machine:'T10+ Tumbler',          icon:'🩶', price:'$3700cD',  inputs:['Tough Stratosteel Ingot','Heavy Fluid Garnet'] },
+  'Refined Stratosteel Ingot':{ machine:'T10+ Tumbler',      icon:'🩶', price:'$5050cD',  inputs:['Stratosteel Ingot','Light Fluid Garnet'] },
+  'Stratosteel Sand':     { machine:'T10+ Grinder',           icon:'🩶', price:'$1700cD',  inputs:['Stratosteel Ingot'] },
+  'Enriched Stratosteel Sand':{ machine:'T10+ Spindle',      icon:'🩶', price:'$2250cD',  inputs:['Stratosteel Sand'] },
+
+  'Coreodeon Gravel':     { machine:'T10+ Ore Crusher',       icon:'🔷', price:'$7.50cD',  inputs:['Coreodeon Ore'] },
+  'Primed Coreodeon':     { machine:'T10+ Mixer',             icon:'🔷', price:'$270cD',   inputs:['Coreodeon Gravel','Aerelium Dust Cluster'] },
+  'Saturated Coreodeon':  { machine:'T10+ Mixer',             icon:'🔷', price:'$290cD',   inputs:['Coreodeon Gravel','Aerelium Glitter Dust'] },
+  'Coreodeon Node':       { machine:'T10+ Induction Smelter', icon:'🔷', price:'$720cD',   inputs:['Primed Coreodeon'] },
+  'Living Coreodeon':     { machine:'T10+ Induction Smelter', icon:'🔷', price:'$750cD',   inputs:['Saturated Coreodeon'] },
+  'Tough Coreodeon Ingot':{ machine:'T10+ Alloy Smelter',     icon:'🔷', price:'$2550cD',  inputs:['Living Coreodeon','Coreodeon Node'] },
+  'Coreodeon Ingot':      { machine:'T10+ Tumbler',          icon:'🔷', price:'$3700cD',  inputs:['Tough Coreodeon Ingot','Heavy Fluid Garnet'] },
+  'Refined Coreodeon Ingot':{ machine:'T10+ Tumbler',        icon:'🔷', price:'$5050cD',  inputs:['Coreodeon Ingot','Light Fluid Garnet'] },
+
+  // ── ALLOY INGOTS ──
+  'Terrasteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.05NvD', inputs:['Refined Terrastrix Ingot','Enriched Stratosteel Sand'] },
+  'Stratostrix Alloy Ingot': { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Stratosteel Ingot','Enriched Terrastrix Sand'] },
+  'Coreostrix Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
+  'Coreosteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.2NvD',  inputs:['Refined Coreodeon Ingot','Enriched Stratosteel Sand'] },
+
+  // ── END-GAME ──
+  'Alto Alloy Core':       { machine:'T10+ Dual Assembler',      icon:'⚙', price:'$7.05NvD', inputs:['Crossed Alto Alloy','Crossed Alto Alloy'] },
+  'Gravisphere':           { machine:'T10+ Dual Assembler',      icon:'🌐', price:'$12.5NvD', inputs:['Concentrated Chromastone Gem','Alto Alloy Core'] },
+  'Cloudy Sphere Field':   { machine:'T10+ Workstation',         icon:'🌐', price:'$25NvD',   inputs:['Gravisphere'] },
+  'Terra Mechanical Gear': { machine:'T10+ Triple Assembler',    icon:'⚙', price:'$20.5NvD', inputs:['Refined Coreodeon Mechanism','Terrasteel Alloy Gear','Red Dye'] },
+  'Strato Mechanical Gear':{ machine:'T10+ Triple Assembler',    icon:'⚙', price:'$21.5NvD', inputs:['Refined Coreodeon Mechanism','Stratostrix Alloy Gear','Green Dye'] },
+  'Refined Coreodeon Mechanism':{ machine:'T10+ Assembler',      icon:'⚙', price:'$1.15NvD', inputs:['Refined Coreodeon Gear'] },
+  'Refined Coreodeon Gear':{ machine:'T10+ Gear Press',          icon:'⚙', price:'$7200cD',  inputs:['Refined Coreodeon Plate'] },
+  'Refined Coreodeon Plate':{ machine:'Press',                  icon:'🔷', price:'$6150cD',  inputs:['Refined Coreodeon Ingot'] },
+  'Terrasteel Alloy Plate':{ machine:'Press',                   icon:'🟫', price:'$1.3NvD',  inputs:['Terrasteel Alloy Ingot'] },
+  'Terrasteel Alloy Gear': { machine:'T10+ Gear Press',          icon:'⚙', price:'$1.55NvD', inputs:['Terrasteel Alloy Plate'] },
+  'Stratostrix Alloy Plate':{ machine:'Press',                  icon:'🟫', price:'$1.35NvD', inputs:['Stratostrix Alloy Ingot'] },
+  'Stratostrix Alloy Gear':{ machine:'T10+ Gear Press',          icon:'⚙', price:'$1.6NvD',  inputs:['Stratostrix Alloy Plate'] },
+  'Dome Gyroscope':        { machine:'T10+ Triple Assembler',    icon:'🔄', price:'$35.5NvD', inputs:['Refined Terrastrix Ring','Refined Stratosteel Ring','Bunch of Coreodeon Screws'] },
+  'Refined Terrastrix Ring':{ machine:'T10+ Assembler',          icon:'⭕', price:'$9950cD',  inputs:['Refined Terrastrix Pipe'] },
+  'Refined Terrastrix Pipe':{ machine:'T10+ Rolling Machine',    icon:'🟢', price:'$6950cD',  inputs:['Refined Terrastrix Plate'] },
+  'Refined Terrastrix Plate':{ machine:'Press',                 icon:'🟩', price:'$5750cD',  inputs:['Refined Terrastrix Ingot'] },
+  'Refined Stratosteel Ring':{ machine:'T10+ Assembler',         icon:'⭕', price:'$1.2NvD',  inputs:['Refined Stratosteel Pipe'] },
+  'Refined Stratosteel Pipe':{ machine:'T10+ Rolling Machine',   icon:'🩶', price:'$7250cD',  inputs:['Refined Stratosteel Plate'] },
+  'Refined Stratosteel Plate':{ machine:'Press',                icon:'🩶', price:'$6150cD',  inputs:['Refined Stratosteel Ingot'] },
+  'Bunch of Coreodeon Screws':{ machine:'T10+ Spindle',         icon:'🔩', price:'—',        inputs:['Refined Coreodeon Screw'] },
+  'Refined Coreodeon Screw':{ machine:'T10+ Assembler',          icon:'🔩', price:'$8400cD',  inputs:['Refined Coreodeon Rod'] },
+  'Refined Coreodeon Rod': { machine:'T10+ Extruder',            icon:'🔷', price:'$6250cD',  inputs:['Refined Coreodeon Ingot'] },
+  'Terra Alloy Axiom':     { machine:'T10+ Dual Assembler',      icon:'⭐', price:'$50NvD',   inputs:['Terrasteel Alloy Gyroscope','Large Terrasteel Alloy Gyroscope'] },
+  'Terrasteel Alloy Gyroscope':  { machine:'T10+ Dual Assembler',icon:'🔄', price:'$8.45NvD', inputs:['Terrasteel Alloy Ring','Terrasteel Alloy Screw'] },
+  'Large Terrasteel Alloy Gyroscope':{ machine:'T10+ Dual Assembler',icon:'🔄', price:'$10.5NvD', inputs:['Large Terrasteel Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
+  'Terrasteel Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2NvD',    inputs:['Terrasteel Alloy Pipe'] },
+  'Terrasteel Alloy Pipe': { machine:'T10+ Rolling Machine',     icon:'🟫', price:'$1.45NvD', inputs:['Terrasteel Alloy Plate'] },
+  'Terrasteel Alloy Rod':  { machine:'T10+ Extruder',            icon:'🟫', price:'$1.35NvD', inputs:['Terrasteel Alloy Ingot'] },
+  'Terrasteel Alloy Screw':{ machine:'T10+ Assembler',           icon:'🔩', price:'$1.9NvD',  inputs:['Terrasteel Alloy Rod'] },
+  'Large Terrasteel Alloy Ring':{ machine:'T10+ Rolling Machine',icon:'⭕', price:'$1.65NvD', inputs:['Terrasteel Alloy Rod'] },
+  'Coreosteel Alloy Rod':  { machine:'T10+ Extruder',            icon:'🟫', price:'$1.45NvD', inputs:['Coreosteel Alloy Ingot'] },
+  'Coreosteel Alloy Screw':{ machine:'T10+ Assembler',           icon:'🔩', price:'$1.95NvD', inputs:['Coreosteel Alloy Rod'] },
+  'Bunch of Coreosteel Alloy Screws':{ machine:'T10+ Spindle',  icon:'🔩', price:'$2.65NvD', inputs:['Coreosteel Alloy Screw'] },
+  'Refined Coreodeon Bearing':{ machine:'T10+ Dual Assembler',   icon:'🔘', price:'$5.25NvD', inputs:['Refined Coreodeon Sleeve','Refined Coreodeon Ring'] },
+  'Refined Coreodeon Sleeve':{ machine:'T10+ Assembler',         icon:'🔷', price:'$1.25NvD', inputs:['Circular Coreodeon Plate'] },
+  'Refined Coreodeon Ring':{ machine:'T10+ Assembler',           icon:'⭕', price:'$1.1NvD',  inputs:['Refined Coreodeon Pipe'] },
+  'Refined Coreodeon Pipe':{ machine:'T10+ Rolling Machine',     icon:'🔷', price:'$7250cD',  inputs:['Refined Coreodeon Plate'] },
+  'Circular Coreodeon Plate':{ machine:'T10+ Workstation',       icon:'🔷', price:'$7650cD',  inputs:['Refined Coreodeon Plate'] },
+  'Dome Field':            { machine:'T10+ Triple Assembler',    icon:'🌐', price:'$225NvD',  inputs:['Purple Dye','Dome Gyroscope','Cloudy Sphere Field'] },
+  'Celestial Supergear':   { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$290NvD',  inputs:['Refined Coreodeon Bearing','Strato Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
+  'Divine Supergear':      { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$300NvD',  inputs:['Refined Coreodeon Bearing','Terra Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
+  'Coreostrix Alloy Ingot':{ machine:'T10+ Alloy Smelter',       icon:'🔷', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
+  'Coreostrix Alloy Plate':{ machine:'Press',                   icon:'🔷', price:'$1.35NvD', inputs:['Coreostrix Alloy Ingot'] },
+  'Coreostrix Alloy Pipe': { machine:'T10+ Rolling Machine',     icon:'🔷', price:'$1.5NvD',  inputs:['Coreostrix Alloy Plate'] },
+  'Coreostrix Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2.05NvD', inputs:['Coreostrix Alloy Pipe'] },
+  'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
+  'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
+};
+// Machine data for the first calculator
 const machineData = {
   single:      { name:'Single Assembler',      time:3.125, mines:1.6,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
   dual:        { name:'Dual Assembler',         time:1.875, mines:2.67,    extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
@@ -475,53 +398,97 @@ const machineData = {
   tumbler:     { name:'Tumbler',                time:0.25,  mines:20,      extractors:1.56, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
 };
 
-function calculate() {
+
+// ==========================================
+// 2. MATH ENGINE FOR CALC 1 (Ratios)
+// ==========================================
+function calculateRatio() {
   const key = document.getElementById('calcMachine').value;
   const n = parseFloat(document.getElementById('calcCount').value) || 1;
   const m = machineData[key];
-  const res = document.getElementById('calcResult');
+  const res = document.getElementById('ratioResult'); // Matches your HTML ID
+
+  if (!m) return;
 
   const totalMines = m.mines * n;
   const totalExt   = m.extractors * n;
   const minesRound = Math.ceil(totalMines);
   const extRound   = Math.ceil(totalExt);
 
-  let html = `<div style="font-family:Share Tech Mono,monospace;font-size:12px;line-height:2.2;">`;
-  html += `<div class="cr-line">Running <em style="font-size:18px;color:var(--gold)">${n}</em> <strong>${m.name}</strong> machines at full speed:</div>`;
-  html += `<div style="height:8px;"></div>`;
+  let html = `<div style="line-height:1.8;">`;
+  html += `Running <strong style="color:var(--gold)">${n} ${m.name}s</strong>:<br>`;
 
   if (totalMines > 0) {
-    html += `<div class="cr-line">
-      🟢 <span class="cr-num">${totalMines.toFixed(2)}</span>
-      <span style="color:var(--text)">${m.mineLabel} needed</span>
-      <span class="cr-sep">|</span>
-      <span style="color:var(--green)">Round up → <strong style="color:#fff">${minesRound} mines</strong></span>
-    </div>`;
+    html += `🟢 ${totalMines.toFixed(2)} ${m.mineLabel} <span style="color:var(--dim)">→</span> <strong style="color:#fff">${minesRound} Mines</strong><br>`;
   }
-
   if (totalExt > 0) {
-    html += `<div class="cr-line">
-      🟠 <span class="cr-num">${totalExt.toFixed(2)}</span>
-      <span style="color:var(--text)">${m.extractLabel} needed</span>
-      <span class="cr-sep">|</span>
-      <span style="color:var(--orange)">Round up → <strong style="color:#fff">${extRound} extractors</strong></span>
-    </div>`;
+    html += `🟠 ${totalExt.toFixed(2)} ${m.extractLabel} <span style="color:var(--dim)">→</span> <strong style="color:#fff">${extRound} Extractors</strong><br>`;
   }
-
-  if (totalMines === 0 && totalExt === 0) {
-    html += `<div style="color:var(--dim)">This machine is fed by other machines (no direct mine input needed).</div>`;
-  }
-
-  html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--dim);">
-    Cycle time: <em>${m.time}s</em> per machine
-    · Total throughput: <em>${(n / m.time).toFixed(2)}</em> items/second
-  </div>`;
+  
+  html += `<div style="font-size:10px; color:var(--dim); margin-top:5px;">Cycle: ${m.time}s | Rate: ${(n/m.time).toFixed(2)} items/sec</div>`;
   html += `</div>`;
 
   res.innerHTML = html;
-  res.classList.add('show');
 }
 
-</script>
+// ==========================================
+// 3. MATH ENGINE FOR CALC 2 (Full Chain)
+// ==========================================
+
+// FIXED: Renamed to match your HTML's onclick="runFullChainCalc()"
+function runFullChainCalc() {
+  const target = document.getElementById('itemSelect').value;
+  const targetRate = parseFloat(document.getElementById('calcRate').value) || 1;
+  
+  if (!target || !recipes[target]) return;
+
+  let rawCounts = {};
+  let machineCounts = {};
+
+  // Logic to calculate how many items/machines are needed per second
+  function processRecipe(itemName, ratePerSec) {
+    const item = recipes[itemName];
+    if (!item) return;
+
+    if (item.raw) {
+      rawCounts[itemName] = (rawCounts[itemName] || 0) + ratePerSec;
+      return;
+    }
+
+    // This assumes 1 machine produces 1 item per cycle (defaulting to 1s if machine not in machineData)
+    // You can adjust this math if your specific game machines have different base speeds
+    const machineBase = Object.values(machineData).find(m => item.machine.includes(m.name)) || {time: 1};
+    const machinesNeeded = ratePerSec * machineBase.time;
+    
+    machineCounts[item.machine] = (machineCounts[item.machine] || 0) + machinesNeeded;
+
+    if (item.inputs) {
+      item.inputs.forEach(input => {
+        // Assuming 1:1 input ratio; multiply ratePerSec by recipe requirements if they differ
+        processRecipe(input, ratePerSec); 
+      });
+    }
+  }
+
+  processRecipe(target, targetRate);
+  
+  // Show results area
+  document.getElementById('chainResultsArea').style.display = 'flex';
+  
+  // FIXED: Targeting the '.content' divs inside your columns
+  const machContent = document.querySelector('#machineList .content');
+  const rawContent = document.querySelector('#rawList .content');
+  
+  machContent.innerHTML = '';
+  rawContent.innerHTML = '';
+
+  for (const [name, qty] of Object.entries(machineCounts)) {
+    machContent.innerHTML += `<div class="item-row"><span>${name}</span> <span><b>${Math.ceil(qty)}</b>x</span></div>`;
+  }
+
+  for (const [name, rate] of Object.entries(rawCounts)) {
+    rawContent.innerHTML += `<div class="item-row"><span>${name}</span> <span><b>${rate.toFixed(1)}</b>/s</span></div>`;
+  }
+}</script>
 </body>
 </html>
