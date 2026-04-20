@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Factory Sim — Calculators</title>
 <style>
-  /* Use your exact same CSS from index.html here */
+  
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
   :root { --bg: #080b0f; --panel: #0d1117; --panel2: #111720; --border: #1c2530; --accent: #00e5ff; --green: #39ff14; --orange: #ff8c42; --purple: #bf7fff; --gold: #ffd700; --text: #c8d8e8; --dim: #4a5a6a; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -406,8 +406,7 @@ function calculateRatio() {
   const key = document.getElementById('calcMachine').value;
   const n = parseFloat(document.getElementById('calcCount').value) || 1;
   const m = machineData[key];
-  const res = document.getElementById('ratioResult'); // Matches your HTML ID
-
+  const res = document.getElementById('ratioResult');
   if (!m) return;
 
   const totalMines = m.mines * n;
@@ -435,7 +434,6 @@ function calculateRatio() {
 // 3. MATH ENGINE FOR CALC 2 (Full Chain)
 // ==========================================
 
-// FIXED: Renamed to match your HTML's onclick="runFullChainCalc()"
 function runFullChainCalc() {
   const target = document.getElementById('itemSelect').value;
   const targetRate = parseFloat(document.getElementById('calcRate').value) || 1;
@@ -475,7 +473,7 @@ function runFullChainCalc() {
   // Show results area
   document.getElementById('chainResultsArea').style.display = 'flex';
   
-  // FIXED: Targeting the '.content' divs inside your columns
+
   const machContent = document.querySelector('#machineList .content');
   const rawContent = document.querySelector('#rawList .content');
   
