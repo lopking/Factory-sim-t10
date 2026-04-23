@@ -490,11 +490,8 @@ for (const [src, prods] of Object.entries(DISTILLATION_GROUPS)) {
 
 const FLUID_STOPS = new Set(['Eveready Petroleum', 'Treated Alto Fluid']);
 
-// Quint ratio: 1 machine = 2.0007 mines. All mine counts derive from this.
 const MINE_RATIO = 2.0007;
-
-// First-stage machines that directly consume raw ore/crystal/wood.
-// mines = machine_count × MINE_RATIO instead of tracing the raw resource tree.
+  
 const PRIMARY_ORE_PROCESSORS = {
   'Terrastrix Gravel':        'Terrastrix Ore Mine',
   'Stratosteel Gravel':       'Stratosteel Ore Mine',
@@ -577,7 +574,7 @@ function runFullChainCalc() {
     }
 
     if (item.raw) {
-      // Raw fluids show as fluid/s, raw ore/wood/crystal handled via PRIMARY_ORE_PROCESSORS — skip here
+     
       if (item.type === 'fluid') fluids[itemName] = (fluids[itemName] || 0) + rate;
       continue;
     }
@@ -595,7 +592,7 @@ function runFullChainCalc() {
     const outputQty = machineOutputQty[item.machine] || 1;
     const machCount = rate * cycleTime / outputQty;
 
-    // First-stage processors: use Quint ratio for mine count instead of tracing raw resources
+  
     if (PRIMARY_ORE_PROCESSORS[itemName]) {
       const mineLabel = PRIMARY_ORE_PROCESSORS[itemName];
       mines[mineLabel] = (mines[mineLabel] || 0) + machCount * MINE_RATIO;
@@ -604,7 +601,7 @@ function runFullChainCalc() {
     machines[item.machine] = (machines[item.machine] || 0) + machCount;
   }
 
-  // Lock final machine to exactly what user entered
+
   if (topItem.machine && machines[topItem.machine] !== undefined) {
     machines[topItem.machine] = machineCount;
   }
