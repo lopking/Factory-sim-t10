@@ -194,12 +194,20 @@
           <input type="number" id="calcRate" value="1" step="0.1" style="width:100px;">
         </div>
         <button class="btn" onclick="runFullChainCalc()">Calculate Full Factory →</button>
+        <div class="calc-group" style="justify-content:flex-end;">
+         <label>1.5x Harvest Gamepass</label>
+         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;">
+          <input type="checkbox" id="harvest15x" style="width:16px;height:16px;cursor:pointer;">
+         <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);">Active</span>
+        </label>
       </div>
+     </div>
 
-      <div class="grid" id="chainResultsArea" style="display: none;">
-        <div class="col" id="machineList"><h3>🏭 Factory Machines</h3><div class="content"></div></div>
-        <div class="col" id="rawList"><h3>⛏️ Raw Extractors/Mines</h3><div class="content"></div></div>
-      </div>
+      <div class="grid" id="chainResultsArea" style="display:none; flex-wrap:wrap;">
+  <div class="col" id="machineList"><h3>🏭 Machines Needed</h3><div class="content"></div></div>
+  <div class="col" id="mineList"><h3>⛏️ Mines & Farms</h3><div class="content"></div></div>
+  <div class="col" id="fluidList"><h3>💧 Fluid Consumption</h3><div class="content"></div></div>
+</div>
     </div>
   </div>
 
@@ -380,6 +388,7 @@ const recipes = {
   'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
   'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
 };
+
 // Machine data for the first calculator
 const machineData = {
   single:      { name:'Single Assembler',      time:3.125, mines:1.6,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
@@ -397,8 +406,6 @@ const machineData = {
   mixer:       { name:'Multi-Flow Mixer',       time:0.25,  mines:0,       extractors:0,    mineLabel:'',           extractLabel:'' },
   tumbler:     { name:'Tumbler',                time:0.25,  mines:20,      extractors:1.56, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
 };
-
-
 // ==========================================
 // 2. MATH ENGINE FOR CALC 1 (Ratios)
 // ==========================================
@@ -434,59 +441,212 @@ function calculateRatio() {
 // 3. MATH ENGINE FOR CALC 2 (Full Chain)
 // ==========================================
 
+const machineCycleTimes = {
+  'T10+ Assembler':            3.125,
+  'T10+ Dual Assembler':       1.875,
+  '102+ Dual Assembler':       1.875,
+  'T10+ Triple Assembler':     1.667,
+  'T10+ Quadruple Assembler':  1.875,
+  'T10+ Quintuple Assembler':  2.5,
+  'T10+ Accelerator':          1.429,
+  'T10+ Workstation':          1.429,
+  'T10+ Spectrum Cutter':      0.5,
+  'T10+ Fluid Reactor':        1.0,
+  'T10+ Pressure Filter':      1.5,
+  'T10+ Distillation Tower':   0.25,
+  'T10+ Form Injector':        0.75,
+  'T10+ Multi-Flow Mixer':     0.25,
+  'T10+ Tumbler':              0.25,
+  'Press':                     0.5,
+  'T10+ Ore Crusher':          2.0,
+  'T10+ Grinder':              1.0,
+  'T10+ Furnace':              2.0,
+  'T10+ Alloy Smelter':        2.0,
+  'T10+ Induction Smelter':    2.0,
+  'T10+ Rolling Machine':      1.0,
+  'T10+ Extruder':             1.0,
+  'T10+ Gear Press':           1.5,
+  'T10+ Spindle':              0.5,
+  'T10+ Laser Cutter':         0.5,
+  'T10+ Energy Concentrator':  1.0,
+  'T10+ Liquid Caster':        1.0,
+  'T10+ Mixer':                0.5,
+  'T10+ Mechanical Mortar':    1.0,
+  'T10+ Cutter':               0.5,
+};
+
+const machineOutputQty = {
+  'T10+ Grinder': 3,
+};
+
+const DISTILLATION_GROUPS = {
+  'Eveready Petroleum': ['Light Fraction', 'Medium Fraction', 'Heavy Fraction'],
+  'Treated Alto Fluid':  ['Alto Thinner', 'Alto Essence', 'Alto Primer'],
+};
+const DISTILLATION_SOURCE = {};
+for (const [src, prods] of Object.entries(DISTILLATION_GROUPS)) {
+  prods.forEach(p => DISTILLATION_SOURCE[p] = src);
+}
+
+const FLUID_STOPS = new Set(['Eveready Petroleum', 'Treated Alto Fluid']);
+
+// Quint ratio: 1 machine = 2.0007 mines. All mine counts derive from this.
+const MINE_RATIO = 2.0007;
+
+// First-stage machines that directly consume raw ore/crystal/wood.
+// mines = machine_count × MINE_RATIO instead of tracing the raw resource tree.
+const PRIMARY_ORE_PROCESSORS = {
+  'Terrastrix Gravel':        'Terrastrix Ore Mine',
+  'Stratosteel Gravel':       'Stratosteel Ore Mine',
+  'Coreodeon Gravel':         'Coreodeon Ore Mine',
+  'Aerelium Shard':           'Aerelium Crystal Mine',
+  'Aerelium Gem':             'Aerelium Crystal Mine',
+  'Chromastone Gem':          'Chromastone Mine',
+  'Reatomized Chromastone':   'Chromastone Mine',
+  'Mesossential Wood Boards': 'Mesossential Tree Farm',
+};
+
 function runFullChainCalc() {
-  const target = document.getElementById('itemSelect').value;
-  const targetRate = parseFloat(document.getElementById('calcRate').value) || 1;
-  
+  const target       = document.getElementById('itemSelect').value;
+  const machineCount = parseFloat(document.getElementById('calcRate').value) || 1;
+  const harvest15x   = document.getElementById('harvest15x') ? document.getElementById('harvest15x').checked : false;
   if (!target || !recipes[target]) return;
 
-  let rawCounts = {};
-  let machineCounts = {};
+  const topItem      = recipes[target];
+  const topCycle     = machineCycleTimes[topItem.machine] || 1.0;
+  const topOutputQty = machineOutputQty[topItem.machine] || 1;
+  const targetRate   = machineCount * topOutputQty / topCycle;
 
-  // Logic to calculate how many items/machines are needed per second
-  function processRecipe(itemName, ratePerSec) {
+  const requiredRates = {};
+
+  function accumulateRates(itemName, rate) {
     const item = recipes[itemName];
     if (!item) return;
+    if (item.type === 'byproduct') return;
 
-    if (item.raw) {
-      rawCounts[itemName] = (rawCounts[itemName] || 0) + ratePerSec;
+    if (FLUID_STOPS.has(itemName)) {
+      requiredRates[itemName] = (requiredRates[itemName] || 0) + rate;
       return;
     }
 
-    // This assumes 1 machine produces 1 item per cycle (defaulting to 1s if machine not in machineData)
-    // You can adjust this math if your specific game machines have different base speeds
-    const machineBase = Object.values(machineData).find(m => item.machine.includes(m.name)) || {time: 1};
-    const machinesNeeded = ratePerSec * machineBase.time;
-    
-    machineCounts[item.machine] = (machineCounts[item.machine] || 0) + machinesNeeded;
+    if (item.raw) {
+      requiredRates[itemName] = (requiredRates[itemName] || 0) + rate;
+      return;
+    }
+
+    if (DISTILLATION_SOURCE[itemName]) {
+      requiredRates[itemName] = (requiredRates[itemName] || 0) + rate;
+      return;
+    }
+
+    requiredRates[itemName] = (requiredRates[itemName] || 0) + rate;
 
     if (item.inputs) {
-      item.inputs.forEach(input => {
-        // Assuming 1:1 input ratio; multiply ratePerSec by recipe requirements if they differ
-        processRecipe(input, ratePerSec); 
-      });
+      const outputQty   = machineOutputQty[item.machine] || 1;
+      const inputCounts = {};
+      item.inputs.forEach(inp => { inputCounts[inp] = (inputCounts[inp] || 0) + 1; });
+      for (const [inp, count] of Object.entries(inputCounts)) {
+        accumulateRates(inp, (rate / outputQty) * count);
+      }
     }
   }
 
-  processRecipe(target, targetRate);
-  
-  // Show results area
+  accumulateRates(target, targetRate);
+
+  // Distillation post-process: one tower run produces all co-products at once
+  for (const [srcFluid, products] of Object.entries(DISTILLATION_GROUPS)) {
+    const rates   = products.map(p => requiredRates[p] || 0);
+    const maxRate = Math.max(...rates);
+    if (maxRate === 0) continue;
+    requiredRates[srcFluid] = (requiredRates[srcFluid] || 0) + maxRate;
+    products.forEach(p => { if ((requiredRates[p] || 0) > 0) requiredRates[p] = maxRate; });
+  }
+
+  const machines = {};
+  const mines    = {};
+  const fluids   = {};
+  const countedDistillSources = new Set();
+
+  for (const [itemName, rate] of Object.entries(requiredRates)) {
+    const item = recipes[itemName];
+    if (!item) continue;
+
+    if (FLUID_STOPS.has(itemName)) {
+      fluids[itemName] = (fluids[itemName] || 0) + rate;
+      continue;
+    }
+
+    if (item.raw) {
+      // Raw fluids show as fluid/s, raw ore/wood/crystal handled via PRIMARY_ORE_PROCESSORS — skip here
+      if (item.type === 'fluid') fluids[itemName] = (fluids[itemName] || 0) + rate;
+      continue;
+    }
+
+    if (DISTILLATION_SOURCE[itemName]) {
+      const src = DISTILLATION_SOURCE[itemName];
+      if (countedDistillSources.has(src)) continue;
+      countedDistillSources.add(src);
+      const cycleTime = machineCycleTimes['T10+ Distillation Tower'];
+      machines['T10+ Distillation Tower'] = (machines['T10+ Distillation Tower'] || 0) + (rate * cycleTime);
+      continue;
+    }
+
+    const cycleTime = machineCycleTimes[item.machine] || 1.0;
+    const outputQty = machineOutputQty[item.machine] || 1;
+    const machCount = rate * cycleTime / outputQty;
+
+    // First-stage processors: use Quint ratio for mine count instead of tracing raw resources
+    if (PRIMARY_ORE_PROCESSORS[itemName]) {
+      const mineLabel = PRIMARY_ORE_PROCESSORS[itemName];
+      mines[mineLabel] = (mines[mineLabel] || 0) + machCount * MINE_RATIO;
+    }
+
+    machines[item.machine] = (machines[item.machine] || 0) + machCount;
+  }
+
+  // Lock final machine to exactly what user entered
+  if (topItem.machine && machines[topItem.machine] !== undefined) {
+    machines[topItem.machine] = machineCount;
+  }
+
+  const harvestMult = harvest15x ? 1.5 : 1.0;
+
   document.getElementById('chainResultsArea').style.display = 'flex';
-  
 
-  const machContent = document.querySelector('#machineList .content');
-  const rawContent = document.querySelector('#rawList .content');
-  
-  machContent.innerHTML = '';
-  rawContent.innerHTML = '';
+  const machContent  = document.querySelector('#machineList .content');
+  const mineContent  = document.querySelector('#mineList .content');
+  const fluidContent = document.querySelector('#fluidList .content');
 
-  for (const [name, qty] of Object.entries(machineCounts)) {
-    machContent.innerHTML += `<div class="item-row"><span>${name}</span> <span><b>${Math.ceil(qty)}</b>x</span></div>`;
+  machContent.innerHTML  = '';
+  mineContent.innerHTML  = '';
+  fluidContent.innerHTML = '';
+
+  for (const [name, qty] of Object.entries(machines)) {
+    machContent.innerHTML += `<div class="item-row">
+      <span>${name}</span>
+      <span><b>${Math.ceil(qty)}</b>x <span style="color:var(--dim);font-size:10px;">(${qty.toFixed(2)})</span></span>
+    </div>`;
   }
 
-  for (const [name, rate] of Object.entries(rawCounts)) {
-    rawContent.innerHTML += `<div class="item-row"><span>${name}</span> <span><b>${rate.toFixed(1)}</b>/s</span></div>`;
+  for (const [label, count] of Object.entries(mines)) {
+    const adjusted = count / harvestMult;
+    mineContent.innerHTML += `<div class="item-row">
+      <span>${label}</span>
+      <span><b>${Math.ceil(adjusted)}</b>x</span>
+    </div>`;
   }
-}</script>
+
+  for (const [name, rate] of Object.entries(fluids)) {
+    fluidContent.innerHTML += `<div class="item-row">
+      <span>${name}</span>
+      <span><b>${rate.toFixed(2)}</b>/s</span>
+    </div>`;
+  }
+
+  if (!machContent.innerHTML)  machContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
+  if (!mineContent.innerHTML)  mineContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
+  if (!fluidContent.innerHTML) fluidContent.innerHTML = '<div style="color:var(--dim)">—</div>';
+}
+</script>
 </body>
 </html>
