@@ -112,102 +112,30 @@
    <div class="controls">
     <div class="ctrl-group" style="max-width:380px;">
       <label>Select Item to View Chain</label>
-      <select id="itemSelect" onchange="renderTree()">
-          <optgroup label="🧪 Fluids & Filtration">
-          <option>Eveready Petroleum</option>
-          <option>Treated Alto Fluid</option>
-          <option>Fluid Garnet</option>
-          <option>Balancer Solution</option>
-          <option>Light Fluid Garnet</option>
-          <option>Heavy Fluid Garnet</option>
-          <option>Light Fraction</option>
-          <option>Medium Fraction</option>
-          <option>Heavy Fraction</option>
-          <option>Alto Thinner</option>
-          <option>Alto Essence</option>
-          <option>Alto Primer</option>
-          <option>Alto Blend</option>
-          <option>Purified Alto Blend</option>
-          <option>Energized Alto Blend</option>
-          <option>Cloudy Alloy Mix</option>
-          <option>Radiating Alto</option>
-          <option>Crossed Alto Alloy</option>
-          <option>Essential Chroma Dye</option>
-          <option>Reatomized Chromastone</option>
-        </optgroup>
-        <optgroup label="🪵 Wood Chain">
-          <option>Meso Fiber Filter</option>
-          <option>Ascendeso Fiber Filter</option>
-          <option>Meso Wood Panel</option>
-          <option>Meso Polyhedron</option>
-          <option>Ascendeso Wood Panel</option>
-          <option>Enamel</option>
-          <option>Hardened Charm Casing</option>
-        </optgroup>
-        <optgroup label="💎 Gems & Dyes">
-          <option>Chromastone Dye</option>
-          <option>Chromastone Spark</option>
-          <option>Chromastone Charm</option>
-          <option>Aerelium Charm</option>
-          <option>Godspark</option>
-          <option>Godspark Charm</option>
-          <option>Cyan Dye</option>
-          <option>Purple Dye</option>
-          <option>Red Dye</option>
-          <option>Green Dye</option>
-          <option>Blue Dye</option>
-        </optgroup>
-        <optgroup label="⛏ Ore Chains">
-          <option>Terrastrix Ingot</option>
-          <option>Stratosteel Ingot</option>
-          <option>Coreodeon Ingot</option>
-          <option>Refined Terrastrix Ingot</option>
-          <option>Refined Stratosteel Ingot</option>
-          <option>Refined Coreodeon Ingot</option>
-        </optgroup>
-        <optgroup label="🔩 Alloy Ingots">
-          <option>Terrasteel Alloy Ingot</option>
-          <option>Stratostrix Alloy Ingot</option>
-          <option>Coreostrix Alloy Ingot</option>
-          <option>Coreosteel Alloy Ingot</option>
-          <option>Enriched Terrastrix Sand</option>
-          <option>Enriched Stratosteel Sand</option>
-        </optgroup>
-        <optgroup label="🏆 End-Game">
-          <option>Alto Alloy Core</option>
-          <option>Gravisphere</option>
-          <option>Cloudy Sphere Field</option>
-          <option>Terra Mechanical Gear</option>
-          <option>Strato Mechanical Gear</option>
-          <option>Dome Gyroscope</option>
-          <option>Terra Alloy Axiom</option>
-          <option>Dome Field</option>
-          <option>Celestial Supergear</option>
-          <option>Divine Supergear</option>
-          <option>Olympus Tri-Axiom</option>
-          <option>Olympus Dyson Axiom</option>
-        </optgroup>
+      <select id="itemSelect">
+        <option value="Olympus Dyson Axiom">🏆 Olympus Dyson Axiom (ODA)</option>
+        <option value="Olympus Tri-Axiom">🏆 Olympus Tri-Axiom (OTA)</option>
       </select>
         </div>
         <div class="calc-group">
-          <label>Target Output</label>
-          <input type="number" id="calcRate" value="1" step="0.1" style="width:100px;">
+          <label>Number of Final Machines</label>
+          <input type="number" id="calcRate" value="1" step="1" style="width:100px;">
+        </div>
+        <div class="calc-group" style="justify-content:flex-end;">
+          <label>1.5x Harvest Gamepass</label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;">
+            <input type="checkbox" id="harvest15x" style="width:16px;height:16px;cursor:pointer;">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);">Active</span>
+          </label>
         </div>
         <button class="btn" onclick="runFullChainCalc()">Calculate Full Factory →</button>
-        <div class="calc-group" style="justify-content:flex-end;">
-         <label>1.5x Harvest Gamepass</label>
-         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;">
-          <input type="checkbox" id="harvest15x" style="width:16px;height:16px;cursor:pointer;">
-         <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);">Active</span>
-        </label>
       </div>
-     </div>
 
       <div class="grid" id="chainResultsArea" style="display:none; flex-wrap:wrap;">
-  <div class="col" id="machineList"><h3>🏭 Machines Needed</h3><div class="content"></div></div>
-  <div class="col" id="mineList"><h3>⛏️ Mines & Farms</h3><div class="content"></div></div>
-  <div class="col" id="fluidList"><h3>💧 Fluid Consumption</h3><div class="content"></div></div>
-</div>
+        <div class="col" id="machineList"><h3>🏭 Machines Needed</h3><div class="content"></div></div>
+        <div class="col" id="mineList"><h3>⛏️ Mines & Farms</h3><div class="content"></div></div>
+        <div class="col" id="fluidList"><h3>💧 Fluid Consumption</h3><div class="content"></div></div>
+      </div>
     </div>
   </div>
 
@@ -388,7 +316,6 @@ const recipes = {
   'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
   'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
 };
-
 // Machine data for the first calculator
 const machineData = {
   single:      { name:'Single Assembler',      time:3.125, mines:1.6,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
@@ -406,6 +333,8 @@ const machineData = {
   mixer:       { name:'Multi-Flow Mixer',       time:0.25,  mines:0,       extractors:0,    mineLabel:'',           extractLabel:'' },
   tumbler:     { name:'Tumbler',                time:0.25,  mines:20,      extractors:1.56, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
 };
+
+
 // ==========================================
 // 2. MATH ENGINE FOR CALC 1 (Ratios)
 // ==========================================
@@ -490,17 +419,13 @@ for (const [src, prods] of Object.entries(DISTILLATION_GROUPS)) {
 
 const FLUID_STOPS = new Set(['Eveready Petroleum', 'Treated Alto Fluid']);
 
-const MINE_RATIO = 2.0007;
-  
-const PRIMARY_ORE_PROCESSORS = {
-  'Terrastrix Gravel':        'Terrastrix Ore Mine',
-  'Stratosteel Gravel':       'Stratosteel Ore Mine',
-  'Coreodeon Gravel':         'Coreodeon Ore Mine',
-  'Aerelium Shard':           'Aerelium Crystal Mine',
-  'Aerelium Gem':             'Aerelium Crystal Mine',
-  'Chromastone Gem':          'Chromastone Mine',
-  'Reatomized Chromastone':   'Chromastone Mine',
-  'Mesossential Wood Boards': 'Mesossential Tree Farm',
+const RAW_RATES = {
+  'Terrastrix Ore':      { rate: 0.2,  label: 'Terrastrix Ore Mine' },
+  'Stratosteel Ore':     { rate: 0.2,  label: 'Stratosteel Ore Mine' },
+  'Coreodeon Ore':       { rate: 0.2,  label: 'Coreodeon Ore Mine' },
+  'Aerelium Crystal':    { rate: 0.2,  label: 'Aerelium Crystal Mine' },
+  'Chromastone Crystal': { rate: 0.1,  label: 'Chromastone Mine' },
+  'Mesossential Wood':   { rate: 0.2,  label: 'Mesossential Tree Farm' },
 };
 
 function runFullChainCalc() {
@@ -550,7 +475,6 @@ function runFullChainCalc() {
 
   accumulateRates(target, targetRate);
 
-  // Distillation post-process: one tower run produces all co-products at once
   for (const [srcFluid, products] of Object.entries(DISTILLATION_GROUPS)) {
     const rates   = products.map(p => requiredRates[p] || 0);
     const maxRate = Math.max(...rates);
@@ -559,9 +483,9 @@ function runFullChainCalc() {
     products.forEach(p => { if ((requiredRates[p] || 0) > 0) requiredRates[p] = maxRate; });
   }
 
-  const machines = {};
-  const mines    = {};
-  const fluids   = {};
+  const machineItems = {};
+  const mines        = {};
+  const fluids       = {};
   const countedDistillSources = new Set();
 
   for (const [itemName, rate] of Object.entries(requiredRates)) {
@@ -574,8 +498,12 @@ function runFullChainCalc() {
     }
 
     if (item.raw) {
-     
-      if (item.type === 'fluid') fluids[itemName] = (fluids[itemName] || 0) + rate;
+      if (item.type === 'fluid') {
+        fluids[itemName] = (fluids[itemName] || 0) + rate;
+      } else if (RAW_RATES[itemName]) {
+        const { rate: mineRate, label } = RAW_RATES[itemName];
+        mines[label] = (mines[label] || 0) + (rate / mineRate);
+      }
       continue;
     }
 
@@ -584,27 +512,25 @@ function runFullChainCalc() {
       if (countedDistillSources.has(src)) continue;
       countedDistillSources.add(src);
       const cycleTime = machineCycleTimes['T10+ Distillation Tower'];
-      machines['T10+ Distillation Tower'] = (machines['T10+ Distillation Tower'] || 0) + (rate * cycleTime);
+      const cnt = rate * cycleTime;
+      machineItems['T10+ Distillation Tower'] = {
+        machine: 'T10+ Distillation Tower',
+        count: (machineItems['T10+ Distillation Tower']?.count || 0) + cnt
+      };
       continue;
     }
 
     const cycleTime = machineCycleTimes[item.machine] || 1.0;
     const outputQty = machineOutputQty[item.machine] || 1;
-    const machCount = rate * cycleTime / outputQty;
+    const cnt       = rate * cycleTime / outputQty;
 
-  
-    if (PRIMARY_ORE_PROCESSORS[itemName]) {
-      const mineLabel = PRIMARY_ORE_PROCESSORS[itemName];
-      mines[mineLabel] = (mines[mineLabel] || 0) + machCount * MINE_RATIO;
+    if (!machineItems[itemName]) {
+      machineItems[itemName] = { machine: item.machine, count: 0 };
     }
-
-    machines[item.machine] = (machines[item.machine] || 0) + machCount;
+    machineItems[itemName].count += cnt;
   }
 
-
-  if (topItem.machine && machines[topItem.machine] !== undefined) {
-    machines[topItem.machine] = machineCount;
-  }
+  if (machineItems[target]) machineItems[target].count = machineCount;
 
   const harvestMult = harvest15x ? 1.5 : 1.0;
 
@@ -618,10 +544,45 @@ function runFullChainCalc() {
   mineContent.innerHTML  = '';
   fluidContent.innerHTML = '';
 
-  for (const [name, qty] of Object.entries(machines)) {
+  const ASSEMBLER_TYPES = new Set([
+    'T10+ Assembler', 'T10+ Dual Assembler', '102+ Dual Assembler',
+    'T10+ Triple Assembler', 'T10+ Quadruple Assembler', 'T10+ Quintuple Assembler',
+    'T10+ Accelerator', 'T10+ Workstation',
+  ]);
+
+  const assemblerGroups = {};
+  const otherMachines   = {};
+
+  for (const [itemName, { machine, count }] of Object.entries(machineItems)) {
+    if (ASSEMBLER_TYPES.has(machine)) {
+      if (!assemblerGroups[machine]) assemblerGroups[machine] = [];
+      assemblerGroups[machine].push({ itemName, count });
+    } else {
+      otherMachines[machine] = (otherMachines[machine] || 0) + count;
+    }
+  }
+
+  machContent.innerHTML = '';
+
+  // Render assemblers: machine name bold, items beneath not bold
+  for (const [machineName, items] of Object.entries(assemblerGroups)) {
+    const totalCount = items.reduce((s, i) => s + i.count, 0);
+    machContent.innerHTML += `<div class="item-row" style="margin-top:8px;">
+      <span><b>${machineName}</b></span>
+      <span><b>${Math.ceil(totalCount)}</b>x <span style="color:var(--dim);font-size:10px;">(${totalCount.toFixed(2)})</span></span>
+    </div>`;
+    for (const { itemName, count } of items) {
+      machContent.innerHTML += `<div class="item-row" style="padding-left:14px;opacity:0.8;">
+        <span style="color:var(--dim);font-size:11px;">↳ ${itemName}</span>
+        <span style="font-size:11px;">${Math.ceil(count)}x <span style="color:var(--dim);font-size:10px;">(${count.toFixed(2)})</span></span>
+      </div>`;
+    }
+  }
+
+  for (const [machineName, count] of Object.entries(otherMachines)) {
     machContent.innerHTML += `<div class="item-row">
-      <span>${name}</span>
-      <span><b>${Math.ceil(qty)}</b>x <span style="color:var(--dim);font-size:10px;">(${qty.toFixed(2)})</span></span>
+      <span>${machineName}</span>
+      <span><b>${Math.ceil(count)}</b>x <span style="color:var(--dim);font-size:10px;">(${count.toFixed(2)})</span></span>
     </div>`;
   }
 
@@ -634,16 +595,17 @@ function runFullChainCalc() {
   }
 
   for (const [name, rate] of Object.entries(fluids)) {
+    const isRawFluid   = recipes[name] && recipes[name].raw && recipes[name].type === 'fluid';
+    const adjustedRate = isRawFluid ? rate / harvestMult : rate;
     fluidContent.innerHTML += `<div class="item-row">
       <span>${name}</span>
-      <span><b>${rate.toFixed(2)}</b>/s</span>
+      <span><b>${adjustedRate.toFixed(2)}</b>/s</span>
     </div>`;
   }
 
   if (!machContent.innerHTML)  machContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
   if (!mineContent.innerHTML)  mineContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
   if (!fluidContent.innerHTML) fluidContent.innerHTML = '<div style="color:var(--dim)">—</div>';
-}
-</script>
+}</script>
 </body>
 </html>
