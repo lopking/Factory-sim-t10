@@ -430,7 +430,6 @@ const PRIMARY_ORE_PROCESSORS = {
   'Mesossential Wood Boards': { label: 'Mesossential Tree Farm', minesPerMachine: 10 },
 };
 
-// Raw resource production rates per mine/farm/extractor
 const RAW_RATES = {
   'Terrastrix Ore':      { rate: 0.2,  label: 'Terrastrix Ore Mine' },
   'Stratosteel Ore':     { rate: 0.2,  label: 'Stratosteel Ore Mine' },
@@ -487,7 +486,6 @@ function runFullChainCalc() {
 
   accumulateRates(target, targetRate);
 
-  // Distillation post-process: one tower run produces all co-products at once
   for (const [srcFluid, products] of Object.entries(DISTILLATION_GROUPS)) {
     const rates   = products.map(p => requiredRates[p] || 0);
     const maxRate = Math.max(...rates);
@@ -495,11 +493,6 @@ function runFullChainCalc() {
     requiredRates[srcFluid] = (requiredRates[srcFluid] || 0) + maxRate;
     products.forEach(p => { if ((requiredRates[p] || 0) > 0) requiredRates[p] = maxRate; });
   }
-
-  // machines keyed by itemName so Divine and Celestial show separately
-  // { itemName: { machine, count } }
-  // How many L of raw fluid each recipe consumes per machine cycle
-
 
   const machineItems = {};
   const mines        = {};
@@ -509,11 +502,8 @@ function runFullChainCalc() {
     const item = recipes[itemName];
     if (!item) continue;
 
-    // Raw ore/crystal/wood — skip, mines derived from first-stage machine below
     if (item.raw) continue;
-
-    // FLUID_STOPS (Eveready Petroleum, Treated Alto Fluid) — don't show as machines,
-    // their raw fluid consumption is handled via FLUID_INPUT_LITERS below
+    
     if (FLUID_STOPS.has(itemName)) continue;
 
     if (DISTILLATION_SOURCE[itemName]) {
@@ -545,11 +535,8 @@ function runFullChainCalc() {
     machineItems[itemName].count += cnt;
   }
 
-  // Lock final item to exactly what the user entered
   if (machineItems[target]) machineItems[target].count = machineCount;
 
-  // Vein Petroleum and Aqueous Alto L/s derived from total ore mine count
-  // Ratio: 1 belt (20 mines) = 1.56 extractors, each extractor = 48 L/s
   const FLUID_EXTRACTOR_RATIO = 1.56;
   const EXTRACTOR_LS          = 48;
   const BELT_SIZE             = 20;
@@ -566,7 +553,6 @@ function runFullChainCalc() {
   const fluidLS         = extractors * EXTRACTOR_LS;
   const adjustedFluidLS = fluidLS / harvestMult;
 
-  // Alto: fixed 4 extractors per max ODA (1 quint), scale by machine count
   const altoExtractors  = 4 * machineCount;
   const altoLS          = (altoExtractors * EXTRACTOR_LS) / harvestMult;
 
@@ -582,15 +568,14 @@ function runFullChainCalc() {
   mineContent.innerHTML  = '';
   fluidContent.innerHTML = '';
 
-  // Assembler types get per-item breakdown, others get grouped by machine
   const ASSEMBLER_TYPES = new Set([
     'T10+ Assembler', 'T10+ Dual Assembler', '102+ Dual Assembler',
     'T10+ Triple Assembler', 'T10+ Quadruple Assembler', 'T10+ Quintuple Assembler',
     'T10+ Accelerator', 'T10+ Workstation',
   ]);
 
-  const assemblerGroups = {}; // { machineName: [{itemName, count}] }
-  const otherMachines   = {}; // { machineName: totalCount }
+  const assemblerGroups = {};
+  const otherMachines   = {};
 
   for (const [itemName, { machine, count }] of Object.entries(machineItems)) {
     if (ASSEMBLER_TYPES.has(machine)) {
@@ -603,7 +588,6 @@ function runFullChainCalc() {
 
   machContent.innerHTML = '';
 
-  // Render assemblers: machine name bold, items beneath not bold
   for (const [machineName, items] of Object.entries(assemblerGroups)) {
     const totalCount = items.reduce((s, i) => s + i.count, 0);
     machContent.innerHTML += `<div class="item-row" style="margin-top:8px;">
@@ -618,7 +602,6 @@ function runFullChainCalc() {
     }
   }
 
-  // Render other machines normally
   for (const [machineName, count] of Object.entries(otherMachines)) {
     machContent.innerHTML += `<div class="item-row">
       <span>${machineName}</span>
