@@ -3,34 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Factory Simulator Full Chain</title>
+<title>Factory Sim — Full Chain Viewer</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
-
-  :root {
-    --bg: #080b0f;
-    --panel: #0d1117;
-    --panel2: #111720;
-    --border: #1c2530;
-    --accent: #00e5ff;
-    --green: #39ff14;
-    --orange: #ff8c42;
-    --purple: #bf7fff;
-    --gold: #ffd700;
-    --red: #ff4466;
-    --text: #c8d8e8;
-    --dim: #4a5a6a;
-    --dim2: #2a3540;
+  
+  :root { 
+    --bg: #080b0f; 
+    --panel: #0d1117; 
+    --panel2: #111720; 
+    --border: #1c2530; 
+    --accent: #00e5ff; 
+    --green: #39ff14; 
+    --orange: #ff8c42; 
+    --purple: #bf7fff; 
+    --gold: #ffd700; 
+    --red: #ff4466; 
+    --text: #c8d8e8; 
+    --dim: #4a5a6a; 
+    --dim2: #2a3540; 
   }
-
+  
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Exo 2', sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 13px; min-height: 100vh; }
+  
+  /* ── BACKGROUND EFFECT ── */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -38,281 +34,114 @@
     pointer-events: none; z-index: 999;
   }
 
-  header {
-    padding: 24px 32px 20px;
-    border-bottom: 2px solid var(--accent);
-    background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f);
-    position: relative; overflow: hidden;
-  }
+  /* ── HEADER ── */
+  header { padding: 28px 32px 22px; border-bottom: 2px solid var(--accent); background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f); position: relative; overflow: hidden; }
   header::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, var(--accent) 40%, var(--purple) 60%, transparent);
   }
-  .hglow {
-    position: absolute; top: -80px; left: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 160px;
-    background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%);
-    pointer-events: none;
-  }
-  h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 24px; font-weight: 900;
-    letter-spacing: 4px; text-transform: uppercase;
-    color: var(--accent);
-    text-shadow: 0 0 24px rgba(0,229,255,0.4);
-  }
+  header .glow { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 700px; height: 160px; background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%); pointer-events: none; }
+  h1 { font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 24px rgba(0,229,255,0.5); }
   .subtitle { font-family: 'Share Tech Mono', monospace; color: var(--dim); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
 
-  .container { max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px; }
-
-  /* ── CONTROLS ── */
-  .controls {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 18px 20px;
-    margin-bottom: 24px;
-    display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
-  }
-  .ctrl-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 200px; }
-  .ctrl-group label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--dim);
-  }
-  select, input[type=text] {
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px; padding: 9px 13px;
-    outline: none; width: 100%;
-    transition: border-color 0.2s;
-  }
+  /* ── LAYOUT & CARDS (Matched to calc2.html) ── */
+  .container { max-width: 1300px; margin: 0 auto; padding: 28px 20px 60px; }
+  .card { background: var(--panel); border: 1px solid var(--border); margin-bottom: 28px; }
+  .card-head { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .card-head.gold  { background: rgba(255,215,0,0.08); color: var(--gold); border-bottom-color: rgba(255,215,0,0.2); }
+  .card-head.cyan  { background: rgba(0,229,255,0.08); color: var(--accent); border-bottom-color: rgba(0,229,255,0.2); }
+  .card-head.purple { background: rgba(191,127,255,0.08); color: var(--purple); border-bottom-color: rgba(191,127,255,0.2); }
+  .card-body { padding: 20px; }
+  
+  .calc-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 5px;}
+  .calc-group { display: flex; flex-direction: column; gap: 5px; }
+  .calc-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; }
+  
+  /* ── INPUTS & BUTTONS ── */
+  select, input[type=text] { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 9px 13px; outline: none; font-family: 'Share Tech Mono', monospace; font-size: 12px; width: 100%; transition: border-color 0.2s; }
   select:focus, input:focus { border-color: var(--accent); }
   select option { background: #111720; }
 
-  .btn {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px; letter-spacing: 2px;
-    padding: 9px 20px; cursor: pointer;
-    text-transform: uppercase;
-    border: 1px solid;
-    transition: all 0.2s;
-    white-space: nowrap;
-    align-self: flex-end;
-  }
-  .btn-primary { background: rgba(0,229,255,0.1); border-color: var(--accent); color: var(--accent); }
-  .btn-primary:hover { background: rgba(0,229,255,0.22); }
+  .btn { background: rgba(0,229,255,0.1); border: 1px solid var(--accent); color: var(--accent); font-family: 'Orbitron', monospace; font-size: 10px; padding: 8px 20px; cursor: pointer; text-transform: uppercase; text-decoration: none; align-self: flex-end; letter-spacing: 2px; transition: all 0.2s; white-space: nowrap;}
+  .btn:hover { background: rgba(0,229,255,0.2); }
   .btn-ghost { background: transparent; border-color: var(--border); color: var(--dim); }
   .btn-ghost:hover { border-color: var(--purple); color: var(--purple); }
 
-  /* ── MAIN LAYOUT ── */
-  .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+  /* ── INFO BOX ── */
+  .info-box { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15); padding: 10px 14px; margin-bottom: 24px; font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 1.8; }
+  .info-box .ib-title { color: var(--accent); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* ── MAIN GRID ── */
+  .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
   @media(max-width:900px) { .main-grid { grid-template-columns: 1fr; } }
 
-  /* ── TREE ── */
-  #treeContainer {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 18px 20px;
-    min-height: 200px;
-    overflow-x: auto;
-  }
-
-  .empty-state {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 60px 20px;
-    color: var(--dim);
-    font-family: 'Share Tech Mono', monospace; font-size: 12px; text-align: center;
-    gap: 12px;
-  }
+  /* ── TREE STRUCTURE ── */
+  #treeContainer { background: var(--panel2); border: 1px solid var(--border); padding: 18px 20px; min-height: 250px; overflow-x: auto; }
+  
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--dim); font-family: 'Share Tech Mono', monospace; font-size: 12px; text-align: center; gap: 12px; }
   .empty-state .big { font-size: 36px; }
 
-  /* Tree structure */
   .tree-root { padding: 0; }
-
   .tree-node { position: relative; margin-bottom: 2px; }
+  .tree-children { padding-left: 28px; margin-left: 13px; border-left: 1px dashed var(--dim2); padding-top: 2px; }
+  .tree-node > .tree-children > .tree-node::before { content: ''; position: absolute; left: -15px; top: 14px; width: 13px; height: 1px; background: var(--dim2); }
 
-  .tree-children {
-    padding-left: 28px;
-    margin-left: 13px;
-    border-left: 1px dashed var(--dim2);
-    padding-top: 2px;
-  }
-
-  .tree-node > .tree-children > .tree-node::before {
-    content: '';
-    position: absolute;
-    left: -15px; top: 14px;
-    width: 13px; height: 1px;
-    background: var(--dim2);
-  }
-
-  .node-header {
-    display: flex; align-items: center; gap: 6px;
-    padding: 6px 10px 6px 8px;
-    border: 1px solid var(--border);
-    background: var(--panel2);
-    cursor: default;
-    user-select: none;
-    flex-wrap: wrap;
-    position: relative;
-    transition: border-color 0.15s;
-  }
+  .node-header { display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 8px; border: 1px solid var(--border); background: var(--panel2); cursor: default; user-select: none; flex-wrap: wrap; position: relative; transition: border-color 0.15s; }
   .node-header:hover { border-color: rgba(0,229,255,0.25); }
 
-  /* item types */
-  .node-header.raw    { border-left: 3px solid var(--green);  background: rgba(57,255,20,0.03); }
+  .node-header.raw       { border-left: 3px solid var(--green);  background: rgba(57,255,20,0.03); }
   .node-header.byproduct { border-left: 3px solid var(--orange); background: rgba(255,140,66,0.03); }
-  .node-header.crafted{ border-left: 3px solid var(--accent); }
-  .node-header.target { border-left: 3px solid var(--gold); background: rgba(255,215,0,0.04); }
-  .node-header.seen   { border-left: 3px solid var(--dim2); background: var(--panel); opacity: 0.7; }
+  .node-header.crafted   { border-left: 3px solid var(--accent); }
+  .node-header.target    { border-left: 3px solid var(--gold); background: rgba(255,215,0,0.04); }
+  .node-header.seen      { border-left: 3px solid var(--dim2); background: var(--panel); opacity: 0.7; }
 
-  .toggle-btn {
-    width: 18px; height: 18px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--dim);
-    font-size: 10px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-family: 'Share Tech Mono', monospace;
-    transition: all 0.15s;
-    line-height: 1;
-  }
+  .toggle-btn { width: 18px; height: 18px; background: var(--panel); border: 1px solid var(--border); color: var(--dim); font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Share Tech Mono', monospace; transition: all 0.15s; line-height: 1; }
   .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
   .toggle-btn.collapsed { color: var(--green); border-color: var(--dim2); }
 
   .node-icon { font-size: 14px; flex-shrink: 0; }
-
-  .node-name {
-    font-family: 'Exo 2', sans-serif;
-    font-weight: 600; font-size: 12px; color: #fff;
-    flex: 1; min-width: 120px;
-  }
-  .node-header.raw .node-name    { color: var(--green); }
-  .node-header.target .node-name { color: var(--gold); font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.5px; }
+  .node-name { font-family: 'Exo 2', sans-serif; font-weight: 600; font-size: 12px; color: #fff; flex: 1; min-width: 120px; }
+  .node-header.raw .node-name       { color: var(--green); }
+  .node-header.target .node-name    { color: var(--gold); font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.5px; }
   .node-header.byproduct .node-name { color: var(--orange); }
-  .node-header.seen .node-name   { color: var(--dim); font-style: italic; }
+  .node-header.seen .node-name      { color: var(--dim); font-style: italic; }
 
-  .node-price {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px; color: var(--green); flex-shrink: 0;
-  }
-  .node-machine {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    background: rgba(191,127,255,0.12);
-    color: var(--purple);
-    border: 1px solid rgba(191,127,255,0.25);
-    padding: 2px 8px;
-    flex-shrink: 0;
-  }
-  .node-source {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    background: rgba(57,255,20,0.08);
-    color: var(--green);
-    border: 1px solid rgba(57,255,20,0.2);
-    padding: 2px 8px;
-    flex-shrink: 0;
-  }
-  .node-note {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--orange);
-    padding: 2px 8px;
-    background: rgba(255,140,66,0.06);
-    border: 1px solid rgba(255,140,66,0.15);
-    flex-shrink: 0;
-  }
-  .node-seen-tag {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; color: var(--dim);
-    font-style: italic;
-  }
+  .node-price { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green); flex-shrink: 0; }
+  .node-machine { font-family: 'Share Tech Mono', monospace; font-size: 10px; background: rgba(191,127,255,0.12); color: var(--purple); border: 1px solid rgba(191,127,255,0.25); padding: 2px 8px; flex-shrink: 0; }
+  .node-source { font-family: 'Share Tech Mono', monospace; font-size: 10px; background: rgba(57,255,20,0.08); color: var(--green); border: 1px solid rgba(57,255,20,0.2); padding: 2px 8px; flex-shrink: 0; }
+  .node-note { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--orange); padding: 2px 8px; background: rgba(255,140,66,0.06); border: 1px solid rgba(255,140,66,0.15); flex-shrink: 0; }
+  .node-seen-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); font-style: italic; }
 
   .tree-collapsed { display: none; }
 
   /* ── SUMMARY PANEL ── */
-  .summary-panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 16px;
-    position: sticky; top: 16px;
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-  }
-
-  .sum-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 6px 10px;
-    margin-bottom: 12px;
-    border-left: 3px solid var(--gold);
-    background: rgba(255,215,0,0.06);
-    color: var(--gold);
-  }
+  .summary-panel { position: sticky; top: 16px; max-height: calc(100vh - 40px); overflow-y: auto; }
   .sum-section { margin-bottom: 16px; }
-  .sum-section-title {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--dim); margin-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 4px;
-  }
-
-  .sum-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 5px 8px; margin-bottom: 3px;
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    font-family: 'Share Tech Mono', monospace; font-size: 11px;
-  }
+  .sum-section-title { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  
+  .sum-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; margin-bottom: 3px; background: var(--panel2); border: 1px solid var(--border); font-family: 'Share Tech Mono', monospace; font-size: 11px; }
   .sum-item .si-name { color: var(--text); }
-  .sum-item .si-count {
-    font-weight: 700; font-size: 13px;
-    padding: 1px 8px;
-    background: rgba(0,229,255,0.08);
-    color: var(--accent);
-  }
+  .sum-item .si-count { font-weight: 700; font-size: 13px; padding: 1px 8px; background: rgba(0,229,255,0.08); color: var(--accent); }
+  
   .sum-item.raw-mine .si-name  { color: var(--green); }
   .sum-item.raw-mine .si-count { background: rgba(57,255,20,0.08); color: var(--green); }
   .sum-item.raw-fluid .si-name { color: var(--orange); }
   .sum-item.raw-fluid .si-count{ background: rgba(255,140,66,0.08); color: var(--orange); }
-  .sum-item.mach .si-name  { color: var(--purple); }
-  .sum-item.mach .si-count { background: rgba(191,127,255,0.08); color: var(--purple); }
+  .sum-item.mach .si-name      { color: var(--purple); }
+  .sum-item.mach .si-count     { background: rgba(191,127,255,0.08); color: var(--purple); }
 
   .sum-empty { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); padding: 8px; }
 
-  /* info box */
-  .info-box {
-    background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
-    padding: 10px 14px; margin-bottom: 20px;
-    font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 1.8;
-  }
-  .info-box .ib-title { color: var(--accent); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-
-  footer {
-    text-align: center; padding: 20px;
-    color: var(--dim);
-    font-family: 'Share Tech Mono', monospace; font-size: 10px;
-    letter-spacing: 2px;
-    border-top: 1px solid var(--border); margin-top: 40px;
-  }
+  footer { text-align: center; padding: 20px; color: var(--dim); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; border-top: 1px solid var(--border); margin-top: 40px; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hglow"></div>
+  <div class="glow"></div>
   <h1>⛓ Factory Sim — Full Chain Viewer</h1>
   <div class="subtitle">Select any item to see the complete ingredient tree — every machine, mine, and extractor needed</div>
-  <table>
+   <table>
    <th>
     <div style="margin-top: 15px;">
      <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
@@ -332,7 +161,7 @@
      </div>
     </th>
    </table>
-
+</header>
 
 <div class="container">
 
@@ -343,125 +172,132 @@
     <span style="color:var(--orange)">🟠 Byproducts</span>. Click any node with a <strong style="color:#fff">[−]</strong> button to collapse that branch. The summary panel on the right tallies up all unique machines and raw resources needed.
   </div>
 
-  <!-- Controls -->
-  <div class="controls">
-    <div class="ctrl-group" style="max-width:380px;">
-      <label>Select Item to View Chain</label>
-      <select id="itemSelect" onchange="renderTree()">
-        <option value="">— Choose an item —</option>
-        <optgroup label="🧪 Fluids & Filtration">
-          <option>Eveready Petroleum</option>
-          <option>Treated Alto Fluid</option>
-          <option>Fluid Garnet</option>
-          <option>Balancer Solution</option>
-          <option>Light Fluid Garnet</option>
-          <option>Heavy Fluid Garnet</option>
-          <option>Light Fraction</option>
-          <option>Medium Fraction</option>
-          <option>Heavy Fraction</option>
-          <option>Alto Thinner</option>
-          <option>Alto Essence</option>
-          <option>Alto Primer</option>
-          <option>Alto Blend</option>
-          <option>Purified Alto Blend</option>
-          <option>Energized Alto Blend</option>
-          <option>Cloudy Alloy Mix</option>
-          <option>Radiating Alto</option>
-          <option>Crossed Alto Alloy</option>
-          <option>Essential Chroma Dye</option>
-          <option>Reatomized Chromastone</option>
-        </optgroup>
-        <optgroup label="🪵 Wood Chain">
-          <option>Meso Fiber Filter</option>
-          <option>Ascendeso Fiber Filter</option>
-          <option>Meso Wood Panel</option>
-          <option>Meso Polyhedron</option>
-          <option>Ascendeso Wood Panel</option>
-          <option>Enamel</option>
-          <option>Hardened Charm Casing</option>
-        </optgroup>
-        <optgroup label="💎 Gems & Dyes">
-          <option>Chromastone Dye</option>
-          <option>Chromastone Spark</option>
-          <option>Chromastone Charm</option>
-          <option>Aerelium Charm</option>
-          <option>Godspark</option>
-          <option>Godspark Charm</option>
-          <option>Cyan Dye</option>
-          <option>Purple Dye</option>
-          <option>Red Dye</option>
-          <option>Green Dye</option>
-          <option>Blue Dye</option>
-        </optgroup>
-        <optgroup label="⛏ Ore Chains">
-          <option>Terrastrix Ingot</option>
-          <option>Stratosteel Ingot</option>
-          <option>Coreodeon Ingot</option>
-          <option>Refined Terrastrix Ingot</option>
-          <option>Refined Stratosteel Ingot</option>
-          <option>Refined Coreodeon Ingot</option>
-        </optgroup>
-        <optgroup label="🔩 Alloy Ingots">
-          <option>Terrasteel Alloy Ingot</option>
-          <option>Stratostrix Alloy Ingot</option>
-          <option>Coreostrix Alloy Ingot</option>
-          <option>Coreosteel Alloy Ingot</option>
-          <option>Enriched Terrastrix Sand</option>
-          <option>Enriched Stratosteel Sand</option>
-        </optgroup>
-        <optgroup label="🏆 End-Game">
-          <option>Alto Alloy Core</option>
-          <option>Gravisphere</option>
-          <option>Cloudy Sphere Field</option>
-          <option>Terra Mechanical Gear</option>
-          <option>Strato Mechanical Gear</option>
-          <option>Dome Gyroscope</option>
-          <option>Terra Alloy Axiom</option>
-          <option>Dome Field</option>
-          <option>Celestial Supergear</option>
-          <option>Divine Supergear</option>
-          <option>Olympus Tri-Axiom</option>
-          <option>Olympus Dyson Axiom</option>
-        </optgroup>
-      </select>
+  <div class="card">
+    <div class="card-head cyan">🔍 View Item Chain</div>
+    <div class="card-body">
+      <div class="calc-row">
+        <div class="calc-group" style="flex:1; min-width: 200px;">
+          <label>Select Item to View Chain</label>
+          <select id="itemSelect" onchange="renderTree()">
+            <option value="">— Choose an item —</option>
+            <optgroup label="🧪 Fluids & Filtration">
+              <option>Eveready Petroleum</option>
+              <option>Treated Alto Fluid</option>
+              <option>Fluid Garnet</option>
+              <option>Balancer Solution</option>
+              <option>Light Fluid Garnet</option>
+              <option>Heavy Fluid Garnet</option>
+              <option>Light Fraction</option>
+              <option>Medium Fraction</option>
+              <option>Heavy Fraction</option>
+              <option>Alto Thinner</option>
+              <option>Alto Essence</option>
+              <option>Alto Primer</option>
+              <option>Alto Blend</option>
+              <option>Purified Alto Blend</option>
+              <option>Energized Alto Blend</option>
+              <option>Cloudy Alloy Mix</option>
+              <option>Radiating Alto</option>
+              <option>Crossed Alto Alloy</option>
+              <option>Essential Chroma Dye</option>
+              <option>Reatomized Chromastone</option>
+            </optgroup>
+            <optgroup label="🪵 Wood Chain">
+              <option>Meso Fiber Filter</option>
+              <option>Ascendeso Fiber Filter</option>
+              <option>Meso Wood Panel</option>
+              <option>Meso Polyhedron</option>
+              <option>Ascendeso Wood Panel</option>
+              <option>Enamel</option>
+              <option>Hardened Charm Casing</option>
+            </optgroup>
+            <optgroup label="💎 Gems & Dyes">
+              <option>Chromastone Dye</option>
+              <option>Chromastone Spark</option>
+              <option>Chromastone Charm</option>
+              <option>Aerelium Charm</option>
+              <option>Godspark</option>
+              <option>Godspark Charm</option>
+              <option>Cyan Dye</option>
+              <option>Purple Dye</option>
+              <option>Red Dye</option>
+              <option>Green Dye</option>
+              <option>Blue Dye</option>
+            </optgroup>
+            <optgroup label="⛏ Ore Chains">
+              <option>Terrastrix Ingot</option>
+              <option>Stratosteel Ingot</option>
+              <option>Coreodeon Ingot</option>
+              <option>Refined Terrastrix Ingot</option>
+              <option>Refined Stratosteel Ingot</option>
+              <option>Refined Coreodeon Ingot</option>
+            </optgroup>
+            <optgroup label="🔩 Alloy Ingots">
+              <option>Terrasteel Alloy Ingot</option>
+              <option>Stratostrix Alloy Ingot</option>
+              <option>Coreostrix Alloy Ingot</option>
+              <option>Coreosteel Alloy Ingot</option>
+              <option>Enriched Terrastrix Sand</option>
+              <option>Enriched Stratosteel Sand</option>
+            </optgroup>
+            <optgroup label="🏆 End-Game">
+              <option>Alto Alloy Core</option>
+              <option>Gravisphere</option>
+              <option>Cloudy Sphere Field</option>
+              <option>Terra Mechanical Gear</option>
+              <option>Strato Mechanical Gear</option>
+              <option>Dome Gyroscope</option>
+              <option>Terra Alloy Axiom</option>
+              <option>Dome Field</option>
+              <option>Celestial Supergear</option>
+              <option>Divine Supergear</option>
+              <option>Olympus Tri-Axiom</option>
+              <option>Olympus Dyson Axiom</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="calc-group" style="flex: 0.5; min-width: 150px;">
+          <label>Or Search Name</label>
+          <input type="text" id="searchInput" placeholder="e.g. Garnet..." oninput="filterItems(this.value)">
+        </div>
+        <button class="btn btn-ghost" onclick="expandAll()">Expand All</button>
+        <button class="btn btn-ghost" onclick="collapseAll()">Collapse All</button>
+      </div>
     </div>
-    <div class="ctrl-group" style="max-width:220px;">
-      <label>Or Search Item Name</label>
-      <input type="text" id="searchInput" placeholder="e.g. Garnet..." oninput="filterItems(this.value)">
-    </div>
-    <button class="btn btn-ghost" onclick="expandAll()">Expand All</button>
-    <button class="btn btn-ghost" onclick="collapseAll()">Collapse All</button>
   </div>
 
-  <!-- Main content -->
   <div class="main-grid">
 
-    <!-- Tree -->
-    <div id="treeContainer">
-      <div class="empty-state">
-        <div class="big">🔍</div>
-        <div>Select an item above to see its full ingredient chain</div>
-        <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
+    <div class="card">
+      <div class="card-head gold">🌳 Ingredient Tree</div>
+      <div class="card-body" style="padding: 15px;">
+        <div id="treeContainer">
+          <div class="empty-state">
+            <div class="big">🔍</div>
+            <div>Select an item above to see its full ingredient chain</div>
+            <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Summary -->
-    <div class="summary-panel">
-      <div class="sum-title">📋 Chain Summary</div>
+    <div class="card">
+      <div class="card-head purple">📋 Chain Summary</div>
+      <div class="card-body summary-panel" style="padding: 15px;">
+        <div class="sum-section">
+          <div class="sum-section-title">🌿 Mines / Farms / Extractors</div>
+          <div id="sumRaw"><div class="sum-empty">— select an item —</div></div>
+        </div>
 
-      <div class="sum-section">
-        <div class="sum-section-title">🌿 Mines / Farms / Extractors</div>
-        <div id="sumRaw"><div class="sum-empty">— select an item —</div></div>
-      </div>
+        <div class="sum-section">
+          <div class="sum-section-title">🏭 Machines Required</div>
+          <div id="sumMachines"><div class="sum-empty">— select an item —</div></div>
+        </div>
 
-      <div class="sum-section">
-        <div class="sum-section-title">🏭 Machines Required</div>
-        <div id="sumMachines"><div class="sum-empty">— select an item —</div></div>
-      </div>
-
-      <div class="sum-section">
-        <div class="sum-section-title">🔄 Intermediate Items</div>
-        <div id="sumItems"><div class="sum-empty">— select an item —</div></div>
+        <div class="sum-section">
+          <div class="sum-section-title">🔄 Intermediate Items</div>
+          <div id="sumItems"><div class="sum-empty">— select an item —</div></div>
+        </div>
       </div>
     </div>
 
@@ -696,7 +532,7 @@ function renderTree() {
   summaryData = { raw:{}, machines:{}, items:{} };
 
   const container = document.getElementById('treeContainer');
-  const seen = new Set(); // for cycle detection on current path
+  const seen = new Set();
   const html = buildNode(sel, true, seen, 0);
   container.innerHTML = `<div class="tree-root">${html}</div>`;
   updateSummary();
@@ -707,7 +543,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   const nodeId = 'n' + (nodeIdCounter++);
 
   if (!r) {
-    // Unknown item
     return `<div class="tree-node">
       <div class="node-header crafted">
         <span class="node-icon">❓</span>
@@ -717,7 +552,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
     </div>`;
   }
 
-  // Circular dependency check
   if (pathAncestors.has(itemName)) {
     return `<div class="tree-node">
       <div class="node-header seen">
@@ -731,7 +565,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   // RAW RESOURCE
   if (r.raw) {
     const cls = r.type === 'byproduct' ? 'byproduct' : 'raw';
-    // Track for summary
     const key = r.source;
     if (r.type !== 'byproduct') {
       summaryData.raw[key] = (summaryData.raw[key] || { name: key, type: r.type, count: 0 });
@@ -748,7 +581,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
     </div>`;
   }
 
-  // CRAFTED ITEM — track machines & items
   if (!isRoot) {
     summaryData.machines[r.machine] = (summaryData.machines[r.machine] || 0) + 1;
     summaryData.items[itemName] = (summaryData.items[itemName] || 0) + 1;
@@ -767,11 +599,9 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   if (hasChildren) {
     const newPath = new Set(pathAncestors);
     newPath.add(itemName);
-    // Deduplicate inputs for display (but still process all for summary)
     const shownInputs = new Set();
     const childRows = (r.inputs || []).map(inp => {
       if (shownInputs.has(inp)) {
-        // Show a "same as above" reference
         return `<div class="tree-node">
           <div class="node-header seen" style="margin-bottom:2px;">
             <span class="node-icon">↩</span>
@@ -814,7 +644,6 @@ function expandAll() {
 }
 
 function collapseAll() {
-  // Collapse everything except root
   const all = document.querySelectorAll('.tree-children');
   all.forEach((el, i) => { if (i > 0) { el.classList.add('tree-collapsed'); } });
   document.querySelectorAll('.toggle-btn').forEach((el, i) => {
@@ -823,7 +652,6 @@ function collapseAll() {
 }
 
 function updateSummary() {
-  // Raw resources
   const rawEl = document.getElementById('sumRaw');
   const rawEntries = Object.values(summaryData.raw).sort((a,b) => b.count - a.count);
   if (rawEntries.length === 0) {
@@ -839,7 +667,6 @@ function updateSummary() {
     }).join('');
   }
 
-  // Machines
   const machEl = document.getElementById('sumMachines');
   const machEntries = Object.entries(summaryData.machines).sort((a,b) => b[1]-a[1]);
   if (machEntries.length === 0) {
@@ -853,7 +680,6 @@ function updateSummary() {
     ).join('');
   }
 
-  // Intermediate items
   const itemEl = document.getElementById('sumItems');
   const itemEntries = Object.entries(summaryData.items).sort((a,b) => b[1]-a[1]).slice(0, 20);
   if (itemEntries.length === 0) {
@@ -869,8 +695,6 @@ function updateSummary() {
     }).join('');
   }
 }
-
-// Search filter
 function filterItems(q) {
   const sel = document.getElementById('itemSelect');
   const lower = q.toLowerCase();
@@ -878,7 +702,6 @@ function filterItems(q) {
     if (!opt.value) return;
     opt.hidden = lower.length > 0 && !opt.value.toLowerCase().includes(lower);
   });
-  // Auto-select if exact match
   const match = Object.keys(recipes).find(k => k.toLowerCase() === lower);
   if (match) {
     sel.value = match;
@@ -887,6 +710,5 @@ function filterItems(q) {
 }
 </script>
   
-
 </body>
 </html>
