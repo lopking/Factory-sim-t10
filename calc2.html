@@ -201,7 +201,7 @@ const recipes = {
   'Ascendeso Wood Sheet':     { machine:'Press',                icon:'🔵', price:'$1450cD',  inputs:['Ascendeso Wood Panel'] },
   'Ascendeso Fiber Filter':   { machine:'T10+ Assembler',        icon:'🔵', price:'$1950cD',  inputs:['Ascendeso Wood Sheet'] },
   'Enamel':                   { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$77.50cD', inputs:['Meso Wood Shreds','Aerelium Compound'] },
-  'Hardened Charm Casing':    { machine:'102+ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
+  'Hardened Charm Casing':    { machine:'T10++ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
 
   // ── AERELIUM CHAIN ──
   'Aerelium Shard':           { machine:'T10+ Grinder',            icon:'✨', price:'$1.50cD',  inputs:['Aerelium Crystal'] },
@@ -553,7 +553,6 @@ function runFullChainCalc() {
     const outputQty = machineOutputQty[item.machine] || 1;
     const cnt       = rate * cycleTime / outputQty;
 
-    // First-stage ore processors — derive mine count from machine count
     if (PRIMARY_ORE_PROCESSORS[itemName]) {
       const { label, minesPerMachine } = PRIMARY_ORE_PROCESSORS[itemName];
       mines[label] = (mines[label] || 0) + cnt * minesPerMachine;
@@ -569,7 +568,6 @@ function runFullChainCalc() {
 
   const harvestMult = harvest15x ? 1.5 : 1.0;
 
-  // Accelerators: ~1 per 26.67 ore mines (3 per 80 mines from in-game observation)
   const ORE_MINE_LABELS = new Set(['Terrastrix Ore Mine', 'Stratosteel Ore Mine', 'Coreodeon Ore Mine']);
   const totalOreMines   = Object.entries(mines)
     .filter(([label]) => ORE_MINE_LABELS.has(label))
@@ -583,13 +581,11 @@ function runFullChainCalc() {
     machineItems['Essential Chroma Dye'].count = acceleratorCount;
   }
 
-  // Vein: derived from Tumbler count × 192 L/s per Tumbler
   const tumblerCount = Object.entries(machineItems)
     .filter(([, { machine }]) => machine === 'T10+ Tumbler')
     .reduce((s, [, { count }]) => s + count, 0);
   const totalVeinLS = tumblerCount * 192;
 
-  // Alto: from Distillation Tower count × 140 L/s per tower
   const distillTowerCount = machineItems['T10+ Distillation Tower']?.count || 0;
   const totalAltoLS = distillTowerCount * 140;
 
