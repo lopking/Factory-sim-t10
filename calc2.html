@@ -172,12 +172,8 @@
 </div>
 
 <script>
-// ==========================================
-// 1. DATA DICTIONARIES
-// ==========================================
 
 const recipes = {
-  // RAW RESOURCES
   'Vein Petroleum':       { raw:true, icon:'💧', source:'Petroleum Extractor',       type:'fluid', price:'$15SpD' },
   'Aqueous Alto':         { raw:true, icon:'💧', source:'Aqueous Alto Extractor',     type:'fluid', price:'$20SpD' },
   'Mesossential Wood':    { raw:true, icon:'🌳', source:'Mesossential Tree Farm',     type:'mine',  price:'$1.50cD' },
@@ -188,7 +184,6 @@ const recipes = {
   'Chromastone Crystal':  { raw:true, icon:'🔮', source:'Chromastone Mine',           type:'mine',  price:'$50cD' },
   'Used Filter':          { raw:true, icon:'♻', source:'Byproduct of Pressure Filter', type:'byproduct', price:'$400cD', note:'Produced by same machine — recycle it' },
 
-  // ── WOOD CHAIN ──
   'Mesossential Wood Boards': { machine:'T10+ Cutter',     icon:'🪵', price:'$40cD',     inputs:['Mesossential Wood'] },
   'Pressurized Meso Wood':    { machine:'Press',           icon:'🟫', price:'$6.50cD',   inputs:['Mesossential Wood Boards'] },
   'Meso Wood Shreds':         { machine:'T10+ Cutter',     icon:'🪵', price:'$8.50cD',   inputs:['Pressurized Meso Wood'] },
@@ -203,7 +198,6 @@ const recipes = {
   'Enamel':                   { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$77.50cD', inputs:['Meso Wood Shreds','Aerelium Compound'] },
   'Hardened Charm Casing':    { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
 
-  // ── AERELIUM CHAIN ──
   'Aerelium Shard':           { machine:'T10+ Grinder',            icon:'✨', price:'$1.50cD',  inputs:['Aerelium Crystal'] },
   'Aerelium Glitter Dust':    { machine:'T10+ Spindle',          icon:'✨', price:'$50cD',    inputs:['Aerelium Shard'] },
   'Aerelium Dust Cluster':    { machine:'T10+ Mechanical Mortar', icon:'✨', price:'$1.80cD',  inputs:['Aerelium Shard'] },
@@ -211,16 +205,12 @@ const recipes = {
   'Aerelium Gem':             { machine:'T10+ Laser Cutter',       icon:'💎', price:'$60cD',    inputs:['Aerelium Crystal'] },
   'Concentrated Aerelium Gem':{ machine:'T10+ Energy Concentrator',icon:'💎',price:'$130cD',   inputs:['Aerelium Gem'] },
   'Aerelium Charm':           { machine:'T10+ Assembler',          icon:'🔮', price:'$350cD',   inputs:['Concentrated Aerelium Gem'] },
-
-  // ── CHROMASTONE CHAIN ──
   'Chromastone Gem':             { machine:'T10+ Laser Cutter',        icon:'🔮', price:'$100cD',   inputs:['Chromastone Crystal'] },
   'Concentrated Chromastone Gem':{ machine:'T10+ Energy Concentrator', icon:'🔮', price:'$110cD',   inputs:['Chromastone Gem'] },
   'Chromastone Dye':             { machine:'T10+ Furnace',             icon:'🟣', price:'$19.50cD', inputs:['Concentrated Chromastone Gem'] },
   'Chromastone Charm':           { machine:'T10+ Assembler',           icon:'🔮', price:'$650cD',   inputs:['Concentrated Chromastone Gem'] },
   'Chromastone Spark':           { machine:'T10+ Spindle',             icon:'⚡', price:'$95.50cD', inputs:['Chromastone Charm'] },
   'Reatomized Chromastone':      { machine:'T10+ Accelerator',         icon:'🔮', price:'$52.50cD', inputs:['Chromastone Crystal','Mesossential Sap'] },
-
-  // ── GEMS & DYES ──
   'Red Gem':              { machine:'T10+ Spectrum Cutter',      icon:'🔴', price:'$160cD',   inputs:['Chromastone Gem'] },
   'Green Gem':            { machine:'T10+ Spectrum Cutter',      icon:'🟢', price:'$160cD',   inputs:['Chromastone Gem'] },
   'Blue Gem':             { machine:'T10+ Spectrum Cutter',      icon:'🔵', price:'$160cD',   inputs:['Chromastone Gem'] },
@@ -235,8 +225,6 @@ const recipes = {
   'Essential Chroma Dye': { machine:'T10+ Accelerator',           icon:'🌈', price:'$72.50cD', inputs:['Mesossential Sap','Chromastone Dye'] },
   'Godspark':             { machine:'T10+ Triple Assembler',      icon:'⚡', price:'$1.44NvD', inputs:['Chromastone Spark','Aerelium Charm','Cyan Dye'] },
   'Godspark Charm':       { machine:'T10+ Dual Assembler',        icon:'⚡', price:'$5.25NvD', inputs:['Godspark','Hardened Charm Casing'] },
-
-  // ── PETROLEUM & ALTO FLUID CHAIN ──
   'Eveready Petroleum':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$27.5SpD', inputs:['Meso Fiber Filter','Vein Petroleum','Used Filter'] },
   'Treated Alto Fluid':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$35SpD', inputs:['Meso Fiber Filter','Aqueous Alto','Used Filter'] },
   'Light Fraction':       { machine:'T10+ Distillation Tower', icon:'🧪', price:'$27.5SpD', inputs:['Eveready Petroleum'] },
@@ -256,8 +244,6 @@ const recipes = {
   'Cloudy Alloy Mix':     { machine:'T10+ Multi-Flow Mixer',   icon:'🌫', price:'$4.15cD', inputs:['Fine Residue','Energized Alto Blend','Medium Fraction'] },
   'Radiating Alto':       { machine:'T10+ Liquid Caster',      icon:'☢', price:'$15.50cD',  inputs:['Alto Essence'] },
   'Crossed Alto Alloy':   { machine:'T10+ Liquid Caster',      icon:'⬡', price:'$1NvD',     inputs:['Cloudy Alloy Mix'] },
-
-  // ── ORE PROCESSING ──
   'Terrastrix Gravel':    { machine:'T10+ Ore Crusher',  icon:'🪨', price:'$6.50cD',  inputs:['Terrastrix Ore'] },
   'Primed Terrastrix':    { machine:'T10+ Mixer',        icon:'🟩', price:'$23.50cD', inputs:['Terrastrix Gravel','Aerelium Dust Cluster'] },
   'Saturated Terrastrix': { machine:'T10+ Mixer',        icon:'🟩', price:'$250cD',   inputs:['Terrastrix Gravel','Aerelium Glitter Dust'] },
@@ -290,14 +276,10 @@ const recipes = {
   'Tough Coreodeon Ingot':{ machine:'T10+ Alloy Smelter',     icon:'🔷', price:'$2550cD',  inputs:['Living Coreodeon','Coreodeon Node'] },
   'Coreodeon Ingot':      { machine:'T10+ Tumbler',          icon:'🔷', price:'$3700cD',  inputs:['Tough Coreodeon Ingot','Heavy Fluid Garnet'] },
   'Refined Coreodeon Ingot':{ machine:'T10+ Tumbler',        icon:'🔷', price:'$5050cD',  inputs:['Coreodeon Ingot','Light Fluid Garnet'] },
-
-  // ── ALLOY INGOTS ──
   'Terrasteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.05NvD', inputs:['Refined Terrastrix Ingot','Enriched Stratosteel Sand'] },
   'Stratostrix Alloy Ingot': { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Stratosteel Ingot','Enriched Terrastrix Sand'] },
   'Coreostrix Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
   'Coreosteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.2NvD',  inputs:['Refined Coreodeon Ingot','Enriched Stratosteel Sand'] },
-
-  // ── END-GAME ──
   'Alto Alloy Core':       { machine:'T10+ Dual Assembler',      icon:'⚙', price:'$7.05NvD', inputs:['Crossed Alto Alloy','Crossed Alto Alloy'] },
   'Gravisphere':           { machine:'T10+ Dual Assembler',      icon:'🌐', price:'$12.5NvD', inputs:['Concentrated Chromastone Gem','Alto Alloy Core'] },
   'Cloudy Sphere Field':   { machine:'T10+ Workstation',         icon:'🌐', price:'$25NvD',   inputs:['Gravisphere'] },
@@ -346,7 +328,6 @@ const recipes = {
   'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
   'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
 };
-// Machine data for the first calculator
 const machineData = {
   single:      { name:'Single Assembler',      time:3.125, mines:1.6,     extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
   dual:        { name:'Dual Assembler',         time:1.875, mines:2.67,    extractors:0,    mineLabel:'ore mines',  extractLabel:'' },
@@ -364,10 +345,6 @@ const machineData = {
   tumbler:     { name:'Tumbler',                time:0.25,  mines:20,      extractors:1.56, mineLabel:'ore mines',  extractLabel:'fluid extractors' },
 };
 
-
-// ==========================================
-// 2. MATH ENGINE FOR CALC 1 (Ratios)
-// ==========================================
 function calculateRatio() {
   const key = document.getElementById('calcMachine').value;
   const n = parseFloat(document.getElementById('calcCount').value) || 1;
@@ -395,10 +372,6 @@ function calculateRatio() {
 
   res.innerHTML = html;
 }
-
-// ==========================================
-// 3. MATH ENGINE FOR CALC 2 (Full Chain)
-// ==========================================
 
 const machineCycleTimes = {
   'T10+ Assembler':            3.125,
