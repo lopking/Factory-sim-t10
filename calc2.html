@@ -557,24 +557,22 @@ function runFullChainCalc() {
 
   if (machineItems[target]) machineItems[target].count = machineCount;
 
-  const FLUID_EXTRACTOR_RATIO = 1.56;
-  const EXTRACTOR_LS          = 48;
-  const BELT_SIZE             = 20;
-
   const harvestMult = harvest15x ? 1.5 : 1.0;
 
-  const ORE_MINE_LABELS = new Set(['Terrastrix Ore Mine', 'Stratosteel Ore Mine', 'Coreodeon Ore Mine']);
-  const totalOreMines   = Object.entries(mines)
-    .filter(([label]) => ORE_MINE_LABELS.has(label))
-    .reduce((s, [, v]) => s + v, 0);
+  // Vein: derived from Tumbler count × 192 L/s per Tumbler
+  // (30L FG per 0.25s cycle → traced back through Mixer → FG Reactor + BS Reactor + Eveready → Distillation Tower)
+  const tumblerCount = Object.entries(machineItems)
+    .filter(([, { machine }]) => machine === 'T10+ Tumbler')
+    .reduce((s, [, { count }]) => s + count, 0);
+  const totalVeinLS = tumblerCount * 192;
 
-  const totalMineCounts = Object.values(mines).reduce((s, v) => s + v, 0);
-  const extractors      = (totalOreMines / BELT_SIZE) * FLUID_EXTRACTOR_RATIO;
-  const fluidLS         = extractors * EXTRACTOR_LS;
-  const adjustedFluidLS = fluidLS / harvestMult;
+  // Alto: from Distillation Tower count × 35L Treated Alto per 0.25s cycle = 140 L/s per tower
+  // One tower run produces ALL three Alto co-products simultaneously from one Treated Alto input
+  const distillTowerCount = machineItems['T10+ Distillation Tower']?.count || 0;
+  const totalAltoLS = distillTowerCount * 140;
 
-  const altoExtractors  = 4 * machineCount;
-  const altoLS          = (altoExtractors * EXTRACTOR_LS) / harvestMult;
+  const adjVeinLS = totalVeinLS / harvestMult;
+  const adjAltoLS = totalAltoLS / harvestMult;
 
 
 
@@ -637,14 +635,14 @@ function runFullChainCalc() {
     </div>`;
   }
 
-  if (totalOreMines > 0) {
-    fluidContent.innerHTML += `<div class="item-row">
+  if (adjVeinLS > 0 || adjAltoLS > 0) {
+    if (adjVeinLS > 0) fluidContent.innerHTML += `<div class="item-row">
       <span>Vein Petroleum</span>
-      <span><b>${adjustedFluidLS.toFixed(2)}</b> L/s</span>
+      <span><b>${adjVeinLS.toFixed(2)}</b> L/s</span>
     </div>`;
-    fluidContent.innerHTML += `<div class="item-row">
+    if (adjAltoLS > 0) fluidContent.innerHTML += `<div class="item-row">
       <span>Aqueous Alto</span>
-      <span><b>${altoLS.toFixed(2)}</b> L/s</span>
+      <span><b>${adjAltoLS.toFixed(2)}</b> L/s</span>
     </div>`;
   }
 
