@@ -447,7 +447,7 @@ for (const [src, prods] of Object.entries(DISTILLATION_GROUPS)) {
   prods.forEach(p => DISTILLATION_SOURCE[p] = src);
 }
 
-const FLUID_STOPS = new Set(['Eveready Petroleum', 'Treated Alto Fluid']);
+const FLUID_STOPS = new Set(['Eveready Petroleum', 'Treated Alto Fluid', 'Balancer Solution', 'Fluid Garnet']);
 
 const PRIMARY_ORE_PROCESSORS = {
   'Terrastrix Gravel':        { label: 'Terrastrix Ore Mine',    minesPerMachine: 10 },
@@ -569,15 +569,27 @@ function runFullChainCalc() {
 
   const harvestMult = harvest15x ? 1.5 : 1.0;
 
+  // Accelerators: ~1 per 26.67 ore mines (3 per 80 mines from in-game observation)
+  const ORE_MINE_LABELS = new Set(['Terrastrix Ore Mine', 'Stratosteel Ore Mine', 'Coreodeon Ore Mine']);
+  const totalOreMines   = Object.entries(mines)
+    .filter(([label]) => ORE_MINE_LABELS.has(label))
+    .reduce((s, [, v]) => s + v, 0);
+  const acceleratorCount = totalOreMines / 26.67;
+
+  if (acceleratorCount > 0) {
+    if (!machineItems['Essential Chroma Dye']) {
+      machineItems['Essential Chroma Dye'] = { machine: 'T10+ Accelerator', count: 0 };
+    }
+    machineItems['Essential Chroma Dye'].count = acceleratorCount;
+  }
+
   // Vein: derived from Tumbler count × 192 L/s per Tumbler
-  // (30L FG per 0.25s cycle → traced back through Mixer → FG Reactor + BS Reactor + Eveready → Distillation Tower)
   const tumblerCount = Object.entries(machineItems)
     .filter(([, { machine }]) => machine === 'T10+ Tumbler')
     .reduce((s, [, { count }]) => s + count, 0);
   const totalVeinLS = tumblerCount * 192;
 
-  // Alto: from Distillation Tower count × 35L Treated Alto per 0.25s cycle = 140 L/s per tower
-  // One tower run produces ALL three Alto co-products simultaneously from one Treated Alto input
+  // Alto: from Distillation Tower count × 140 L/s per tower
   const distillTowerCount = machineItems['T10+ Distillation Tower']?.count || 0;
   const totalAltoLS = distillTowerCount * 140;
 
