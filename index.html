@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Factory Sim — Full Chain Viewer</title>
+<link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
   
@@ -34,15 +35,7 @@
     pointer-events: none; z-index: 999;
   }
 
-  /* ── HEADER ── */
-  header { padding: 28px 32px 22px; border-bottom: 2px solid var(--accent); background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f); position: relative; overflow: hidden; }
-  header::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent) 40%, var(--purple) 60%, transparent);
-  }
-  header .glow { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 700px; height: 160px; background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%); pointer-events: none; }
-  h1 { font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 24px rgba(0,229,255,0.5); }
-  .subtitle { font-family: 'Share Tech Mono', monospace; color: var(--dim); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
+  /* header is provided by shared stylesheet */
 
   /* ── LAYOUT & CARDS (Matched to calc2.html) ── */
   .container { max-width: 1300px; margin: 0 auto; padding: 28px 20px 60px; }
@@ -141,11 +134,11 @@
   <div class="glow"></div>
   <h1>⛓ Factory Sim — Full Chain Viewer</h1>
   <div class="subtitle">Select any item to see the complete ingredient tree — every machine, mine, and extractor needed</div>
-   <table>
+  <table>
    <th>
     <div style="margin-top: 15px;">
-     <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	RATIOS
+     <a href="index.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+	LIST
      </a>
     </th>
     <th>
@@ -155,12 +148,23 @@
     </th>
     <th>
      <div style="margin-top: 15px;">
-      <a href="calc2.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	CALCULATOR
+      <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+	RATIOS
       </a>
      </div>
+      <th>
+     <td></td>
+     <td style="width: 30px;"></td> 
+     <td></td>
+      </th>
+     <th>
+    <div style="margin-top: 15px;">
+     <a href="calc2.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+	CALCULATOR
+     </a>
     </th>
    </table>
+
 </header>
 
 <div class="container">
