@@ -27,7 +27,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 13px; min-height: 100vh; }
   
-  /* ── BACKGROUND EFFECT ── */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -35,9 +34,6 @@
     pointer-events: none; z-index: 999;
   }
 
-  /* header is provided by shared stylesheet */
-
-  /* ── LAYOUT & CARDS (Matched to calc2.html) ── */
   .container { max-width: 1300px; margin: 0 auto; padding: 28px 20px 60px; }
   .card { background: var(--panel); border: 1px solid var(--border); margin-bottom: 28px; }
   .card-head { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 10px 16px; border-bottom: 1px solid var(--border); }
@@ -50,7 +46,6 @@
   .calc-group { display: flex; flex-direction: column; gap: 5px; }
   .calc-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; }
   
-  /* ── INPUTS & BUTTONS ── */
   select, input[type=text] { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 9px 13px; outline: none; font-family: 'Share Tech Mono', monospace; font-size: 12px; width: 100%; transition: border-color 0.2s; }
   select:focus, input:focus { border-color: var(--accent); }
   select option { background: #111720; }
@@ -60,15 +55,15 @@
   .btn-ghost { background: transparent; border-color: var(--border); color: var(--dim); }
   .btn-ghost:hover { border-color: var(--purple); color: var(--purple); }
 
-  /* ── INFO BOX ── */
+  /* tier select highlight */
+  #tierSelect { border-color: var(--gold); color: var(--gold); font-weight: 700; }
+
   .info-box { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15); padding: 10px 14px; margin-bottom: 24px; font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 1.8; }
   .info-box .ib-title { color: var(--accent); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
 
-  /* ── MAIN GRID ── */
   .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
   @media(max-width:900px) { .main-grid { grid-template-columns: 1fr; } }
 
-  /* ── TREE STRUCTURE ── */
   #treeContainer { background: var(--panel2); border: 1px solid var(--border); padding: 18px 20px; min-height: 250px; overflow-x: auto; }
   
   .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--dim); font-family: 'Share Tech Mono', monospace; font-size: 12px; text-align: center; gap: 12px; }
@@ -76,24 +71,31 @@
 
   .tree-root { padding: 0; }
   .tree-node { position: relative; margin-bottom: 2px; }
-  .tree-children { padding-left: 28px; margin-left: 13px; border-left: 1px dashed var(--dim2); padding-top: 2px; }
+  .tree-children { padding-left: 28px; margin-left: 13px; border-left: 1px dashed var(--dim2); padding-top: 2px; transition: border-left-color 0.15s; }
+  .tree-node:hover > .tree-children { border-left-color: var(--accent); }
   .tree-node > .tree-children > .tree-node::before { content: ''; position: absolute; left: -15px; top: 14px; width: 13px; height: 1px; background: var(--dim2); }
 
-  .node-header { display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 8px; border: 1px solid var(--border); background: var(--panel2); cursor: default; user-select: none; flex-wrap: wrap; position: relative; transition: border-color 0.15s; }
-  .node-header:hover { border-color: rgba(0,229,255,0.25); }
+  /* Cut the vertical dashed line at the last child so it doesn't overshoot */
+  .tree-children > .tree-node:last-child::after { content: ''; position: absolute; left: -28px; top: 16px; bottom: 0; width: 2px; background: var(--bg); }
+
+  .node-header { display: grid; grid-template-columns: 18px 18px 1fr auto auto auto; align-items: center; gap: 8px; padding: 6px 10px 6px 8px; border: 1px solid var(--border); background: var(--panel2); cursor: default; user-select: none; position: relative; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
+  /* raw nodes have no toggle btn — shift columns */
+  .node-header.raw, .node-header.byproduct { grid-template-columns: 18px 1fr auto auto auto; }
+  .node-header.seen { grid-template-columns: 18px 18px 1fr auto; }
+  .node-header:hover { border-color: var(--accent); background: rgba(0,229,255,0.05) !important; box-shadow: 0 0 10px rgba(0,229,255,0.15); }
 
   .node-header.raw       { border-left: 3px solid var(--green);  background: rgba(57,255,20,0.03); }
   .node-header.byproduct { border-left: 3px solid var(--orange); background: rgba(255,140,66,0.03); }
   .node-header.crafted   { border-left: 3px solid var(--accent); }
   .node-header.target    { border-left: 3px solid var(--gold); background: rgba(255,215,0,0.04); }
-  .node-header.seen      { border-left: 3px solid var(--dim2); background: var(--panel); opacity: 0.7; }
+  .node-header.seen      { border-left: 3px solid var(--dim2); background: transparent; opacity: 0.4; filter: grayscale(80%); }
 
   .toggle-btn { width: 18px; height: 18px; background: var(--panel); border: 1px solid var(--border); color: var(--dim); font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Share Tech Mono', monospace; transition: all 0.15s; line-height: 1; }
   .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
   .toggle-btn.collapsed { color: var(--green); border-color: var(--dim2); }
 
   .node-icon { font-size: 14px; flex-shrink: 0; }
-  .node-name { font-family: 'Exo 2', sans-serif; font-weight: 600; font-size: 12px; color: #fff; flex: 1; min-width: 120px; }
+  .node-name { font-family: 'Exo 2', sans-serif; font-weight: 600; font-size: 12px; color: #fff; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .node-header.raw .node-name       { color: var(--green); }
   .node-header.target .node-name    { color: var(--gold); font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.5px; }
   .node-header.byproduct .node-name { color: var(--orange); }
@@ -102,12 +104,38 @@
   .node-price { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green); flex-shrink: 0; }
   .node-machine { font-family: 'Share Tech Mono', monospace; font-size: 10px; background: rgba(191,127,255,0.12); color: var(--purple); border: 1px solid rgba(191,127,255,0.25); padding: 2px 8px; flex-shrink: 0; }
   .node-source { font-family: 'Share Tech Mono', monospace; font-size: 10px; background: rgba(57,255,20,0.08); color: var(--green); border: 1px solid rgba(57,255,20,0.2); padding: 2px 8px; flex-shrink: 0; }
-  .node-note { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--orange); padding: 2px 8px; background: rgba(255,140,66,0.06); border: 1px solid rgba(255,140,66,0.15); flex-shrink: 0; }
+  .node-note { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #fff; background: rgba(255,140,66,0.2); border: 1px solid var(--orange); padding: 2px 6px; border-radius: 3px; text-transform: uppercase; flex-shrink: 0; }
   .node-seen-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); font-style: italic; }
+  .node-depth { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--dim2); letter-spacing: 1px; flex-shrink: 0; min-width: 20px; text-align: right; }
+
+  /* Depth-tinted connector lines — gives visual rhythm to deep chains */
+  .tree-children[data-depth="1"] { border-left-color: rgba(0,229,255,0.35); }
+  .tree-children[data-depth="2"] { border-left-color: rgba(191,127,255,0.28); }
+  .tree-children[data-depth="3"] { border-left-color: rgba(0,229,255,0.18); }
+  .tree-children[data-depth="4"] { border-left-color: rgba(191,127,255,0.14); }
+  .tree-children[data-depth="5"] { border-left-color: rgba(0,229,255,0.10); }
+
+  /* Stats bar above tree */
+  .tree-stats { display: flex; gap: 16px; padding: 8px 12px; background: rgba(0,229,255,0.03); border: 1px solid rgba(0,229,255,0.1); margin-bottom: 10px; flex-wrap: wrap; }
+  .tree-stat { font-family: 'Share Tech Mono', monospace; font-size: 10px; display: flex; align-items: center; gap: 6px; }
+  .tree-stat .ts-val { font-size: 13px; font-weight: 700; }
+  .tree-stat.nodes .ts-val { color: var(--accent); }
+  .tree-stat.machines .ts-val { color: var(--purple); }
+  .tree-stat.raw .ts-val { color: var(--green); }
+  .tree-stat.depth .ts-val { color: var(--gold); }
+  .tree-stat .ts-label { color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Breadcrumb path bar */
+  .breadcrumb-bar { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); padding: 5px 10px; background: var(--panel); border: 1px solid var(--border); border-bottom: none; min-height: 26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
+  .breadcrumb-bar.visible { display: block; }
+  .breadcrumb-bar .bc-sep { color: var(--dim2); margin: 0 5px; }
+  .breadcrumb-bar .bc-item { color: var(--text); }
+  .breadcrumb-bar .bc-item.bc-raw { color: var(--green); }
+  .breadcrumb-bar .bc-item.bc-target { color: var(--gold); }
+  .breadcrumb-bar .bc-item.bc-last { color: var(--accent); }
 
   .tree-collapsed { display: none; }
 
-  /* ── SUMMARY PANEL ── */
   .summary-panel { position: sticky; top: 16px; max-height: calc(100vh - 40px); overflow-y: auto; }
   .sum-section { margin-bottom: 16px; }
   .sum-section-title { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
@@ -133,7 +161,7 @@
 <header>
   <div class="glow"></div>
   <h1>⛓ Factory Sim — Full Chain Viewer</h1>
-  <div class="subtitle">Select any item to see the complete ingredient tree — every machine, mine, and extractor needed</div>
+  <div class="subtitle">Select a tier and item to see the complete ingredient tree — every machine, mine, and extractor needed</div>
   <table>
    <th>
     <div style="margin-top: 15px;">
@@ -164,14 +192,13 @@
      </a>
     </th>
    </table>
-
 </header>
 
 <div class="container">
 
   <div class="info-box">
     <div class="ib-title">How to use</div>
-    Pick an item from the dropdown below. The full dependency tree will expand showing <span style="color:var(--green)">🟢 Raw resources</span> (mines/farms),
+    Pick a <strong style="color:var(--gold)">Tier</strong> then an item from the dropdown. The full dependency tree will expand showing <span style="color:var(--green)">🟢 Raw resources</span> (mines/farms),
     <span style="color:var(--accent)">🔵 Crafted items</span> with their machine, and
     <span style="color:var(--orange)">🟠 Byproducts</span>. Click any node with a <strong style="color:#fff">[−]</strong> button to collapse that branch. The summary panel on the right tallies up all unique machines and raw resources needed.
   </div>
@@ -180,84 +207,26 @@
     <div class="card-head cyan">🔍 View Item Chain</div>
     <div class="card-body">
       <div class="calc-row">
+        <div class="calc-group" style="flex: 0 0 90px;">
+          <label>Tier</label>
+          <select id="tierSelect" onchange="updateTierItems()">
+            <option value="T0">T0</option>
+            <option value="T1">T1</option>
+            <option value="T2">T2</option>
+            <option value="T3">T3</option>
+            <option value="T4">T4</option>
+            <option value="T5">T5</option>
+            <option value="T6">T6</option>
+            <option value="T7">T7</option>
+            <option value="T8">T8</option>
+            <option value="T9">T9</option>
+            <option value="T10" selected>T10</option>
+          </select>
+        </div>
         <div class="calc-group" style="flex:1; min-width: 200px;">
           <label>Select Item to View Chain</label>
           <select id="itemSelect" onchange="renderTree()">
             <option value="">— Choose an item —</option>
-            <optgroup label="🧪 Fluids & Filtration">
-              <option>Eveready Petroleum</option>
-              <option>Treated Alto Fluid</option>
-              <option>Fluid Garnet</option>
-              <option>Balancer Solution</option>
-              <option>Light Fluid Garnet</option>
-              <option>Heavy Fluid Garnet</option>
-              <option>Light Fraction</option>
-              <option>Medium Fraction</option>
-              <option>Heavy Fraction</option>
-              <option>Alto Thinner</option>
-              <option>Alto Essence</option>
-              <option>Alto Primer</option>
-              <option>Alto Blend</option>
-              <option>Purified Alto Blend</option>
-              <option>Energized Alto Blend</option>
-              <option>Cloudy Alloy Mix</option>
-              <option>Radiating Alto</option>
-              <option>Crossed Alto Alloy</option>
-              <option>Essential Chroma Dye</option>
-              <option>Reatomized Chromastone</option>
-            </optgroup>
-            <optgroup label="🪵 Wood Chain">
-              <option>Meso Fiber Filter</option>
-              <option>Ascendeso Fiber Filter</option>
-              <option>Meso Wood Panel</option>
-              <option>Meso Polyhedron</option>
-              <option>Ascendeso Wood Panel</option>
-              <option>Enamel</option>
-              <option>Hardened Charm Casing</option>
-            </optgroup>
-            <optgroup label="💎 Gems & Dyes">
-              <option>Chromastone Dye</option>
-              <option>Chromastone Spark</option>
-              <option>Chromastone Charm</option>
-              <option>Aerelium Charm</option>
-              <option>Godspark</option>
-              <option>Godspark Charm</option>
-              <option>Cyan Dye</option>
-              <option>Purple Dye</option>
-              <option>Red Dye</option>
-              <option>Green Dye</option>
-              <option>Blue Dye</option>
-            </optgroup>
-            <optgroup label="⛏ Ore Chains">
-              <option>Terrastrix Ingot</option>
-              <option>Stratosteel Ingot</option>
-              <option>Coreodeon Ingot</option>
-              <option>Refined Terrastrix Ingot</option>
-              <option>Refined Stratosteel Ingot</option>
-              <option>Refined Coreodeon Ingot</option>
-            </optgroup>
-            <optgroup label="🔩 Alloy Ingots">
-              <option>Terrasteel Alloy Ingot</option>
-              <option>Stratostrix Alloy Ingot</option>
-              <option>Coreostrix Alloy Ingot</option>
-              <option>Coreosteel Alloy Ingot</option>
-              <option>Enriched Terrastrix Sand</option>
-              <option>Enriched Stratosteel Sand</option>
-            </optgroup>
-            <optgroup label="🏆 End-Game">
-              <option>Alto Alloy Core</option>
-              <option>Gravisphere</option>
-              <option>Cloudy Sphere Field</option>
-              <option>Terra Mechanical Gear</option>
-              <option>Strato Mechanical Gear</option>
-              <option>Dome Gyroscope</option>
-              <option>Terra Alloy Axiom</option>
-              <option>Dome Field</option>
-              <option>Celestial Supergear</option>
-              <option>Divine Supergear</option>
-              <option>Olympus Tri-Axiom</option>
-              <option>Olympus Dyson Axiom</option>
-            </optgroup>
           </select>
         </div>
         <div class="calc-group" style="flex: 0.5; min-width: 150px;">
@@ -266,6 +235,7 @@
         </div>
         <button class="btn btn-ghost" onclick="expandAll()">Expand All</button>
         <button class="btn btn-ghost" onclick="collapseAll()">Collapse All</button>
+        <button class="btn btn-ghost" onclick="rawFocus()" title="Collapse everything — show only paths to raw resources">Raw Focus</button>
       </div>
     </div>
   </div>
@@ -275,10 +245,17 @@
     <div class="card">
       <div class="card-head gold">🌳 Ingredient Tree</div>
       <div class="card-body" style="padding: 15px;">
+        <div id="breadcrumbBar" class="breadcrumb-bar"></div>
         <div id="treeContainer">
           <div class="empty-state">
             <div class="big">🔍</div>
-            <div>Select an item above to see its full ingredient chain</div>
+            <div>Select a tier and item above to see its full ingredient chain</div>
+            <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
+          </div>
+        </div>
+          <div class="empty-state">
+            <div class="big">🔍</div>
+            <div>Select a tier and item above to see its full ingredient chain</div>
             <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
           </div>
         </div>
@@ -309,14 +286,271 @@
 
 </div>
 
-<footer>FACTORY SIM · FULL CHAIN VIEWER · TIER 10</footer>
+<footer>FACTORY SIM · FULL CHAIN VIEWER · T9 & T10</footer>
 
 <script>
+// ═══════════════════════════════════════════════════════════
+//  TIER ITEMS DIRECTORY
+// ═══════════════════════════════════════════════════════════
+const tierItems = {
+  T0: {},
+  T1: {},
+  T2: {},
+  T3: {},
+  T4: {},
+  T5: {},
+  T6: {},
+  T7: {},
+  T8: {},
+  T9: {
+    '⛏ T9 Ore & Dust Processing': [
+      'Molybdenum Gravel','Chromium Gravel','Platinum Gravel','Iridium Gravel','Magnesium Gravel',
+      'Graphite Dust','Painite Shard','Painite Pane','Painite Dust'
+    ],
+    '🔥 T9 Activated Materials': [
+      'Activated Platinum','Activated Molybdenum','Activated Chromium','Activated Magnesium','Activated Iridium'
+    ],
+    '🏭 T9 Ingots & Compounds': [
+      'Carbon Compound','Carbide Node','Tempered Painite',
+      'Chromium Ingot','Magnesium Ingot','Platinum Ingot','Iridium Ingot','Molybdenum Ingot'
+    ],
+    '🔩 T9 Fabricated Parts': [
+      'Chromium Plate','Magnesium Plate','Carbide Plate','Molyb Plate',
+      'Platinum Wire','Carbide Lining','Molyb Tubing','Carbide Tubing',
+      'Chromium Component','Magnesium Component'
+    ],
+    '🔮 T9 Painite & Dark Matter': [
+      'Recrystallized Painite','Painite Charm',
+      'Crystallized Dark Matter','Dark Matter Charm'
+    ],
+    '⚗ T9 Alloys & Reinforced Components': [
+      'Apex Alloy','Stabilized Chromagnum Alloy','Stabilized Vesper Alloy',
+      'Stabilized Chromagnum Alloy Component','Stabilized Vesper Alloy Component','Apex Alloy Component',
+      'Reinforced Chromagnum Alloy Component','Reinforced Vesper Alloy Component','Reinforced Apex Alloy Component'
+    ],
+    '⚡ T9 Gauges & Electronics': [
+      'Power Gauge','Supercapacitor','Controller',
+      'Painite Gauge','Dark Matter Gauge','Amped Uranium Gauge',
+      'Activated Turkey Slices'
+    ],
+    '🌌 T9 End-Game': [
+      'Cosmos Alloy Component','Tempest Alloy Component','Stellaris Alloy Component',
+      'Ten Elements','Dark Matter Battery','Cosmos Ultracell',
+      'Chaos Charm','Dark Gamma Reactor'
+    ]
+  },
+  T10: {
+    '🧪 Fluids & Filtration': [
+      'Eveready Petroleum','Treated Alto Fluid','Fluid Garnet','Balancer Solution',
+      'Light Fluid Garnet','Heavy Fluid Garnet','Light Fraction','Medium Fraction','Heavy Fraction',
+      'Alto Thinner','Alto Essence','Alto Primer','Alto Blend','Purified Alto Blend',
+      'Energized Alto Blend','Cloudy Alloy Mix','Radiating Alto','Crossed Alto Alloy',
+      'Essential Chroma Dye','Reatomized Chromastone'
+    ],
+    '🪵 Wood Chain': [
+      'Meso Fiber Filter','Ascendeso Fiber Filter','Meso Wood Panel','Meso Polyhedron',
+      'Ascendeso Wood Panel','Enamel','Hardened Charm Casing'
+    ],
+    '💎 Gems & Dyes': [
+      'Chromastone Dye','Chromastone Spark','Chromastone Charm','Aerelium Charm',
+      'Godspark','Godspark Charm','Cyan Dye','Purple Dye','Red Dye','Green Dye','Blue Dye'
+    ],
+    '⛏ Ore Chains': [
+      'Terrastrix Ingot','Stratosteel Ingot','Coreodeon Ingot',
+      'Refined Terrastrix Ingot','Refined Stratosteel Ingot','Refined Coreodeon Ingot'
+    ],
+    '🔩 Alloy Ingots': [
+      'Terrasteel Alloy Ingot','Stratostrix Alloy Ingot','Coreostrix Alloy Ingot',
+      'Coreosteel Alloy Ingot','Enriched Terrastrix Sand','Enriched Stratosteel Sand'
+    ],
+    '🏆 End-Game': [
+      'Alto Alloy Core','Gravisphere','Cloudy Sphere Field',
+      'Terra Mechanical Gear','Strato Mechanical Gear','Dome Gyroscope',
+      'Terra Alloy Axiom','Dome Field','Celestial Supergear','Divine Supergear',
+      'Olympus Tri-Axiom','Olympus Dyson Axiom'
+    ]
+  }
+};
+
+function updateTierItems() {
+  const tier = document.getElementById('tierSelect').value;
+  const sel = document.getElementById('itemSelect');
+  sel.innerHTML = '<option value="">— Choose an item —</option>';
+
+  const groups = tierItems[tier];
+  if (!groups || Object.keys(groups).length === 0) {
+    const opt = document.createElement('option');
+    opt.disabled = true;
+    opt.textContent = '— No items for this tier yet —';
+    sel.appendChild(opt);
+    // clear tree
+    document.getElementById('treeContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">🚧</div>
+        <div style="color:var(--gold)">${tier} items coming soon</div>
+        <div style="color:var(--dim2);">This tier hasn't been added yet</div>
+      </div>`;
+    document.getElementById('sumRaw').innerHTML = '<div class="sum-empty">— select an item —</div>';
+    document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+    document.getElementById('sumItems').innerHTML = '<div class="sum-empty">— select an item —</div>';
+    return;
+  }
+
+  for (const [groupLabel, items] of Object.entries(groups)) {
+    const og = document.createElement('optgroup');
+    og.label = groupLabel;
+    items.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════
 //  RECIPES DATABASE
 // ═══════════════════════════════════════════════════════════
 const recipes = {
-  // RAW RESOURCES
+
+  // ══════════════════════════════════════════════════════
+  //  T9 RAW RESOURCES
+  // ══════════════════════════════════════════════════════
+  'Molybdenum Ore':  { raw:true, icon:'⛏', source:'Molybdenum Ore Mine',  type:'mine', price:'$3QnD' },
+  'Chromium Ore':    { raw:true, icon:'⛏', source:'Chromium Ore Mine',    type:'mine', price:'$3QnD' },
+  'Platinum Ore':    { raw:true, icon:'⛏', source:'Platinum Ore Mine',    type:'mine', price:'$3QnD' },
+  'Iridium Ore':     { raw:true, icon:'⛏', source:'Iridium Ore Mine',     type:'mine', price:'$3QnD' },
+  'Magnesium Ore':   { raw:true, icon:'⛏', source:'Magnesium Ore Mine',   type:'mine', price:'$3QnD' },
+  'Graphite Ore':    { raw:true, icon:'⛏', source:'Graphite Ore Mine',    type:'mine', price:'$3QnD' },
+  'Painite Crystal': { raw:true, icon:'💎', source:'Painite Crystal Mine', type:'mine', price:'$1000qdD' },
+  'Salt Shard':      { raw:true, icon:'🧂', source:'Shop / Mine',          type:'mine', price:'$19.9Sp' },
+  'Fuel Rod':        { raw:true, icon:'☢',  source:'Shop / Crafted',       type:'mine', price:'$1.76M' },
+  'Turkey Slices':   { raw:true, icon:'🍗', source:'Shop / Farm',          type:'mine', price:'$100' },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 ORE PROCESSING (T9 Ore Crusher)
+  // ══════════════════════════════════════════════════════
+  'Molybdenum Gravel': { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Molybdenum Ore'] },
+  'Chromium Gravel':   { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Chromium Ore'] },
+  'Platinum Gravel':   { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Platinum Ore'] },
+  'Iridium Gravel':    { machine:'T9 Ore Crusher', icon:'🪨', price:'$12QnD',  inputs:['Iridium Ore'] },
+  'Magnesium Gravel':  { machine:'T9 Ore Crusher', icon:'🪨', price:'$12QnD',  inputs:['Magnesium Ore'] },
+
+  // T9 Mechanical Mortar
+  'Graphite Dust': { machine:'T9 Mechanical Mortar', icon:'⬛', price:'$10QnD',   inputs:['Graphite Ore'] },
+  'Painite Dust':  { machine:'T9 Mechanical Mortar', icon:'💎', price:'$29.9QnD', inputs:['Painite Shard'] },
+
+  // T9 Grinder
+  'Painite Shard': { machine:'T9 Grinder', icon:'💎', price:'$20QnD', inputs:['Painite Crystal'] },
+
+  // T9 Cutter
+  'Painite Pane':  { machine:'T9 Cutter',  icon:'💎', price:'$4QnD',  inputs:['Painite Crystal'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 ACTIVATED MATERIALS (T9 Mixer)
+  // ══════════════════════════════════════════════════════
+  'Activated Platinum':   { machine:'T9 Mixer', icon:'⬜', price:'$24QnD',   inputs:['Platinum Gravel','Salt Shard'] },
+  'Activated Molybdenum': { machine:'T9 Mixer', icon:'🩶', price:'$30.9QnD', inputs:['Molybdenum Gravel','Salt Shard'] },
+  'Activated Chromium':   { machine:'T9 Mixer', icon:'🔵', price:'$24QnD',   inputs:['Chromium Gravel','Salt Shard'] },
+  'Activated Magnesium':  { machine:'T9 Mixer', icon:'⬜', price:'$24QnD',   inputs:['Magnesium Gravel','Salt Shard'] },
+  'Activated Iridium':    { machine:'T9 Mixer', icon:'🔷', price:'$20.9QnD', inputs:['Iridium Gravel','Salt Shard'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 FURNACE
+  // ══════════════════════════════════════════════════════
+  'Tempered Painite':      { machine:'T9 Furnace', icon:'💎', price:'$12QnD',   inputs:['Painite Crystal'] },
+  'Carbon Compound':       { machine:'T9 Furnace', icon:'⬛', price:'$21.9QnD', inputs:['Graphite Dust'] },
+  'Carbide Node':          { machine:'T9 Furnace', icon:'⬛', price:'$33QnD',   inputs:['Carbon Compound'] },
+  'Chromium Ingot':        { machine:'T9 Furnace', icon:'🔵', price:'$30.9QnD', inputs:['Activated Chromium'] },
+  'Magnesium Ingot':       { machine:'T9 Furnace', icon:'⬜', price:'$35QnD',   inputs:['Activated Magnesium'] },
+  'Platinum Ingot':        { machine:'T9 Furnace', icon:'⬜', price:'$35QnD',   inputs:['Activated Platinum'] },
+  'Iridium Ingot':         { machine:'T9 Furnace', icon:'🔷', price:'$35QnD',   inputs:['Activated Iridium'] },
+  'Molybdenum Ingot':      { machine:'T9 Furnace', icon:'🩶', price:'$41.9QnD', inputs:['Activated Molybdenum'] },
+  'Recrystallized Painite':{ machine:'T9 Furnace', icon:'💎', price:'$77QnD',   inputs:['Painite Dust'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 PRESS
+  // ══════════════════════════════════════════════════════
+  'Chromium Plate':    { machine:'T9 Press', icon:'🔵', price:'$46QnD',   inputs:['Chromium Ingot'] },
+  'Magnesium Plate':   { machine:'T9 Press', icon:'⬜', price:'$46QnD',   inputs:['Magnesium Ingot'] },
+  'Carbide Plate':     { machine:'T9 Press', icon:'⬛', price:'$58QnD',   inputs:['Carbide Node'] },
+  'Molyb Plate':       { machine:'T9 Press', icon:'🩶', price:'$41.9QnD', inputs:['Molybdenum Ingot'] },
+  'Painite Charm':     { machine:'T9 Press', icon:'💎', price:'$77QnD',   inputs:['Recrystallized Painite'] },
+  'Dark Matter Charm': { machine:'T9 Press', icon:'🌑', price:'$240QnD',  inputs:['Crystallized Dark Matter'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 EXTRUDER
+  // ══════════════════════════════════════════════════════
+  'Platinum Wire':  { machine:'T9 Extruder', icon:'⬜', price:'$66QnD', inputs:['Platinum Ingot'] },
+  'Carbide Lining': { machine:'T9 Extruder', icon:'⬛', price:'$90QnD', inputs:['Carbide Plate'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 ROLLING MACHINE
+  // ══════════════════════════════════════════════════════
+  'Molyb Tubing':   { machine:'T9 Rolling Machine', icon:'🩶', price:'$99QnD', inputs:['Molyb Plate'] },
+  'Carbide Tubing': { machine:'T9 Rolling Machine', icon:'⬛', price:'$99QnD', inputs:['Carbide Plate'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T9 TRIPLE ALLOY SMELTER
+  // ══════════════════════════════════════════════════════
+  'Apex Alloy':                  { machine:'T9 Triple Alloy Smelter', icon:'🟡', price:'$379QnD', inputs:['Chromium Ingot','Molybdenum Ingot','Platinum Ingot'] },
+  'Stabilized Chromagnum Alloy': { machine:'T9 Triple Alloy Smelter', icon:'🔵', price:'$360QnD', inputs:['Chromium Ingot','Magnesium Ingot','Molybdenum Ingot'] },
+  'Stabilized Vesper Alloy':     { machine:'T9 Triple Alloy Smelter', icon:'🔷', price:'$360QnD', inputs:['Chromium Ingot','Iridium Ingot','Molybdenum Ingot'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 WORKSTATION (1.43s)
+  // ══════════════════════════════════════════════════════
+  'Chromium Component':                    { machine:'Adv T9 Workstation', icon:'🔵', price:'$54.9QnD', inputs:['Chromium Ingot'] },
+  'Magnesium Component':                   { machine:'Adv T9 Workstation', icon:'⬜', price:'$54.9QnD', inputs:['Magnesium Ingot'] },
+  'Stabilized Chromagnum Alloy Component': { machine:'Adv T9 Workstation', icon:'🔵', price:'$520QnD',  inputs:['Stabilized Chromagnum Alloy'] },
+  'Stabilized Vesper Alloy Component':     { machine:'Adv T9 Workstation', icon:'🔷', price:'$520QnD',  inputs:['Stabilized Vesper Alloy'] },
+  'Apex Alloy Component':                  { machine:'Adv T9 Workstation', icon:'🟡', price:'$550QnD',  inputs:['Apex Alloy'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 ACCELERATOR (1.43s)
+  // ══════════════════════════════════════════════════════
+  'Crystallized Dark Matter': { machine:'Adv T9 Accelerator', icon:'🌑', price:'$160QnD', inputs:['Activated Iridium','Painite Dust'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 ASSEMBLER (3.12s)
+  // ══════════════════════════════════════════════════════
+  'Reinforced Chromagnum Alloy Component': { machine:'Adv T9 Assembler', icon:'🔵', price:'$1.40xxD', inputs:['Stabilized Chromagnum Alloy Component'] },
+  'Reinforced Vesper Alloy Component':     { machine:'Adv T9 Assembler', icon:'🔷', price:'$1.40xxD', inputs:['Stabilized Vesper Alloy Component'] },
+  'Reinforced Apex Alloy Component':       { machine:'Adv T9 Assembler', icon:'🟡', price:'$1.48xxD', inputs:['Apex Alloy Component'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 DUAL ASSEMBLER (1.88s)
+  // ══════════════════════════════════════════════════════
+  'Power Gauge':             { machine:'Adv T9 Dual Assembler', icon:'⚡', price:'$450QnD', inputs:['Carbide Lining','Molyb Tubing'] },
+  'Activated Turkey Slices': { machine:'Adv T9 Dual Assembler', icon:'🍗', price:'$49.9QnD', inputs:['Chromium Gravel','Turkey Slices'] },
+  'Chaos Charm':             { machine:'Adv T9 Dual Assembler', icon:'🌀', price:'$927xxD',  inputs:['Painite Charm','Ten Elements'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 TRIPLE ASSEMBLER (1.67s)
+  // ══════════════════════════════════════════════════════
+  'Cosmos Alloy Component':    { machine:'Adv T9 Triple Assembler', icon:'🌌', price:'$17.4xxD', inputs:['Carbide Lining','Reinforced Vesper Alloy Component','Reinforced Vesper Alloy Component'] },
+  'Tempest Alloy Component':   { machine:'Adv T9 Triple Assembler', icon:'🌪', price:'$18.3xxD', inputs:['Carbide Lining','Reinforced Apex Alloy Component','Reinforced Apex Alloy Component'] },
+  'Stellaris Alloy Component': { machine:'Adv T9 Triple Assembler', icon:'⭐', price:'$17.4xxD', inputs:['Carbide Lining','Reinforced Chromagnum Alloy Component','Reinforced Chromagnum Alloy Component'] },
+  'Painite Gauge':             { machine:'Adv T9 Triple Assembler', icon:'💎', price:'$3.6xxD',  inputs:['Carbide Tubing','Painite Charm','Power Gauge'] },
+  'Dark Matter Gauge':         { machine:'Adv T9 Triple Assembler', icon:'🌑', price:'$4.8xxD',  inputs:['Carbide Tubing','Dark Matter Charm','Power Gauge'] },
+  'Amped Uranium Gauge':       { machine:'Adv T9 Triple Assembler', icon:'☢',  price:'$3xxD',    inputs:['Carbide Tubing','Power Gauge','Fuel Rod'] },
+
+  // ══════════════════════════════════════════════════════
+  //  ADV T9 QUADRUPLE ASSEMBLER (1.88s)
+  // ══════════════════════════════════════════════════════
+  'Supercapacitor':      { machine:'Adv T9 Quadruple Assembler', icon:'⚡', price:'$4.8xxD',  inputs:['Chromium Plate','Magnesium Component','Platinum Wire','Power Gauge'] },
+  'Controller':          { machine:'Adv T9 Quadruple Assembler', icon:'🎮', price:'$4.8xxD',  inputs:['Chromium Component','Magnesium Plate','Platinum Wire','Power Gauge'] },
+  'Ten Elements':        { machine:'Adv T9 Quadruple Assembler', icon:'🔟', price:'$231xxD',  inputs:['Amped Uranium Gauge','Controller','Supercapacitor','Tempest Alloy Component'] },
+  'Dark Matter Battery': { machine:'Adv T9 Quadruple Assembler', icon:'🌑', price:'$254xxD',  inputs:['Controller','Dark Matter Gauge','Stellaris Alloy Component','Supercapacitor'] },
+  'Cosmos Ultracell':    { machine:'Adv T9 Quadruple Assembler', icon:'🌌', price:'$240xxD',  inputs:['Controller','Cosmos Alloy Component','Painite Gauge','Supercapacitor'] },
+
+  // ADV T9 TRIPLE ASSEMBLER — end-game output
+  'Dark Gamma Reactor':  { machine:'Adv T9 Triple Assembler', icon:'☢', price:'$3.55pD', inputs:['Cosmos Alloy Component','Dark Matter Battery','Ten Elements'] },
+
+  // ══════════════════════════════════════════════════════
+  //  T10 RAW RESOURCES
+  // ══════════════════════════════════════════════════════
   'Vein Petroleum':       { raw:true, icon:'💧', source:'Petroleum Extractor',       type:'fluid', price:'$15SpD' },
   'Aqueous Alto':         { raw:true, icon:'💧', source:'Aqueous Alto Extractor',     type:'fluid', price:'$20SpD' },
   'Mesossential Wood':    { raw:true, icon:'🌳', source:'Mesossential Tree Farm',     type:'mine',  price:'$1.50cD' },
@@ -514,7 +748,6 @@ const recipes = {
   'Dome Field':            { machine:'T10+ Triple Assembler',    icon:'🌐', price:'$225NvD',  inputs:['Purple Dye','Dome Gyroscope','Cloudy Sphere Field'] },
   'Celestial Supergear':   { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$290NvD',  inputs:['Refined Coreodeon Bearing','Strato Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
   'Divine Supergear':      { machine:'T10+ Quadruple Assembler', icon:'⭐', price:'$300NvD',  inputs:['Refined Coreodeon Bearing','Terra Mechanical Gear','Coreostrix Alloy Ring','Bunch of Coreosteel Alloy Screws'] },
-  'Coreostrix Alloy Ingot':{ machine:'T10+ Alloy Smelter',       icon:'🔷', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
   'Coreostrix Alloy Plate':{ machine:'Press',                   icon:'🔷', price:'$1.35NvD', inputs:['Coreostrix Alloy Ingot'] },
   'Coreostrix Alloy Pipe': { machine:'T10+ Rolling Machine',     icon:'🔷', price:'$1.5NvD',  inputs:['Coreostrix Alloy Plate'] },
   'Coreostrix Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2.05NvD', inputs:['Coreostrix Alloy Pipe'] },
@@ -528,27 +761,78 @@ const recipes = {
 let nodeIdCounter = 0;
 let summaryData = { raw:{}, machines:{}, items:{} };
 
+let maxDepthReached = 0;
+
 function renderTree() {
   const sel = document.getElementById('itemSelect').value;
   if (!sel) return;
 
   nodeIdCounter = 0;
   summaryData = { raw:{}, machines:{}, items:{} };
+  maxDepthReached = 0;
 
   const container = document.getElementById('treeContainer');
   const seen = new Set();
   const html = buildNode(sel, true, seen, 0);
-  container.innerHTML = `<div class="tree-root">${html}</div>`;
+
+  // Count total nodes rendered
+  const totalNodes = nodeIdCounter;
+  const rawCount = Object.keys(summaryData.raw).length;
+  const machCount = Object.keys(summaryData.machines).length;
+
+  const statsHtml = `<div class="tree-stats">
+    <div class="tree-stat nodes"><span class="ts-val">${totalNodes}</span><span class="ts-label">nodes</span></div>
+    <div class="tree-stat machines"><span class="ts-val">${machCount}</span><span class="ts-label">machine types</span></div>
+    <div class="tree-stat raw"><span class="ts-val">${rawCount}</span><span class="ts-label">raw sources</span></div>
+    <div class="tree-stat depth"><span class="ts-val">${maxDepthReached}</span><span class="ts-label">max depth</span></div>
+  </div>`;
+
+  container.innerHTML = statsHtml + `<div class="tree-root">${html}</div>`;
   updateSummary();
+  wireBreadcrumb();
+}
+
+function wireBreadcrumb() {
+  const bar = document.getElementById('breadcrumbBar');
+  const container = document.getElementById('treeContainer');
+
+  container.addEventListener('mouseover', function(e) {
+    const header = e.target.closest('.node-header');
+    if (!header) return;
+    const path = [];
+    let el = header;
+    while (el && el.id !== 'treeContainer') {
+      if (el.classList.contains('node-header')) {
+        const name = el.querySelector('.node-name')?.textContent?.trim();
+        const isRaw = el.classList.contains('raw');
+        const isTarget = el.classList.contains('target');
+        if (name) path.unshift({ name, isRaw, isTarget });
+      }
+      el = el.parentElement;
+    }
+    if (path.length === 0) return;
+    bar.classList.add('visible');
+    bar.innerHTML = path.map((p, i) => {
+      const cls = p.isTarget ? 'bc-target' : p.isRaw ? 'bc-raw' : (i === path.length - 1 ? 'bc-last' : '');
+      const sep = i > 0 ? `<span class="bc-sep">›</span>` : '';
+      return `${sep}<span class="bc-item ${cls}">${p.name}</span>`;
+    }).join('');
+  });
+
+  container.addEventListener('mouseleave', function() {
+    bar.classList.remove('visible');
+    bar.innerHTML = '';
+  });
 }
 
 function buildNode(itemName, isRoot, pathAncestors, depth) {
   const r = recipes[itemName];
   const nodeId = 'n' + (nodeIdCounter++);
+  if (depth > maxDepthReached) maxDepthReached = depth;
 
   if (!r) {
     return `<div class="tree-node">
-      <div class="node-header crafted">
+      <div class="node-header crafted depth-${depth}" data-depth="${depth}">
         <span class="node-icon">❓</span>
         <span class="node-name">${itemName}</span>
         <span class="node-note">unknown item</span>
@@ -558,7 +842,7 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
 
   if (pathAncestors.has(itemName)) {
     return `<div class="tree-node">
-      <div class="node-header seen">
+      <div class="node-header seen depth-${depth}" data-depth="${depth}">
         <span class="node-icon">🔄</span>
         <span class="node-name">${itemName}</span>
         <span class="node-seen-tag">(circular — already in chain above)</span>
@@ -575,12 +859,13 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
       summaryData.raw[key].count++;
     }
     return `<div class="tree-node">
-      <div class="node-header ${cls}">
+      <div class="node-header ${cls} depth-${depth}" data-depth="${depth}">
         <span class="node-icon">${r.icon || '⬤'}</span>
         <span class="node-name">${itemName}</span>
         <span class="node-price">${r.price || ''}</span>
         <span class="node-source">${r.source}</span>
         ${r.note ? `<span class="node-note">${r.note}</span>` : ''}
+        ${depth > 0 ? `<span class="node-depth">L${depth}</span>` : ''}
       </div>
     </div>`;
   }
@@ -593,8 +878,10 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   }
 
   const hasChildren = r.inputs && r.inputs.length > 0;
+  // Auto-collapse branches at depth >= 3 to keep initial view manageable
+  const autoCollapse = depth >= 3;
   const toggleBtn = hasChildren
-    ? `<button class="toggle-btn" id="tb_${nodeId}" onclick="toggle('${nodeId}')" title="collapse/expand">−</button>`
+    ? `<button class="toggle-btn${autoCollapse ? ' collapsed' : ''}" id="tb_${nodeId}" onclick="toggle('${nodeId}')" title="collapse/expand">${autoCollapse ? '+' : '−'}</button>`
     : `<span style="width:18px;display:inline-block;"></span>`;
 
   const headerClass = isRoot ? 'target' : 'crafted';
@@ -617,17 +904,18 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
       shownInputs.add(inp);
       return buildNode(inp, false, newPath, depth + 1);
     }).join('');
-    childrenHtml = `<div class="tree-children" id="ch_${nodeId}">${childRows}</div>`;
+    childrenHtml = `<div class="tree-children${autoCollapse ? ' tree-collapsed' : ''}" id="ch_${nodeId}" data-depth="${depth + 1}">${childRows}</div>`;
   }
 
   return `<div class="tree-node">
-    <div class="node-header ${headerClass}">
+    <div class="node-header ${headerClass} depth-${depth}" data-depth="${depth}">
       ${toggleBtn}
       <span class="node-icon">${r.icon || '⚙'}</span>
       <span class="node-name">${itemName}</span>
       <span class="node-price">${r.price || ''}</span>
       <span class="node-machine">${r.machine}</span>
       ${r.note ? `<span class="node-note">${r.note}</span>` : ''}
+      ${depth > 0 ? `<span class="node-depth">L${depth}</span>` : ''}
     </div>
     ${childrenHtml}
   </div>`;
@@ -652,6 +940,29 @@ function collapseAll() {
   all.forEach((el, i) => { if (i > 0) { el.classList.add('tree-collapsed'); } });
   document.querySelectorAll('.toggle-btn').forEach((el, i) => {
     if (i > 0) { el.textContent = '+'; el.classList.add('collapsed'); }
+  });
+}
+
+function rawFocus() {
+  // Collapse everything first
+  document.querySelectorAll('.tree-children').forEach(el => el.classList.add('tree-collapsed'));
+  document.querySelectorAll('.toggle-btn').forEach(el => { el.textContent = '+'; el.classList.add('collapsed'); });
+
+  // Walk up from every raw node and expand only the path to it
+  document.querySelectorAll('.node-header.raw').forEach(rawHeader => {
+    let el = rawHeader.parentElement;
+    while (el && el.id !== 'treeContainer') {
+      if (el.classList.contains('tree-children')) {
+        el.classList.remove('tree-collapsed');
+        // Reopen the toggle button of the parent node
+        const parentTreeNode = el.parentElement;
+        if (parentTreeNode) {
+          const tb = parentTreeNode.querySelector(':scope > .node-header .toggle-btn');
+          if (tb) { tb.textContent = '−'; tb.classList.remove('collapsed'); }
+        }
+      }
+      el = el.parentElement;
+    }
   });
 }
 
@@ -699,6 +1010,7 @@ function updateSummary() {
     }).join('');
   }
 }
+
 function filterItems(q) {
   const sel = document.getElementById('itemSelect');
   const lower = q.toLowerCase();
@@ -712,6 +1024,9 @@ function filterItems(q) {
     renderTree();
   }
 }
+
+// Init — populate T10 on load
+updateTierItems();
 </script>
   
 </body>
