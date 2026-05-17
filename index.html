@@ -55,7 +55,6 @@
   .btn-ghost { background: transparent; border-color: var(--border); color: var(--dim); }
   .btn-ghost:hover { border-color: var(--purple); color: var(--purple); }
 
-  /* tier select highlight */
   #tierSelect { border-color: var(--gold); color: var(--gold); font-weight: 700; }
 
   .info-box { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15); padding: 10px 14px; margin-bottom: 24px; font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 1.8; }
@@ -75,11 +74,9 @@
   .tree-node:hover > .tree-children { border-left-color: var(--accent); }
   .tree-node > .tree-children > .tree-node::before { content: ''; position: absolute; left: -15px; top: 14px; width: 13px; height: 1px; background: var(--dim2); }
 
-  /* Cut the vertical dashed line at the last child so it doesn't overshoot */
   .tree-children > .tree-node:last-child::after { content: ''; position: absolute; left: -28px; top: 16px; bottom: 0; width: 2px; background: var(--bg); }
 
   .node-header { display: grid; grid-template-columns: 18px 18px 1fr auto auto auto; align-items: center; gap: 8px; padding: 6px 10px 6px 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; user-select: none; position: relative; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
-  /* raw nodes have no toggle btn — shift columns */
   .node-header.raw, .node-header.byproduct { grid-template-columns: 18px 1fr auto auto auto; }
   .node-header.seen { grid-template-columns: 18px 18px 1fr auto; }
   .node-header:hover { border-color: var(--accent); background: rgba(0,229,255,0.05) !important; box-shadow: 0 0 10px rgba(0,229,255,0.15); }
@@ -108,14 +105,11 @@
   .node-seen-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); font-style: italic; }
   .node-depth { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--dim2); letter-spacing: 1px; flex-shrink: 0; min-width: 20px; text-align: right; }
 
-  /* Depth-tinted connector lines — gives visual rhythm to deep chains */
   .tree-children[data-depth="1"] { border-left-color: rgba(0,229,255,0.35); }
   .tree-children[data-depth="2"] { border-left-color: rgba(191,127,255,0.28); }
   .tree-children[data-depth="3"] { border-left-color: rgba(0,229,255,0.18); }
   .tree-children[data-depth="4"] { border-left-color: rgba(191,127,255,0.14); }
   .tree-children[data-depth="5"] { border-left-color: rgba(0,229,255,0.10); }
-
-  /* Stats bar above tree */
   .tree-stats { display: flex; gap: 16px; padding: 8px 12px; background: rgba(0,229,255,0.03); border: 1px solid rgba(0,229,255,0.1); margin-bottom: 10px; flex-wrap: wrap; }
   .tree-stat { font-family: 'Share Tech Mono', monospace; font-size: 10px; display: flex; align-items: center; gap: 6px; }
   .tree-stat .ts-val { font-size: 13px; font-weight: 700; }
@@ -124,8 +118,6 @@
   .tree-stat.raw .ts-val { color: var(--green); }
   .tree-stat.depth .ts-val { color: var(--gold); }
   .tree-stat .ts-label { color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
-
-  /* Breadcrumb path bar */
   .breadcrumb-bar { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); padding: 5px 10px; background: var(--panel); border: 1px solid var(--border); border-bottom: none; min-height: 26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
   .breadcrumb-bar.visible { display: block; }
   .breadcrumb-bar .bc-sep { color: var(--dim2); margin: 0 5px; }
@@ -155,7 +147,6 @@
 
   footer { text-align: center; padding: 20px; color: var(--dim); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; border-top: 1px solid var(--border); margin-top: 40px; }
 
-  /* ── Flowchart Modal ─────────────────────────────────── */
   #flowModal {
     display: none; position: fixed; inset: 0; z-index: 1000;
     background: rgba(8,11,15,0.88);
@@ -195,8 +186,22 @@
   }
   .flow-close:hover { border-color: var(--red); color: var(--red); }
 
+  .flow-zoom-btn {
+    background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.25); color: var(--accent);
+    font-size: 14px; width: 28px; height: 28px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0; font-family: 'Share Tech Mono', monospace;
+  }
+  .flow-zoom-btn:hover { background: rgba(0,229,255,0.2); border-color: var(--accent); }
+  .flow-zoom-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent);
+    min-width: 38px; text-align: center; letter-spacing: 1px;
+  }
+
   .flow-svg-wrap {
-    overflow: auto; padding: 24px; flex: 1;
+    overflow: hidden; padding: 24px; flex: 1;
+    cursor: grab;
+    user-select: none;
     background: repeating-linear-gradient(
       90deg, transparent, transparent 39px, rgba(0,229,255,0.02) 39px, rgba(0,229,255,0.02) 40px
     ),
@@ -204,6 +209,7 @@
       0deg, transparent, transparent 39px, rgba(0,229,255,0.02) 39px, rgba(0,229,255,0.02) 40px
     );
   }
+  .flow-svg-wrap.dragging { cursor: grabbing; }
   .flow-svg-wrap svg { display: block; }
 
   .flow-hint {
@@ -272,7 +278,7 @@
     <div class="card-head cyan">🔍 View Item Chain</div>
     <div class="card-body">
       <div class="calc-row">
-        <div class="calc-group" style="flex: 0 0 90px;">
+        <div class="calc-group" id="tierGroup" style="flex: 0 0 90px;">
           <label>Tier</label>
           <select id="tierSelect" onchange="updateTierItems()">
             <option value="T0">T0</option>
@@ -288,6 +294,8 @@
             <option value="T10" selected>T10</option>
           </select>
         </div>
+        <button class="btn btn-ghost" id="eventModeBtn" onclick="showEventSelector()" style="align-self:flex-end; border-color:var(--purple); color:var(--purple);">⚡ Event</button>
+        <div id="eventModeRow" style="display:none; align-items:flex-end; gap:6px; flex-wrap:wrap; align-self:flex-end;"></div>
         <div class="calc-group" style="flex:1; min-width: 200px;">
           <label>Select Item to View Chain</label>
           <select id="itemSelect" onchange="renderTree()">
@@ -347,7 +355,6 @@
 
 <footer>FACTORY SIM · FULL CHAIN VIEWER · T9 & T10</footer>
 
-<!-- ── Flowchart Modal ────────────────────────────────────── -->
 <div id="flowModal" onclick="handleFlowModalClick(event)">
   <div class="flow-modal-inner">
     <div class="flow-modal-head">
@@ -355,17 +362,20 @@
         <div class="flow-modal-title">📊 <span id="flowModalTitle"></span></div>
         <div class="flow-modal-subtitle">ingredient flow chart · full chain</div>
       </div>
-      <button class="flow-close" onclick="closeFlowModal()" title="Close (Esc)">✕</button>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <button class="flow-zoom-btn" onclick="flowZoomOut()" title="Zoom out (−)">−</button>
+        <span class="flow-zoom-label" id="flowZoomDisplay">100%</span>
+        <button class="flow-zoom-btn" onclick="flowZoomIn()" title="Zoom in (+)">+</button>
+        <button class="flow-zoom-btn" onclick="flowZoomReset()" title="Reset zoom" style="width:auto;padding:0 8px;font-size:9px;letter-spacing:1px;">RESET</button>
+        <button class="flow-close" onclick="closeFlowModal()" title="Close (Esc)">✕</button>
+      </div>
     </div>
     <div class="flow-svg-wrap" id="flowSvgWrap"></div>
-    <div class="flow-hint">click a node in the tree → show its flowchart &nbsp;|&nbsp; esc to close</div>
+    <div class="flow-hint">click a node in the tree → show its flowchart &nbsp;|&nbsp; scroll to zoom &nbsp;|&nbsp; drag to pan &nbsp;|&nbsp; +/− buttons or Esc to close</div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-//  TIER ITEMS DIRECTORY
-// ═══════════════════════════════════════════════════════════
 const tierItems = {
   T0: {
     '🪨 Stone Chain': ['Stone Slab','Stone Tiles','Stone Bricks'],
@@ -417,7 +427,7 @@ const tierItems = {
     '⚗ T5 Alloy Chain': [
       'Strangesteel Ingot','Weirdsteel Ingot','Shroomsteel Ingot','Trimetal Ingot',
       'Strangesteel Plate','Weirdsteel Plate','Shroomsteel Plate','Trimetal Plate',
-      'Strangesteel Wire','Weirdsteel Wire','Shroomsteel Wire','Trimetal Wire',
+      'Strangesteel Wire','Weirdsteel Wire','Shroomsteel Wire','Trimetal Gear',
       'Strangesteel Gear','Weirdsteel Gear','Shroomsteel Gear','Trimetal Gear',
       'Strangesteel Pipe','Weirdsteel Pipe','Shroomsteel Pipe','Trimetal Pipe'
     ],
@@ -509,7 +519,35 @@ const tierItems = {
       'Robot','Mega Robot','Mega Zod','Talking Robot'
     ]
   },
-  T8: {},
+  T8: {
+    '💎 T8 Crystal Chain': [
+      'Prismarine Pane','Prismarine Shard','Prismarine Gem','Concentrated Prismarine Gem',
+      'Prismarine Dust Cluster','Concentrated Prismarine Dust',
+      'Molten Pane','Molten Gem','Concentrated Molten Gem','Concentrated Molten Dust'
+    ],
+    '⛏ T8 Ore Chain': [
+      'Silicon Gravel','Mithril Gravel','Plutonium Gravel','Steelix Gravel',
+      'Activated Silicon','Activated Mithril','Living Plutonium','Activated Steelix','Raging Steelix','Living Mithril',
+      'Silicon Ingot','Mithril Ingot','Steelix Ingot','Plutonium Node','Molten Steelix Ingot','Mithril Node',
+      'Iconix Ingot','Superstructure Ingot'
+    ],
+    '🔩 T8 Plates, Wires & Pipes': [
+      'Plutonium Plate','Molten Steelix Plate','Silicon Plate','Iconix Plate','Superstructure Plate',
+      'Steelix Wire','Superstring','Iconix Wire','Superstructure Wire',
+      'Plutonium Pipe','Superstructure Pipe'
+    ],
+    '🔧 T8 Reinforced & Components': [
+      'Reinforced Plutonium Plate','Reinforced Molten Plate','Reinforced Silicon Plate',
+      'Reinforced Iconix Plate','Reinforced Superstructure Plate',
+      'Iconix Screw','Plutonium Ring','Superstructure Ring','Superstring Element',
+      'Superfluid Element','Core Truss','Plutonium Core','Ultralink'
+    ],
+    '🏆 T8 End-Game': [
+      'Core Shell','Core Shielding',
+      'Superstring Core','Supersolid Core','Superfluid Core',
+      'Teraplex','Teraplex Mechanical Assembly','Hologram Turkey'
+    ]
+  },
   T9: {
     '⛏ T9 Ore & Dust Processing': [
       'Molybdenum Gravel','Chromium Gravel','Platinum Gravel','Iridium Gravel','Magnesium Gravel',
@@ -547,8 +585,7 @@ const tierItems = {
       'Chaos Charm','Dark Gamma Reactor'
     ]
   },
-  T10: {
-    '🧪 Fluids & Filtration': [
+  T10: {    '🧪 Fluids & Filtration': [
       'Eveready Petroleum','Treated Alto Fluid','Fluid Garnet','Balancer Solution',
       'Light Fluid Garnet','Heavy Fluid Garnet','Light Fraction','Medium Fraction','Heavy Fraction',
       'Alto Thinner','Alto Essence','Alto Primer','Alto Blend','Purified Alto Blend',
@@ -577,6 +614,85 @@ const tierItems = {
       'Terra Alloy Axiom','Dome Field','Celestial Supergear','Divine Supergear',
       'Olympus Tri-Axiom','Olympus Dyson Axiom'
     ]
+  },
+
+  EVENT_Halloween_T0: {},
+  EVENT_Halloween_T1: {},
+  EVENT_Halloween_T2: {},
+  EVENT_Halloween_T3: {},
+
+  EVENT_Classic_T0: {
+    '⛏ Classic T0 Basic Processing': [
+      'Cut Stud',
+      'Redcliffian Metal Dust',
+      'Astrum Crystal',
+      'Astral Isles Rock',
+      'Astrum Dust',
+      'Astral Isles Dust',
+      'Cylindrical Stud'
+    ],
+    '🔥 Classic T0 Smelting': [
+      'Blasted Stud',
+      'Forged Astrum',
+      'Glowing Redcliffian Metal Dust',
+      'Heat Treated Cylindrical Stud',
+      'Redcliffian Steel'
+    ],
+    '❄ Classic T0 Alloys': [
+      'Cooled Redcliff Ingot',
+      'Astral Alloy'
+    ],
+    '🏆 Classic T0 End-Game': [
+      'Astral Alloy Capsule',
+      'Periastron Core'
+    ]
+  },
+  EVENT_Classic_T1: {
+    '🩸 T1 Flesh Chain': [
+      'Seething Overseer Flesh',
+      'Compressed Overseer Flesh',
+      'Chilled Overseer Flesh',
+      'Overseer Chunk',
+      'Overseer Dust',
+      'Glowing Overseer Chunk'
+    ],
+    '⛏ T1 Ore & Silver Chain': [
+      'Astral Soul Gravel',
+      'Gilded Silver Gravel',
+      'Astral Soul Essence',
+      'Activated Gilded Silver',
+      'Gilded Silver Ingot'
+    ],
+    '⚗ T1 Alloys & Essences': [
+      'Gamma Star Fragment',
+      'Alpha Star Fragment',
+      'Astral Soul Holder',
+      'Gilded Power Essence'
+    ],
+    '🏆 T1 End-Game': [
+      'Activated Periastron Core',
+      'Azure Periastron, Alpha',
+      'Charteuse Periastron, Gamma'
+    ]
+  },
+  EVENT_Classic_T2: {},
+  EVENT_Classic_T3: {},
+  EVENT_Classic_T4: {},
+  EVENT_Classic_T5: {},
+
+  EVENT_Christmas: {},
+  EVENT_NuclearSummer: {},
+  EVENT_Halloween: {
+    '🎃 Halloween Items': [
+      'Jack-o-Lantern','Witch Hat','Candy Bag','Skeleton Key','Haunted Lantern',
+      'Spider Web','Potion Bottle','Ghost Sheet','Vampire Cape','Cursed Pumpkin'
+    ]
+  },
+  EVENT_Classic: {
+    '🏛 Classic Items': [
+      'Stone Slab','Wood Boards','Copper Ingot','Iron Ingot','Glass',
+      'Basic Circuit','Mechanical Assembly','Copper Gear','Iron Gear','Copper Plate'
+    ]
   }
 };
 
@@ -585,13 +701,25 @@ function updateTierItems() {
   const sel = document.getElementById('itemSelect');
   sel.innerHTML = '<option value="">— Choose an item —</option>';
 
+  document.getElementById('treeContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="big">🔍</div>
+      <div>Select an item from <span style="color:var(--gold)">${tier}</span> to see its full ingredient chain</div>
+      <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
+    </div>`;
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+  document.getElementById('breadcrumbBar').innerHTML = '';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('sumRaw').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumItems').innerHTML = '<div class="sum-empty">— select an item —</div>';
+
   const groups = tierItems[tier];
   if (!groups || Object.keys(groups).length === 0) {
     const opt = document.createElement('option');
     opt.disabled = true;
     opt.textContent = '— No items for this tier yet —';
     sel.appendChild(opt);
-    // clear tree
     document.getElementById('treeContainer').innerHTML = `
       <div class="empty-state">
         <div class="big">🚧</div>
@@ -616,21 +744,11 @@ function updateTierItems() {
     sel.appendChild(og);
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-//  RECIPES DATABASE
-// ═══════════════════════════════════════════════════════════
 const recipes = {
-
-  // ══════════════════════════════════════════════════════
-  //  T0 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
   'Rock':        { raw:true, icon:'🪨', source:'Stone Mine',     type:'mine', price:'$10' },
   'Wood':        { raw:true, icon:'🪵', source:'Tree Farm',      type:'mine', price:'$10' },
   'Sand':        { raw:true, icon:'🏖', source:'Sand Mine',      type:'mine', price:'$35' },
   'Turkey':      { raw:true, icon:'🦃', source:'Turkey Farm',    type:'mine', price:'$100' },
-
-  // ── T0/T1 MACHINE OUTPUTS ──────────────────────────────
   'Stone Slab':        { machine:'T1 Cutter',   icon:'🪨', price:'$25',   inputs:['Rock'] },
   'Stone Tiles':       { machine:'T1 Cutter',   icon:'🪨', price:'$35',   inputs:['Stone Slab'] },
   'Wood Boards':       { machine:'T1 Cutter',   icon:'🪵', price:'$25',   inputs:['Wood'] },
@@ -640,21 +758,13 @@ const recipes = {
   'Turkey Chop':       { machine:'T1 Press',    icon:'🦃', price:'$100',  inputs:['Turkey'] },
   'Cooked Turkey':     { machine:'T1 Furnace',  icon:'🍗', price:'$300',  inputs:['Turkey'] },
   'Cooked Turkey Chop':{ machine:'T1 Furnace',  icon:'🍗', price:'$600',  inputs:['Turkey Chop'] },
-
-  // ── T1 RAW ────────────────────────────────────────────
   'Copper Ore':  { raw:true, icon:'⛏', source:'Copper Mine',  type:'mine', price:'$45' },
-
-  // ── T1 MACHINE OUTPUTS ────────────────────────────────
   'Copper Ingot': { machine:'T1 Furnace',  icon:'🟤', price:'$85',   inputs:['Copper Ore'] },
   'Copper Plate': { machine:'T1 Press',    icon:'🟤', price:'$100',  inputs:['Copper Ingot'] },
   'Copper Wire':  { machine:'T1 Extruder', icon:'🟤', price:'$225',  inputs:['Copper Ingot'] },
-
-  // ── T2 RAW ────────────────────────────────────────────
   'Hardwood':  { raw:true, icon:'🪵', source:'Hardwood Tree Farm', type:'mine', price:'$625' },
   'Iron Ore':  { raw:true, icon:'⛏', source:'Iron Mine',          type:'mine', price:'$750' },
   'Gold Ore':  { raw:true, icon:'⛏', source:'Gold Mine',          type:'mine', price:'$900' },
-
-  // ── T2 MACHINE OUTPUTS ────────────────────────────────
   'Hardwood Boards':     { machine:'T2 Cutter',        icon:'🪵', price:'$1.1k',  inputs:['Hardwood'] },
   'Pressurized Hardwood':{ machine:'T2 Press',         icon:'🪵', price:'$1.5k',  inputs:['Hardwood Boards'] },
   'Iron Ingot':          { machine:'T2 Furnace',        icon:'⬜', price:'$1.45k', inputs:['Iron Ore'] },
@@ -675,15 +785,11 @@ const recipes = {
   'Golden Turkey':       { machine:'T2 Dual Assembler', icon:'🦃', price:'$48.5k', inputs:['Gold Ingot','Turkey'] },
   'Mechanical Assembly': { machine:'T2 Dual Assembler', icon:'⚙',  price:'$80k',   inputs:['Copper Gear','Iron Plate'] },
   'Advanced Circuit':    { machine:'T2 Dual Assembler', icon:'💡', price:'$75k',   inputs:['Basic Circuit','Gold Wire'] },
-
-  // ── T3 RAW ────────────────────────────────────────────
   'Superwood':    { raw:true, icon:'🌲', source:'Superwood Tree Farm', type:'mine', price:'$200k' },
   'Resinite Ore': { raw:true, icon:'⛏', source:'Resinite Mine',       type:'mine', price:'$185k' },
   'Titanium Ore': { raw:true, icon:'⛏', source:'Titanium Mine',       type:'mine', price:'$225k' },
   'Uranium Ore':  { raw:true, icon:'☢',  source:'Uranium Mine',        type:'mine', price:'$265k' },
   'Diamond':      { raw:true, icon:'💎', source:'Diamond Mine',        type:'mine', price:'$120k' },
-
-  // ── T3 MACHINE OUTPUTS ────────────────────────────────
   'Superwood Boards':     { machine:'T3 Cutter',        icon:'🌲', price:'$185k',  inputs:['Superwood'] },
   'Pressurized Superwood':{ machine:'T3 Press',         icon:'🌲', price:'$295k',  inputs:['Superwood Boards'] },
   'Resinite Ingot':       { machine:'T3 Furnace',       icon:'🟢', price:'$625k',  inputs:['Resinite Ore'] },
@@ -707,16 +813,12 @@ const recipes = {
   'Living Composite':     { machine:'T3 Dual Assembler',icon:'🌿', price:'$145M',  inputs:['Resinite Mesh','Pressurized Superwood'] },
   'Mutant Turkey':        { machine:'T3 Dual Assembler',icon:'🦃', price:'$63M',   inputs:['Turkey','Uranium Ingot'] },
   'Living Alloy Gear':    { machine:'T3 Assembler',     icon:'⚙',  price:'$180M',  inputs:['Living Alloy'] },
-
-  // ── T4 RAW ────────────────────────────────────────────
   'Ultrawood':    { raw:true, icon:'🌳', source:'Ultrawood Tree Farm', type:'mine', price:'$6B' },
   'Tungsten Ore': { raw:true, icon:'⛏', source:'Tungsten Mine',       type:'mine', price:'$7B' },
   'Bluemetal Ore':{ raw:true, icon:'⛏', source:'Bluemetal Mine',      type:'mine', price:'$7B' },
   'Redmetal Ore': { raw:true, icon:'⛏', source:'Redmetal Mine',       type:'mine', price:'$7B' },
   'Ice Crystal':  { raw:true, icon:'🧊', source:'Ice Crystal Mine',   type:'mine', price:'$8B' },
   'Lava Crystal': { raw:true, icon:'🌋', source:'Lava Crystal Mine',  type:'mine', price:'$8B' },
-
-  // ── T4 MACHINE OUTPUTS ────────────────────────────────
   'Ultrawood Boards':          { machine:'T4 Cutter',        icon:'🌳', price:'$8B',    inputs:['Ultrawood'] },
   'Pressurized Ultrawood':     { machine:'T4 Press',         icon:'🌳', price:'$12B',   inputs:['Ultrawood Boards'] },
   'Tungsten Ingot':            { machine:'T4 Furnace',       icon:'🔩', price:'$12.5B', inputs:['Tungsten Ore'] },
@@ -754,20 +856,12 @@ const recipes = {
   'Blue Ultra Boards':         { machine:'T4 Dual Assembler',icon:'🔵', price:'$25.5T', inputs:['Bluemetal Plate','Ultrawood Boards'] },
   'Red Ultra Boards':          { machine:'T4 Dual Assembler',icon:'🔴', price:'$25.5T', inputs:['Redmetal Plate','Ultrawood Boards'] },
   'Frozen Turkey Chop':        { machine:'T4 Dual Assembler',icon:'🦃', price:'$75.5T', inputs:['Ice Crystal','Turkey Chop'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T5 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
   'Petrified Wood':   { raw:true, icon:'🪨', source:'Advanced Petrified Tree Farm', type:'mine', price:'$25qd' },
   'Weird Ore':        { raw:true, icon:'⛏', source:'Advanced Weird Mine',           type:'mine', price:'$25qd' },
   'Shroomite Ore':    { raw:true, icon:'⛏', source:'Advanced Shroomite Mine',       type:'mine', price:'$25qd' },
   'Osmium Ore':       { raw:true, icon:'⛏', source:'Advanced Osmium Mine',          type:'mine', price:'$30qd' },
   'Energy Crystal':   { raw:true, icon:'⚡', source:'Advanced Energy Crystal Mine', type:'mine', price:'$45qd' },
-
-  // ── T5 CUTTER ─────────────────────────────────────────
   'Petrified Boards': { machine:'T5 Cutter', icon:'🪨', price:'$50qd', inputs:['Petrified Wood'] },
-
-  // ── T5 PRESS ──────────────────────────────────────────
   'Pressurized Petrified Wood': { machine:'T5 Press', icon:'🪨',  price:'$160qd',  inputs:['Petrified Boards'] },
   'Weird Plate':                { machine:'T5 Press', icon:'🟣',  price:'$168qd',  inputs:['Weird Ingot'] },
   'Shroomite Plate':            { machine:'T5 Press', icon:'🍄',  price:'$210qd',  inputs:['Shroomite Ingot'] },
@@ -776,18 +870,12 @@ const recipes = {
   'Strangesteel Plate':         { machine:'T5 Press', icon:'🌀',  price:'$2.1Qn',  inputs:['Strangesteel Ingot'] },
   'Shroomsteel Plate':          { machine:'T5 Press', icon:'🍄',  price:'$2.1Qn',  inputs:['Shroomsteel Ingot'] },
   'Trimetal Plate':             { machine:'T5 Press', icon:'⭐',  price:'$31.5Qn', inputs:['Trimetal Ingot'] },
-
-  // ── T5 ORE CRUSHER ────────────────────────────────────
   'Weird Gravel':     { machine:'T5 Ore Crusher', icon:'🪨', price:'$80qd',  inputs:['Weird Ore'] },
   'Shroomite Gravel': { machine:'T5 Ore Crusher', icon:'🪨', price:'$80qd',  inputs:['Shroomite Ore'] },
   'Osmium Gravel':    { machine:'T5 Ore Crusher', icon:'🪨', price:'$85qd',  inputs:['Osmium Ore'] },
-
-  // ── T5 INDUCTION SMELTER ──────────────────────────────
   'Weird Ingot':      { machine:'T5 Induction Smelter', icon:'🟣', price:'$112qd', inputs:['Weird Gravel'] },
   'Shroomite Ingot':  { machine:'T5 Induction Smelter', icon:'🍄', price:'$140qd', inputs:['Shroomite Gravel'] },
   'Osmium Ingot':     { machine:'T5 Induction Smelter', icon:'🔵', price:'$168qd', inputs:['Osmium Gravel'] },
-
-  // ── T5 EXTRUDER ───────────────────────────────────────
   'Weird Wire':       { machine:'T5 Extruder', icon:'🟣', price:'$218qd',  inputs:['Weird Ingot'] },
   'Shroomite Wire':   { machine:'T5 Extruder', icon:'🍄', price:'$273qd',  inputs:['Shroomite Ingot'] },
   'Osmium Wire':      { machine:'T5 Extruder', icon:'🔵', price:'$327qd',  inputs:['Osmium Ingot'] },
@@ -795,11 +883,7 @@ const recipes = {
   'Strangesteel Wire':{ machine:'T5 Extruder', icon:'🌀', price:'$2.73Qn', inputs:['Strangesteel Ingot'] },
   'Shroomsteel Wire': { machine:'T5 Extruder', icon:'🍄', price:'$2.73Qn', inputs:['Shroomsteel Ingot'] },
   'Trimetal Wire':    { machine:'T5 Extruder', icon:'⭐', price:'$40.9Qn', inputs:['Trimetal Ingot'] },
-
-  // ── T5 LASER CUTTER ───────────────────────────────────
   'Energy Gem': { machine:'T5 Laser Cutter', icon:'💎', price:'$220qd', inputs:['Energy Crystal'] },
-
-  // ── T5 GEAR PRESS ─────────────────────────────────────
   'Weird Gear':       { machine:'T5 Gear Press', icon:'⚙', price:'$431qd',  inputs:['Weird Plate'] },
   'Shroomite Gear':   { machine:'T5 Gear Press', icon:'⚙', price:'$539qd',  inputs:['Shroomite Plate'] },
   'Osmium Gear':      { machine:'T5 Gear Press', icon:'⚙', price:'$646qd',  inputs:['Osmium Plate'] },
@@ -807,8 +891,6 @@ const recipes = {
   'Weirdsteel Gear':  { machine:'T5 Gear Press', icon:'⚙', price:'$5.39Qn', inputs:['Weirdsteel Plate'] },
   'Shroomsteel Gear': { machine:'T5 Gear Press', icon:'⚙', price:'$5.39Qn', inputs:['Shroomsteel Plate'] },
   'Trimetal Gear':    { machine:'T5 Gear Press', icon:'⚙', price:'$80.8Qn', inputs:['Trimetal Plate'] },
-
-  // ── T5 ROLLING MACHINE ────────────────────────────────
   'Weird Pipe':       { machine:'T5 Rolling Machine', icon:'🔧', price:'$442qd',  inputs:['Weird Plate'] },
   'Shroomite Pipe':   { machine:'T5 Rolling Machine', icon:'🔧', price:'$553qd',  inputs:['Shroomite Plate'] },
   'Osmium Pipe':      { machine:'T5 Rolling Machine', icon:'🔧', price:'$663qd',  inputs:['Osmium Plate'] },
@@ -816,19 +898,11 @@ const recipes = {
   'Shroomsteel Pipe': { machine:'T5 Rolling Machine', icon:'🔧', price:'$5.53Qn', inputs:['Shroomsteel Plate'] },
   'Strangesteel Pipe':{ machine:'T5 Rolling Machine', icon:'🔧', price:'$6.53Qn', inputs:['Strangesteel Plate'] },
   'Trimetal Pipe':    { machine:'T5 Rolling Machine', icon:'🔧', price:'$82.9Qn', inputs:['Trimetal Plate'] },
-
-  // ── T5 ALLOY SMELTER ──────────────────────────────────
   'Strangesteel Ingot': { machine:'T5 Alloy Smelter', icon:'🌀', price:'$1.4Qn', inputs:['Shroomite Ingot','Weird Ingot'] },
   'Weirdsteel Ingot':   { machine:'T5 Alloy Smelter', icon:'🟣', price:'$1.4Qn', inputs:['Weird Ingot','Weird Ingot'] },
   'Shroomsteel Ingot':  { machine:'T5 Alloy Smelter', icon:'🍄', price:'$1.4Qn', inputs:['Osmium Ingot','Shroomite Ingot'] },
-
-  // ── T5 TRIPLE ALLOY SMELTER ───────────────────────────
   'Trimetal Ingot': { machine:'T5 Triple Alloy Smelter', icon:'⭐', price:'$21Qn', inputs:['Osmium Ingot','Shroomite Ingot','Weird Ingot'] },
-
-  // ── T5 ENERGY CONCENTRATOR ────────────────────────────
   'Concentrated Energy Gem': { machine:'T5 Energy Concentrator', icon:'💎', price:'$550qd', inputs:['Energy Gem'] },
-
-  // ── ADVANCED T5 ASSEMBLER (single input) ──────────────
   'Petrified Table':           { machine:'Adv T5 Assembler', icon:'🪨', price:'$150qd',  inputs:['Pressurized Petrified Wood'] },
   'Reinforced Weird Plate':    { machine:'Adv T5 Assembler', icon:'🟣', price:'$1.18Qn', inputs:['Weird Plate'] },
   'Reinforced Shroomite Plate':{ machine:'Adv T5 Assembler', icon:'🍄', price:'$1.47Qn', inputs:['Shroomite Plate'] },
@@ -858,8 +932,6 @@ const recipes = {
   'Trimetal Screw':            { machine:'Adv T5 Assembler', icon:'🔩', price:'$219Qn',  inputs:['Trimetal Wire'] },
   'Trimetal Ring':             { machine:'Adv T5 Assembler', icon:'⭕', price:'$217Qn',  inputs:['Trimetal Pipe'] },
   'Trimetal Mechanism':        { machine:'Adv T5 Assembler', icon:'⚙', price:'$222Qn',  inputs:['Trimetal Gear'] },
-
-  // ── ADVANCED T5 DUAL ASSEMBLER ────────────────────────
   'Turkey Roll':              { machine:'Adv T5 Dual Assembler', icon:'🦃', price:'$9sx',    inputs:['Turkey Chop','Weird Pipe'] },
   'Strangesteel Energy Core': { machine:'Adv T5 Dual Assembler', icon:'💎', price:'$650Qn',  inputs:['Energy Gem','Strangesteel Plate'] },
   'Weirdsteel Energy Core':   { machine:'Adv T5 Dual Assembler', icon:'💎', price:'$650Qn',  inputs:['Energy Gem','Weirdsteel Plate'] },
@@ -867,13 +939,7 @@ const recipes = {
   'Advanced Energy Core':     { machine:'Adv T5 Dual Assembler', icon:'⚡', price:'$2.85sx', inputs:['Concentrated Energy Gem','Trimetal Plate'] },
   'Composite Plate':          { machine:'Adv T5 Dual Assembler', icon:'🪨', price:'$900Qn',  inputs:['Reinforced Osmium Plate','Pressurized Petrified Wood'] },
   'Elite Energy Core':        { machine:'Adv T5 Dual Assembler', icon:'⚡', price:'$5.35sx', inputs:['Advanced Energy Core','Composite Plate'] },
-
-  // ── ADVANCED T5 TRIPLE ASSEMBLER ─────────────────────
   'Trimetal Reactor': { machine:'Adv T5 Triple Assembler', icon:'⚙', price:'$90sx', inputs:['Elite Energy Core','Trimetal Mechanism','Trimetal Screw'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T6 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
   'Tropical Wood':   { raw:true, icon:'🌴', source:'Advanced Tropical Tree Farm',  type:'mine', price:'$255p' },
   'Salt Crystal':    { raw:true, icon:'🧂', source:'Advanced Salt Crystal Mine',   type:'mine', price:'$305p' },
   'Ambernite Ore':   { raw:true, icon:'⛏', source:'Advanced Ambernite Mine',      type:'mine', price:'$45.05p' },
@@ -881,33 +947,23 @@ const recipes = {
   'Silver Ore':      { raw:true, icon:'⛏', source:'Advanced Silver Mine',         type:'mine', price:'$555p' },
   'Diablium Ore':    { raw:true, icon:'⛏', source:'Advanced Diablium Mine',       type:'mine', price:'$755p' },
   'Sanctium Ore':    { raw:true, icon:'⛏', source:'Advanced Sanctium Mine',       type:'mine', price:'$755p' },
-
-  // ── T6 CUTTER ─────────────────────────────────────────
   'Tropical Boards': { machine:'T6 Cutter', icon:'🌴', price:'$555p', inputs:['Tropical Wood'] },
-
-  // ── T6 ORE CRUSHER ────────────────────────────────────
   'Ambernite Gravel': { machine:'T6 Ore Crusher', icon:'🪨', price:'$95Sp',  inputs:['Ambernite Ore'] },
   'Lead Gravel':      { machine:'T6 Ore Crusher', icon:'🪨', price:'$95Sp',  inputs:['Lead Ore'] },
   'Silver Gravel':    { machine:'T6 Ore Crusher', icon:'🪨', price:'$95Sp',  inputs:['Silver Ore'] },
   'Sanctium Gravel':  { machine:'T6 Ore Crusher', icon:'🪨', price:'$95Sp',  inputs:['Sanctium Ore'] },
   'Diablium Gravel':  { machine:'T6 Ore Crusher', icon:'🪨', price:'$95Sp',  inputs:['Diablium Ore'] },
-
-  // ── T6 MIXER (activates gravel with Salt Shard) ───────
   'Activated Ambernite Gravel': { machine:'T6 Mixer', icon:'🪨', price:'$165Sp', inputs:['Ambernite Gravel','Salt Shard'] },
   'Activated Lead Gravel':      { machine:'T6 Mixer', icon:'🪨', price:'$165Sp', inputs:['Lead Gravel','Salt Shard'] },
   'Activated Silver Gravel':    { machine:'T6 Mixer', icon:'🪨', price:'$165Sp', inputs:['Silver Gravel','Salt Shard'] },
   'Activated Sanctium Gravel':  { machine:'T6 Mixer', icon:'🪨', price:'$165Sp', inputs:['Sanctium Gravel','Salt Shard'] },
   'Activated Diablium Gravel':  { machine:'T6 Mixer', icon:'🪨', price:'$165Sp', inputs:['Diablium Gravel','Salt Shard'] },
   'Salted Cooked Turkey':       { machine:'T6 Mixer', icon:'🍗', price:'$250oct', inputs:['Cooked Turkey','Salt Shard'] },
-
-  // ── T6 INDUCTION SMELTER ──────────────────────────────
   'Ambernite Ingot': { machine:'T6 Induction Smelter', icon:'🟠', price:'$215Sp', inputs:['Activated Ambernite Gravel'] },
   'Lead Ingot':      { machine:'T6 Induction Smelter', icon:'⬜', price:'$215Sp', inputs:['Activated Lead Gravel'] },
   'Silver Ingot':    { machine:'T6 Induction Smelter', icon:'⬜', price:'$215Sp', inputs:['Activated Silver Gravel'] },
   'Sanctium Ingot':  { machine:'T6 Induction Smelter', icon:'🟡', price:'$215Sp', inputs:['Activated Sanctium Gravel'] },
   'Diablium Ingot':  { machine:'T6 Induction Smelter', icon:'🔴', price:'$215Sp', inputs:['Activated Diablium Gravel'] },
-
-  // ── T6 PRESS ──────────────────────────────────────────
   'Pressurized Tropical Wood': { machine:'T6 Press', icon:'🌴', price:'$155Sp',   inputs:['Tropical Boards'] },
   'Ambernite Plate':           { machine:'T6 Press', icon:'🟠', price:'$315Sp',   inputs:['Ambernite Ingot'] },
   'Lead Plate':                { machine:'T6 Press', icon:'⬜', price:'$315Sp',   inputs:['Lead Ingot'] },
@@ -917,8 +973,6 @@ const recipes = {
   'Angelic Plate':             { machine:'T6 Press', icon:'🤍', price:'$1.02oct', inputs:['Angelic Ingot'] },
   'Devilish Plate':            { machine:'T6 Press', icon:'🖤', price:'$1.02oct', inputs:['Devilish Ingot'] },
   'Cosmic Plate':              { machine:'T6 Press', icon:'🌌', price:'$14.1oct', inputs:['Cosmic Ingot'] },
-
-  // ── T6 EXTRUDER ───────────────────────────────────────
   'Ambernite Wire': { machine:'T6 Extruder', icon:'🟠', price:'$335Sp',   inputs:['Ambernite Ingot'] },
   'Lead Wire':      { machine:'T6 Extruder', icon:'⬜', price:'$335Sp',   inputs:['Lead Ingot'] },
   'Silver Wire':    { machine:'T6 Extruder', icon:'⬜', price:'$335Sp',   inputs:['Silver Ingot'] },
@@ -927,8 +981,6 @@ const recipes = {
   'Angelic Wire':   { machine:'T6 Extruder', icon:'🤍', price:'$1.08oct', inputs:['Angelic Ingot'] },
   'Devilish Wire':  { machine:'T6 Extruder', icon:'🖤', price:'$1.08oct', inputs:['Devilish Ingot'] },
   'Cosmic Wire':    { machine:'T6 Extruder', icon:'🌌', price:'$15.0oct', inputs:['Cosmic Ingot'] },
-
-  // ── T6 ROLLING MACHINE ────────────────────────────────
   'Ambernite Pipe': { machine:'T6 Rolling Machine', icon:'🟠', price:'$535Sp',   inputs:['Ambernite Plate'] },
   'Lead Pipe':      { machine:'T6 Rolling Machine', icon:'⬜', price:'$535Sp',   inputs:['Lead Plate'] },
   'Silver Pipe':    { machine:'T6 Rolling Machine', icon:'⬜', price:'$535Sp',   inputs:['Silver Plate'] },
@@ -937,8 +989,6 @@ const recipes = {
   'Angelic Pipe':   { machine:'T6 Rolling Machine', icon:'🤍', price:'$1.73oct', inputs:['Angelic Plate'] },
   'Devilish Pipe':  { machine:'T6 Rolling Machine', icon:'🖤', price:'$1.73oct', inputs:['Devilish Plate'] },
   'Cosmic Pipe':    { machine:'T6 Rolling Machine', icon:'🌌', price:'$24.0oct', inputs:['Cosmic Plate'] },
-
-  // ── T6 GEAR PRESS ─────────────────────────────────────
   'Ambernite Gear': { machine:'T6 Gear Press', icon:'⚙', price:'$505Sp',   inputs:['Ambernite Plate'] },
   'Lead Gear':      { machine:'T6 Gear Press', icon:'⚙', price:'$505Sp',   inputs:['Lead Plate'] },
   'Silver Gear':    { machine:'T6 Gear Press', icon:'⚙', price:'$505Sp',   inputs:['Silver Plate'] },
@@ -947,18 +997,10 @@ const recipes = {
   'Angelic Gear':   { machine:'T6 Gear Press', icon:'⚙', price:'$1.78oct', inputs:['Angelic Plate'] },
   'Devilish Gear':  { machine:'T6 Gear Press', icon:'⚙', price:'$1.78oct', inputs:['Devilish Plate'] },
   'Cosmic Gear':    { machine:'T6 Gear Press', icon:'⚙', price:'$24.7oct', inputs:['Cosmic Plate'] },
-
-  // ── T6 MULTI-PRESS ────────────────────────────────────
   'Tropical Plywood': { machine:'T6 Multi-Press', icon:'🌴', price:'$750Sp', inputs:['Pressurized Tropical Wood','Pressurized Tropical Wood','Pressurized Tropical Wood'] },
-
-  // ── T6 ALLOY SMELTER ──────────────────────────────────
   'Angelic Ingot':  { machine:'T6 Alloy Smelter', icon:'🤍', price:'$698Sp', inputs:['Sanctium Ingot','Silver Ingot'] },
   'Devilish Ingot': { machine:'T6 Alloy Smelter', icon:'🖤', price:'$698Sp', inputs:['Diablium Ingot','Lead Ingot'] },
-
-  // ── T6 TRIPLE ALLOY SMELTER ───────────────────────────
   'Cosmic Ingot': { machine:'T6 Triple Alloy Smelter', icon:'🌌', price:'$9.67oct', inputs:['Ambernite Ingot','Angelic Ingot','Devilish Ingot'] },
-
-  // ── ADVANCED T6 ASSEMBLER ─────────────────────────────
   'Reinforced Ambernite Plate':  { machine:'Adv T6 Assembler', icon:'🟠', price:'$1.19oct', inputs:['Ambernite Plate'] },
   'Reinforced Lead Plate':       { machine:'Adv T6 Assembler', icon:'⬜', price:'$1.19oct', inputs:['Lead Plate'] },
   'Reinforced Silver Plate':     { machine:'Adv T6 Assembler', icon:'⬜', price:'$1.19oct', inputs:['Silver Plate'] },
@@ -990,8 +1032,6 @@ const recipes = {
   'Angelic Mechanism':   { machine:'Adv T6 Assembler', icon:'⚙', price:'$4.07oct', inputs:['Angelic Gear'] },
   'Devilish Mechanism':  { machine:'Adv T6 Assembler', icon:'⚙', price:'$4.07oct', inputs:['Devilish Gear'] },
   'Cosmic Mechanism':    { machine:'Adv T6 Assembler', icon:'⚙', price:'$56.4oct', inputs:['Cosmic Gear'] },
-
-  // ── ADVANCED T6 DUAL ASSEMBLER ────────────────────────
   'Amber Plywood':             { machine:'Adv T6 Dual Assembler', icon:'🌴', price:'$1.25oct', inputs:['Ambernite Ingot','Tropical Plywood'] },
   'Devilish Core':             { machine:'Adv T6 Dual Assembler', icon:'🖤', price:'$29.2oct', inputs:['Reinforced Devilish Plate','Reinforced Devilish Plate'] },
   'Angelic Core':              { machine:'Adv T6 Dual Assembler', icon:'🤍', price:'$29.2oct', inputs:['Reinforced Angelic Plate','Reinforced Angelic Plate'] },
@@ -1002,61 +1042,35 @@ const recipes = {
   'Angelic Gyroscope':  { machine:'Adv T6 Dual Assembler', icon:'🔄', price:'$30.8oct', inputs:['Angelic Ring','Angelic Screw'] },
   'Devilish Gyroscope': { machine:'Adv T6 Dual Assembler', icon:'🔄', price:'$30.8oct', inputs:['Devilish Ring','Devilish Screw'] },
   'Cosmic Gyroscope':   { machine:'Adv T6 Dual Assembler', icon:'🔄', price:'$427oct',  inputs:['Cosmic Ring','Cosmic Screw'] },
-
-  // ── ADVANCED T6 QUADRUPLE ASSEMBLER ──────────────────
   'Cosmic Powerglove': { machine:'Adv T6 Quadruple Assembler', icon:'🌌', price:'$11N', inputs:['Amber Plywood','Cosmic Core','Cosmic Gyroscope','Cosmic Reinforced Mechanism'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T7 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
   'Coral':        { raw:true, icon:'🪸', source:'Coral Farm',               type:'mine', price:'$62N' },
   'Zinc Ore':     { raw:true, icon:'⛏', source:'Advanced Zinc Mine',        type:'mine', price:'$140N' },
   'Samarium Ore': { raw:true, icon:'⛏', source:'Advanced Samarium Mine',    type:'mine', price:'$140N' },
   'Cobalt Ore':   { raw:true, icon:'⛏', source:'Advanced Cobalt Mine',      type:'mine', price:'$190N' },
   'Nickel Ore':   { raw:true, icon:'⛏', source:'Advanced Nickel Mine',      type:'mine', price:'$190N' },
-
-  // ── T7 CUTTER ─────────────────────────────────────────
   'Coral Rag': { machine:'T7 Cutter', icon:'🪸', price:'$198N', inputs:['Coral'] },
-
-  // ── T7 ORE CRUSHER ────────────────────────────────────
   'Zinc Gravel':     { machine:'T7 Ore Crusher', icon:'🪨', price:'$380N', inputs:['Zinc Ore'] },
   'Samarium Gravel': { machine:'T7 Ore Crusher', icon:'🪨', price:'$380N', inputs:['Samarium Ore'] },
   'Cobalt Gravel':   { machine:'T7 Ore Crusher', icon:'🪨', price:'$380N', inputs:['Cobalt Ore'] },
   'Nickel Gravel':   { machine:'T7 Ore Crusher', icon:'🪨', price:'$380N', inputs:['Nickel Ore'] },
-
-  // ── T7 MIXER ──────────────────────────────────────────
   'Activated Zinc':     { machine:'T7 Mixer', icon:'🪨', price:'$760N', inputs:['Zinc Gravel','Salt Shard'] },
   'Activated Samarium': { machine:'T7 Mixer', icon:'🪨', price:'$760N', inputs:['Samarium Gravel','Salt Shard'] },
   'Activated Cobalt':   { machine:'T7 Mixer', icon:'🪨', price:'$760N', inputs:['Cobalt Gravel','Salt Shard'] },
   'Activated Nickel':   { machine:'T7 Mixer', icon:'🪨', price:'$760N', inputs:['Nickel Gravel','Salt Shard'] },
-
-  // ── T7 INDUCTION SMELTER ──────────────────────────────
   'Zinc Ingot':     { machine:'T7 Induction Smelter', icon:'🔵', price:'$1.45de', inputs:['Activated Zinc'] },
   'Samarium Ingot': { machine:'T7 Induction Smelter', icon:'🟡', price:'$1.45de', inputs:['Activated Samarium'] },
   'Cobalt Ingot':   { machine:'T7 Induction Smelter', icon:'🔷', price:'$1.45de', inputs:['Activated Cobalt'] },
   'Nickel Ingot':   { machine:'T7 Induction Smelter', icon:'⬜', price:'$1.45de', inputs:['Activated Nickel'] },
-
-  // ── T7 PRESS ──────────────────────────────────────────
   'Pressed Coral':    { machine:'T7 Press', icon:'🪸', price:'$760N',  inputs:['Coral Rag'] },
   'Cobalt Alloy Plate':{ machine:'T7 Press', icon:'🔷', price:'$18de', inputs:['Cobalt Alloy'] },
-
-  // ── T7 SMELTER ────────────────────────────────────────
   'Cobalt Alloy':     { machine:'T7 Smelter', icon:'🔷', price:'$8.5de', inputs:['Cobalt Ingot','Nickel Ingot'] },
   'Magnet':           { machine:'T7 Smelter', icon:'🧲', price:'$9de',   inputs:['Cobalt Ingot','Samarium Ingot'] },
   'Zinc Nickel Alloy':{ machine:'T7 Smelter', icon:'🔵', price:'$8.5de', inputs:['Nickel Ingot','Zinc Ingot'] },
-
-  // ── T7 EXTRUDER ───────────────────────────────────────
   'Zinc Coil':     { machine:'T7 Extruder', icon:'🔵', price:'$17de', inputs:['Zinc Nickel Alloy'] },
   'Magnetic Coil': { machine:'T7 Extruder', icon:'🧲', price:'$70de', inputs:['Magnet'] },
-
-  // ── T7 ROLLING MACHINE ────────────────────────────────
   'Zinc Winding':     { machine:'T7 Rolling Machine', icon:'🔵', price:'$34de',  inputs:['Zinc Coil'] },
   'Magnetic Winding': { machine:'T7 Rolling Machine', icon:'🧲', price:'$140de', inputs:['Magnetic Coil'] },
-
-  // ── T7 GEAR PRESS ─────────────────────────────────────
   'Cobalt Gear': { machine:'T7 Gear Press', icon:'⚙', price:'$36de', inputs:['Cobalt Alloy Plate'] },
-
-  // ── ADVANCED T7 DUAL ASSEMBLER ────────────────────────
   'Permanent Magnet': { machine:'Adv T7 Dual Assembler', icon:'🧲', price:'$35de',  inputs:['Cobalt Alloy','Magnet'] },
   'Battery':          { machine:'Adv T7 Dual Assembler', icon:'🔋', price:'$52de',  inputs:['Magnet','Zinc Coil'] },
   'Transformer':      { machine:'Adv T7 Dual Assembler', icon:'⚡', price:'$363de', inputs:['Permanent Magnet','Zinc Winding'] },
@@ -1066,22 +1080,80 @@ const recipes = {
   'Mechanical Turk':  { machine:'Adv T7 Dual Assembler', icon:'🦃', price:'$200de', inputs:['Cobalt Gear','Turkey'] },
   'Talking Robot':    { machine:'Adv T7 Dual Assembler', icon:'🤖', price:'$35Ud',  inputs:['Robot','Speaker'] },
   'Mega Zod':         { machine:'Adv T7 Dual Assembler', icon:'🤖', price:'$297Ud', inputs:['Energy Crystal','Mega Robot'] },
-
-  // ── ADVANCED T7 TRIPLE ASSEMBLER ──────────────────────
   'Speaker':           { machine:'Adv T7 Triple Assembler', icon:'🔊', price:'$200de',  inputs:['Cobalt Alloy Plate','Permanent Magnet','Zinc Coil'] },
   'Mega Battery':      { machine:'Adv T7 Triple Assembler', icon:'🔋', price:'$499de',  inputs:['Battery','Magnet','Magnetic Coil'] },
   'Mega Mechanism':    { machine:'Adv T7 Triple Assembler', icon:'⚙', price:'$2.7Ud',  inputs:['Magnetic Winding','Mechanism','Transformer'] },
   'Mega Transformer':  { machine:'Adv T7 Triple Assembler', icon:'⚡', price:'$2Ud',    inputs:['Magnetic Winding','Mega Battery','Transformer'] },
   'Mega Motor':        { machine:'Adv T7 Triple Assembler', icon:'⚙', price:'$5.4Ud',  inputs:['Mega Battery','Mega Mechanism','Motor'] },
   'Mega Generator':    { machine:'Adv T7 Triple Assembler', icon:'⚡', price:'$2.55Ud', inputs:['Generator','Magnetic Winding','Mega Mechanism'] },
-
-  // ── ADVANCED T7 QUADRUPLE ASSEMBLER ───────────────────
   'Robot':      { machine:'Adv T7 Quadruple Assembler', icon:'🤖', price:'$19Ud',   inputs:['Cobalt Alloy Plate','Generator','Motor','Transformer'] },
   'Mega Robot': { machine:'Adv T7 Quadruple Assembler', icon:'🤖', price:'$99.0Ud', inputs:['Mega Generator','Mega Motor','Mega Transformer','Robot'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
+  'Prismarine Crystal': { raw:true, icon:'💠', source:'Advanced Prismarine Crystal Mine', type:'mine', price:'$10.0DD' },
+  'Molten Crystal':     { raw:true, icon:'🔶', source:'Advanced Molten Crystal Mine',     type:'mine', price:'$12DD'   },
+  'Mithril Ore':        { raw:true, icon:'⛏', source:'Advanced Mithril Mine',            type:'mine', price:'$24DD'   },
+  'Silicon Ore':        { raw:true, icon:'⛏', source:'Advanced Silicon Mine',            type:'mine', price:'$24DD'   },
+  'Plutonium Ore':      { raw:true, icon:'☢',  source:'Advanced Plutonium Mine',          type:'mine', price:'$30DD'   },
+  'Steelix Ore':        { raw:true, icon:'⛏', source:'Advanced Steelix Mine',            type:'mine', price:'$30DD'   },
+  'Prismarine Pane': { machine:'T8 Cutter', icon:'💠', price:'$17DD',  inputs:['Prismarine Crystal'] },
+  'Molten Pane':     { machine:'T8 Cutter', icon:'🔶', price:'$18DD',  inputs:['Molten Crystal'] },
+  'Prismarine Shard': { machine:'T8 Grinder', icon:'💠', price:'$22DD', inputs:['Prismarine Crystal'] },
+  'Prismarine Gem': { machine:'T8 Laser Cutter', icon:'💠', price:'$20DD', inputs:['Prismarine Crystal'] },
+  'Molten Gem':     { machine:'T8 Laser Cutter', icon:'🔶', price:'$24DD', inputs:['Molten Crystal'] },
+  'Silicon Gravel':   { machine:'T8 Ore Crusher', icon:'🪨', price:'$48DD', inputs:['Silicon Ore'] },
+  'Mithril Gravel':   { machine:'T8 Ore Crusher', icon:'🪨', price:'$48DD', inputs:['Mithril Ore'] },
+  'Plutonium Gravel': { machine:'T8 Ore Crusher', icon:'🪨', price:'$60DD', inputs:['Plutonium Ore'] },
+  'Steelix Gravel':   { machine:'T8 Ore Crusher', icon:'🪨', price:'$60DD', inputs:['Steelix Ore'] },
+  'Prismarine Dust Cluster':    { machine:'T8 Mechanical Mortar', icon:'💠', price:'$44DD',  inputs:['Prismarine Shard'] },
+  'Concentrated Prismarine Dust':{ machine:'T8 Mechanical Mortar', icon:'💠', price:'$84DD', inputs:['Concentrated Prismarine Gem'] },
+  'Concentrated Molten Dust':   { machine:'T8 Mechanical Mortar', icon:'🔶', price:'$96DD',  inputs:['Concentrated Molten Gem'] },
+  'Concentrated Prismarine Gem': { machine:'T8 Energy Concentrator', icon:'💠', price:'$42DD', inputs:['Prismarine Gem'] },
+  'Concentrated Molten Gem':     { machine:'T8 Energy Concentrator', icon:'🔶', price:'$48DD', inputs:['Molten Gem'] },
+  'Activated Silicon':   { machine:'T8 Mixer', icon:'🪨', price:'$184DD', inputs:['Silicon Gravel'] },
+  'Activated Mithril':   { machine:'T8 Mixer', icon:'🪨', price:'$184DD', inputs:['Mithril Gravel'] },
+  'Living Plutonium':    { machine:'T8 Mixer', icon:'☢',  price:'$144DD', inputs:['Plutonium Gravel'] },
+  'Activated Steelix':   { machine:'T8 Mixer', icon:'🪨', price:'$104DD', inputs:['Steelix Gravel'] },
+  'Raging Steelix':      { machine:'T8 Mixer', icon:'🪨', price:'$156DD', inputs:['Steelix Gravel','Plutonium Gravel'] },
+  'Living Mithril':      { machine:'T8 Mixer', icon:'🪨', price:'$264DD', inputs:['Mithril Gravel','Silicon Gravel'] },
+  'Steelix Ingot':         { machine:'T8 Induction Smelter', icon:'🔩', price:'$207DD',  inputs:['Activated Steelix'] },
+  'Plutonium Node':        { machine:'T8 Induction Smelter', icon:'☢',  price:'$288DD',  inputs:['Living Plutonium'] },
+  'Molten Steelix Ingot':  { machine:'T8 Induction Smelter', icon:'🔶', price:'$311DD',  inputs:['Raging Steelix'] },
+  'Mithril Ingot':         { machine:'T8 Induction Smelter', icon:'⬜', price:'$368DD',  inputs:['Activated Mithril'] },
+  'Silicon Ingot':         { machine:'T8 Induction Smelter', icon:'🔵', price:'$368DD',  inputs:['Activated Silicon'] },
+  'Mithril Node':          { machine:'T8 Induction Smelter', icon:'⬜', price:'$528DD',  inputs:['Living Mithril'] },
+  'Iconix Ingot':          { machine:'T8 Smelter', icon:'🟣', price:'$576DD',  inputs:['Silicon Ingot','Steelix Ingot'] },
+  'Superstructure Ingot':  { machine:'T8 Smelter', icon:'🟣', price:'$1.78tD',  inputs:['Mithril Ingot','Mithril Node'] },
+  'Plutonium Plate':       { machine:'T8 Press', icon:'☢',  price:'$576DD',  inputs:['Plutonium Node'] },
+  'Molten Steelix Plate':  { machine:'T8 Press', icon:'🔶', price:'$623DD',  inputs:['Molten Steelix Ingot'] },
+  'Silicon Plate':         { machine:'T8 Press', icon:'🔵', price:'$736DD',  inputs:['Silicon Ingot'] },
+  'Iconix Plate':          { machine:'T8 Press', icon:'🟣', price:'$1.15tD', inputs:['Iconix Ingot'] },
+  'Superstructure Plate':  { machine:'T8 Press', icon:'🟣', price:'$3.58tD', inputs:['Superstructure Ingot'] },
+  'Steelix Wire':          { machine:'T8 Extruder', icon:'🔩', price:'$415DD',  inputs:['Steelix Ingot'] },
+  'Superstring':           { machine:'T8 Extruder', icon:'🔩', price:'$831DD',  inputs:['Steelix Wire'] },
+  'Iconix Wire':           { machine:'T8 Extruder', icon:'🟣', price:'$1.15tD', inputs:['Iconix Ingot'] },
+  'Superstructure Wire':   { machine:'T8 Extruder', icon:'🟣', price:'$3.8tD',  inputs:['Superstructure Ingot'] },
+  'Plutonium Pipe':        { machine:'T8 Rolling Machine', icon:'☢',  price:'$1.15tD', inputs:['Plutonium Plate'] },
+  'Superstructure Pipe':   { machine:'T8 Rolling Machine', icon:'🟣', price:'$7.17tD', inputs:['Superstructure Plate'] },
+  'Reinforced Plutonium Plate':      { machine:'Adv T8 Assembler', icon:'☢',  price:'$1.15tD',  inputs:['Plutonium Plate'] },
+  'Reinforced Molten Plate':         { machine:'Adv T8 Assembler', icon:'🔶', price:'$1.24tD',  inputs:['Molten Steelix Plate'] },
+  'Reinforced Silicon Plate':        { machine:'Adv T8 Assembler', icon:'🔵', price:'$1.47tD',  inputs:['Silicon Plate'] },
+  'Superstring Element':             { machine:'Adv T8 Assembler', icon:'🔩', price:'$1.65tD',  inputs:['Superstring'] },
+  'Reinforced Iconix Plate':         { machine:'Adv T8 Assembler', icon:'🟣', price:'$2.30tD',  inputs:['Iconix Plate'] },
+  'Iconix Screw':                    { machine:'Adv T8 Assembler', icon:'🔩', price:'$2.30tD',  inputs:['Iconix Wire'] },
+  'Plutonium Ring':                  { machine:'Adv T8 Assembler', icon:'⭕', price:'$2.30tD',  inputs:['Plutonium Pipe'] },
+  'Reinforced Superstructure Plate': { machine:'Adv T8 Assembler', icon:'🟣', price:'$7.17tD',  inputs:['Superstructure Plate'] },
+  'Superstructure Ring':             { machine:'Adv T8 Assembler', icon:'⭕', price:'$14.3tD',  inputs:['Superstructure Pipe'] },
+  'Superfluid Element':              { machine:'Adv T8 Dual Assembler', icon:'🔵', price:'$1.65tD',  inputs:['Reinforced Molten Plate','Reinforced Plutonium Plate'] },
+  'Core Truss':                      { machine:'Adv T8 Dual Assembler', icon:'🟣', price:'$3.77tD',  inputs:['Reinforced Iconix Plate','Reinforced Silicon Plate'] },
+  'Plutonium Core':                  { machine:'Adv T8 Dual Assembler', icon:'☢',  price:'$4.60tD',  inputs:['Reinforced Plutonium Plate','Reinforced Silicon Plate'] },
+  'Ultralink':                       { machine:'Adv T8 Dual Assembler', icon:'🔗', price:'$5.24tD',  inputs:['Superstring','Superstructure Ingot'] },
+  'Teraplex Mechanical Assembly':    { machine:'Adv T8 Dual Assembler', icon:'⚙',  price:'$1.49qdD', inputs:['Advanced Mechanical Assembly','Teraplex'] },
+  'Hologram Turkey':                 { machine:'Adv T8 Dual Assembler', icon:'🦃', price:'$1000DD',  inputs:['Activated Silicon','Cooked Turkey'] },
+  'Core Shell':     { machine:'Adv T8 Triple Assembler', icon:'🛡', price:'$47.6tD', inputs:['Iconix Screw','Reinforced Superstructure Plate','Superstructure Ring'] },
+  'Core Shielding': { machine:'Adv T8 Triple Assembler', icon:'🛡', price:'$13.8tD', inputs:['Iconix Screw','Plutonium Ring','Reinforced Iconix Plate'] },
+  'Superstring Core': { machine:'Adv T8 Quadruple Assembler', icon:'🟣', price:'$66tD',  inputs:['Core Shell','Core Shielding','Core Truss','Superstring Element'] },
+  'Supersolid Core':  { machine:'Adv T8 Quadruple Assembler', icon:'🟣', price:'$70tD',  inputs:['Core Shell','Core Shielding','Core Truss','Plutonium Core'] },
+  'Superfluid Core':  { machine:'Adv T8 Quadruple Assembler', icon:'🔵', price:'$67.0tD',inputs:['Core Shell','Core Shielding','Core Truss','Superfluid Element'] },
+  'Teraplex':         { machine:'Adv T8 Quadruple Assembler', icon:'💠', price:'$416tD', inputs:['Superfluid Core','Supersolid Core','Superstring Core','Ultralink'] },
   'Molybdenum Ore':  { raw:true, icon:'⛏', source:'Molybdenum Ore Mine',  type:'mine', price:'$3QnD' },
   'Chromium Ore':    { raw:true, icon:'⛏', source:'Chromium Ore Mine',    type:'mine', price:'$3QnD' },
   'Platinum Ore':    { raw:true, icon:'⛏', source:'Platinum Ore Mine',    type:'mine', price:'$3QnD' },
@@ -1092,38 +1164,20 @@ const recipes = {
   'Salt Shard':      { raw:true, icon:'🧂', source:'Shop / Mine',          type:'mine', price:'$19.9Sp' },
   'Fuel Rod':        { raw:true, icon:'☢',  source:'Shop / Crafted',       type:'mine', price:'$1.76M' },
   'Turkey Slices':   { raw:true, icon:'🍗', source:'Shop / Farm',          type:'mine', price:'$100' },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 ORE PROCESSING (T9 Ore Crusher)
-  // ══════════════════════════════════════════════════════
   'Molybdenum Gravel': { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Molybdenum Ore'] },
   'Chromium Gravel':   { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Chromium Ore'] },
   'Platinum Gravel':   { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Platinum Ore'] },
   'Iridium Gravel':    { machine:'T9 Ore Crusher', icon:'🪨', price:'$12QnD',  inputs:['Iridium Ore'] },
   'Magnesium Gravel':  { machine:'T9 Ore Crusher', icon:'🪨', price:'$12QnD',  inputs:['Magnesium Ore'] },
-
-  // T9 Mechanical Mortar
   'Graphite Dust': { machine:'T9 Mechanical Mortar', icon:'⬛', price:'$10QnD',   inputs:['Graphite Ore'] },
   'Painite Dust':  { machine:'T9 Mechanical Mortar', icon:'💎', price:'$29.9QnD', inputs:['Painite Shard'] },
-
-  // T9 Grinder
   'Painite Shard': { machine:'T9 Grinder', icon:'💎', price:'$20QnD', inputs:['Painite Crystal'] },
-
-  // T9 Cutter
   'Painite Pane':  { machine:'T9 Cutter',  icon:'💎', price:'$4QnD',  inputs:['Painite Crystal'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 ACTIVATED MATERIALS (T9 Mixer)
-  // ══════════════════════════════════════════════════════
   'Activated Platinum':   { machine:'T9 Mixer', icon:'⬜', price:'$24QnD',   inputs:['Platinum Gravel','Salt Shard'] },
   'Activated Molybdenum': { machine:'T9 Mixer', icon:'🩶', price:'$30.9QnD', inputs:['Molybdenum Gravel','Salt Shard'] },
   'Activated Chromium':   { machine:'T9 Mixer', icon:'🔵', price:'$24QnD',   inputs:['Chromium Gravel','Salt Shard'] },
   'Activated Magnesium':  { machine:'T9 Mixer', icon:'⬜', price:'$24QnD',   inputs:['Magnesium Gravel','Salt Shard'] },
   'Activated Iridium':    { machine:'T9 Mixer', icon:'🔷', price:'$20.9QnD', inputs:['Iridium Gravel','Salt Shard'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 FURNACE
-  // ══════════════════════════════════════════════════════
   'Tempered Painite':      { machine:'T9 Furnace', icon:'💎', price:'$12QnD',   inputs:['Painite Crystal'] },
   'Carbon Compound':       { machine:'T9 Furnace', icon:'⬛', price:'$21.9QnD', inputs:['Graphite Dust'] },
   'Carbide Node':          { machine:'T9 Furnace', icon:'⬛', price:'$33QnD',   inputs:['Carbon Compound'] },
@@ -1133,89 +1187,43 @@ const recipes = {
   'Iridium Ingot':         { machine:'T9 Furnace', icon:'🔷', price:'$35QnD',   inputs:['Activated Iridium'] },
   'Molybdenum Ingot':      { machine:'T9 Furnace', icon:'🩶', price:'$41.9QnD', inputs:['Activated Molybdenum'] },
   'Recrystallized Painite':{ machine:'T9 Furnace', icon:'💎', price:'$77QnD',   inputs:['Painite Dust'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 PRESS
-  // ══════════════════════════════════════════════════════
   'Chromium Plate':    { machine:'T9 Press', icon:'🔵', price:'$46QnD',   inputs:['Chromium Ingot'] },
   'Magnesium Plate':   { machine:'T9 Press', icon:'⬜', price:'$46QnD',   inputs:['Magnesium Ingot'] },
   'Carbide Plate':     { machine:'T9 Press', icon:'⬛', price:'$58QnD',   inputs:['Carbide Node'] },
   'Molyb Plate':       { machine:'T9 Press', icon:'🩶', price:'$41.9QnD', inputs:['Molybdenum Ingot'] },
   'Painite Charm':     { machine:'T9 Press', icon:'💎', price:'$77QnD',   inputs:['Recrystallized Painite'] },
   'Dark Matter Charm': { machine:'T9 Press', icon:'🌑', price:'$240QnD',  inputs:['Crystallized Dark Matter'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 EXTRUDER
-  // ══════════════════════════════════════════════════════
   'Platinum Wire':  { machine:'T9 Extruder', icon:'⬜', price:'$66QnD', inputs:['Platinum Ingot'] },
   'Carbide Lining': { machine:'T9 Extruder', icon:'⬛', price:'$90QnD', inputs:['Carbide Plate'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 ROLLING MACHINE
-  // ══════════════════════════════════════════════════════
   'Molyb Tubing':   { machine:'T9 Rolling Machine', icon:'🩶', price:'$99QnD', inputs:['Molyb Plate'] },
   'Carbide Tubing': { machine:'T9 Rolling Machine', icon:'⬛', price:'$99QnD', inputs:['Carbide Plate'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T9 TRIPLE ALLOY SMELTER
-  // ══════════════════════════════════════════════════════
   'Apex Alloy':                  { machine:'T9 Triple Alloy Smelter', icon:'🟡', price:'$379QnD', inputs:['Chromium Ingot','Molybdenum Ingot','Platinum Ingot'] },
   'Stabilized Chromagnum Alloy': { machine:'T9 Triple Alloy Smelter', icon:'🔵', price:'$360QnD', inputs:['Chromium Ingot','Magnesium Ingot','Molybdenum Ingot'] },
   'Stabilized Vesper Alloy':     { machine:'T9 Triple Alloy Smelter', icon:'🔷', price:'$360QnD', inputs:['Chromium Ingot','Iridium Ingot','Molybdenum Ingot'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 WORKSTATION (1.43s)
-  // ══════════════════════════════════════════════════════
   'Chromium Component':                    { machine:'Adv T9 Workstation', icon:'🔵', price:'$54.9QnD', inputs:['Chromium Ingot'] },
   'Magnesium Component':                   { machine:'Adv T9 Workstation', icon:'⬜', price:'$54.9QnD', inputs:['Magnesium Ingot'] },
   'Stabilized Chromagnum Alloy Component': { machine:'Adv T9 Workstation', icon:'🔵', price:'$520QnD',  inputs:['Stabilized Chromagnum Alloy'] },
   'Stabilized Vesper Alloy Component':     { machine:'Adv T9 Workstation', icon:'🔷', price:'$520QnD',  inputs:['Stabilized Vesper Alloy'] },
   'Apex Alloy Component':                  { machine:'Adv T9 Workstation', icon:'🟡', price:'$550QnD',  inputs:['Apex Alloy'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 ACCELERATOR (1.43s)
-  // ══════════════════════════════════════════════════════
   'Crystallized Dark Matter': { machine:'Adv T9 Accelerator', icon:'🌑', price:'$160QnD', inputs:['Activated Iridium','Painite Dust'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 ASSEMBLER (3.12s)
-  // ══════════════════════════════════════════════════════
   'Reinforced Chromagnum Alloy Component': { machine:'Adv T9 Assembler', icon:'🔵', price:'$1.40xxD', inputs:['Stabilized Chromagnum Alloy Component'] },
   'Reinforced Vesper Alloy Component':     { machine:'Adv T9 Assembler', icon:'🔷', price:'$1.40xxD', inputs:['Stabilized Vesper Alloy Component'] },
   'Reinforced Apex Alloy Component':       { machine:'Adv T9 Assembler', icon:'🟡', price:'$1.48xxD', inputs:['Apex Alloy Component'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 DUAL ASSEMBLER (1.88s)
-  // ══════════════════════════════════════════════════════
   'Power Gauge':             { machine:'Adv T9 Dual Assembler', icon:'⚡', price:'$450QnD', inputs:['Carbide Lining','Molyb Tubing'] },
   'Activated Turkey Slices': { machine:'Adv T9 Dual Assembler', icon:'🍗', price:'$49.9QnD', inputs:['Chromium Gravel','Turkey Slices'] },
   'Chaos Charm':             { machine:'Adv T9 Dual Assembler', icon:'🌀', price:'$927xxD',  inputs:['Painite Charm','Ten Elements'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 TRIPLE ASSEMBLER (1.67s)
-  // ══════════════════════════════════════════════════════
   'Cosmos Alloy Component':    { machine:'Adv T9 Triple Assembler', icon:'🌌', price:'$17.4xxD', inputs:['Carbide Lining','Reinforced Vesper Alloy Component','Reinforced Vesper Alloy Component'] },
   'Tempest Alloy Component':   { machine:'Adv T9 Triple Assembler', icon:'🌪', price:'$18.3xxD', inputs:['Carbide Lining','Reinforced Apex Alloy Component','Reinforced Apex Alloy Component'] },
   'Stellaris Alloy Component': { machine:'Adv T9 Triple Assembler', icon:'⭐', price:'$17.4xxD', inputs:['Carbide Lining','Reinforced Chromagnum Alloy Component','Reinforced Chromagnum Alloy Component'] },
   'Painite Gauge':             { machine:'Adv T9 Triple Assembler', icon:'💎', price:'$3.6xxD',  inputs:['Carbide Tubing','Painite Charm','Power Gauge'] },
   'Dark Matter Gauge':         { machine:'Adv T9 Triple Assembler', icon:'🌑', price:'$4.8xxD',  inputs:['Carbide Tubing','Dark Matter Charm','Power Gauge'] },
   'Amped Uranium Gauge':       { machine:'Adv T9 Triple Assembler', icon:'☢',  price:'$3xxD',    inputs:['Carbide Tubing','Power Gauge','Fuel Rod'] },
-
-  // ══════════════════════════════════════════════════════
-  //  ADV T9 QUADRUPLE ASSEMBLER (1.88s)
-  // ══════════════════════════════════════════════════════
   'Supercapacitor':      { machine:'Adv T9 Quadruple Assembler', icon:'⚡', price:'$4.8xxD',  inputs:['Chromium Plate','Magnesium Component','Platinum Wire','Power Gauge'] },
   'Controller':          { machine:'Adv T9 Quadruple Assembler', icon:'🎮', price:'$4.8xxD',  inputs:['Chromium Component','Magnesium Plate','Platinum Wire','Power Gauge'] },
   'Ten Elements':        { machine:'Adv T9 Quadruple Assembler', icon:'🔟', price:'$231xxD',  inputs:['Amped Uranium Gauge','Controller','Supercapacitor','Tempest Alloy Component'] },
   'Dark Matter Battery': { machine:'Adv T9 Quadruple Assembler', icon:'🌑', price:'$254xxD',  inputs:['Controller','Dark Matter Gauge','Stellaris Alloy Component','Supercapacitor'] },
   'Cosmos Ultracell':    { machine:'Adv T9 Quadruple Assembler', icon:'🌌', price:'$240xxD',  inputs:['Controller','Cosmos Alloy Component','Painite Gauge','Supercapacitor'] },
-
-  // ADV T9 TRIPLE ASSEMBLER — end-game output
   'Dark Gamma Reactor':  { machine:'Adv T9 Triple Assembler', icon:'☢', price:'$3.55pD', inputs:['Cosmos Alloy Component','Dark Matter Battery','Ten Elements'] },
-
-  // ══════════════════════════════════════════════════════
-  //  T10 RAW RESOURCES
-  // ══════════════════════════════════════════════════════
   'Vein Petroleum':       { raw:true, icon:'💧', source:'Petroleum Extractor',       type:'fluid', price:'$15SpD' },
   'Aqueous Alto':         { raw:true, icon:'💧', source:'Aqueous Alto Extractor',     type:'fluid', price:'$20SpD' },
   'Mesossential Wood':    { raw:true, icon:'🌳', source:'Mesossential Tree Farm',     type:'mine',  price:'$1.50cD' },
@@ -1225,8 +1233,6 @@ const recipes = {
   'Aerelium Crystal':     { raw:true, icon:'💎', source:'Aerelium Crystal Mine',      type:'mine',  price:'$30cD' },
   'Chromastone Crystal':  { raw:true, icon:'🔮', source:'Chromastone Mine',           type:'mine',  price:'$50cD' },
   'Used Filter':          { raw:true, icon:'♻', source:'Byproduct of Pressure Filter', type:'byproduct', price:'$400cD', note:'Produced by same machine — recycle it' },
-
-  // ── WOOD CHAIN ──
   'Mesossential Wood Boards': { machine:'T10+ Cutter',     icon:'🪵', price:'$40cD',     inputs:['Mesossential Wood'] },
   'Pressurized Meso Wood':    { machine:'Press',           icon:'🟫', price:'$6.50cD',   inputs:['Mesossential Wood Boards'] },
   'Meso Wood Shreds':         { machine:'T10+ Cutter',     icon:'🪵', price:'$8.50cD',   inputs:['Pressurized Meso Wood'] },
@@ -1240,8 +1246,6 @@ const recipes = {
   'Ascendeso Fiber Filter':   { machine:'T10+ Assembler',        icon:'🔵', price:'$1950cD',  inputs:['Ascendeso Wood Sheet'] },
   'Enamel':                   { machine:'T10+ Dual Assembler',   icon:'🟡', price:'$77.50cD', inputs:['Meso Wood Shreds','Aerelium Compound'] },
   'Hardened Charm Casing':    { machine:'102+ Dual Assembler',   icon:'🟡', price:'$7750cD',  inputs:['Meso Polyhedron','Enamel'] },
-
-  // ── AERELIUM CHAIN ──
   'Aerelium Shard':           { machine:'T10+ Grinder',           icon:'✨', price:'$1.50cD',  inputs:['Aerelium Crystal'] },
   'Aerelium Glitter Dust':    { machine:'T10+ Spindle',          icon:'✨', price:'$50cD',    inputs:['Aerelium Shard'] },
   'Aerelium Dust Cluster':    { machine:'T10+ Mechanical Mortar', icon:'✨', price:'$1.80cD',  inputs:['Aerelium Shard'] },
@@ -1249,16 +1253,12 @@ const recipes = {
   'Aerelium Gem':             { machine:'T10+ Laser Cutter',      icon:'💎', price:'$60cD',    inputs:['Aerelium Crystal'] },
   'Concentrated Aerelium Gem':{ machine:'T10+ Energy Concentrator',icon:'💎',price:'$130cD',   inputs:['Aerelium Gem'] },
   'Aerelium Charm':           { machine:'T10+ Assembler',         icon:'🔮', price:'$350cD',   inputs:['Concentrated Aerelium Gem'] },
-
-  // ── CHROMASTONE CHAIN ──
   'Chromastone Gem':             { machine:'T10+ Laser Cutter',        icon:'🔮', price:'$100cD',   inputs:['Chromastone Crystal'] },
   'Concentrated Chromastone Gem':{ machine:'T10+ Energy Concentrator', icon:'🔮', price:'$110cD',   inputs:['Chromastone Gem'] },
   'Chromastone Dye':             { machine:'T10+ Furnace',             icon:'🟣', price:'$19.50cD', inputs:['Concentrated Chromastone Gem'] },
   'Chromastone Charm':           { machine:'T10+ Assembler',           icon:'🔮', price:'$650cD',   inputs:['Concentrated Chromastone Gem'] },
   'Chromastone Spark':           { machine:'T10+ Spindle',            icon:'⚡', price:'$95.50cD', inputs:['Chromastone Charm'] },
   'Reatomized Chromastone':      { machine:'T10+ Accelerator',         icon:'🔮', price:'$52.50cD', inputs:['Chromastone Crystal','Mesossential Sap'] },
-
-  // ── GEMS & DYES ──
   'Red Gem':              { machine:'T10+ Spectrum Cutter',      icon:'🔴', price:'$160cD',   inputs:['Chromastone Gem'] },
   'Green Gem':            { machine:'T10+ Spectrum Cutter',      icon:'🟢', price:'$160cD',   inputs:['Chromastone Gem'] },
   'Blue Gem':             { machine:'T10+ Spectrum Cutter',      icon:'🔵', price:'$160cD',   inputs:['Chromastone Gem'] },
@@ -1273,8 +1273,6 @@ const recipes = {
   'Essential Chroma Dye': { machine:'T10+ Accelerator',           icon:'🌈', price:'$72.50cD', inputs:['Mesossential Sap','Chromastone Dye'] },
   'Godspark':             { machine:'T10+ Triple Assembler',      icon:'⚡', price:'$1.44NvD', inputs:['Chromastone Spark','Aerelium Charm','Cyan Dye'] },
   'Godspark Charm':       { machine:'T10+ Dual Assembler',        icon:'⚡', price:'$5.25NvD', inputs:['Godspark','Hardened Charm Casing'] },
-
-  // ── PETROLEUM & ALTO FLUID CHAIN ──
   'Eveready Petroleum':   { machine:'T10+ Pressure Filter',    icon:'🛢', price:'$27.5SpD',
                              inputs:['Meso Fiber Filter','Vein Petroleum','Used Filter'],
                              note:'500L Vein Petroleum → 500L Eveready + Used Filter (byproduct)' },
@@ -1326,8 +1324,6 @@ const recipes = {
                              note:'20L Fine Residue + 20L EAB + 20L Medium Fraction' },
   'Radiating Alto':       { machine:'T10+ Liquid Caster',      icon:'☢', price:'$15.50cD',  inputs:['Alto Essence'], note:'200L Alto Essence → Radiating Alto (solid)' },
   'Crossed Alto Alloy':   { machine:'T10+ Liquid Caster',      icon:'⬡', price:'$1NvD',     inputs:['Cloudy Alloy Mix'], note:'200L Cloudy Alloy Mix → Crossed Alto Alloy (solid)' },
-
-  // ── ORE PROCESSING ──
   'Terrastrix Gravel':    { machine:'T10+ Ore Crusher',  icon:'🪨', price:'$6.50cD',  inputs:['Terrastrix Ore'] },
   'Primed Terrastrix':    { machine:'T10+ Mixer',        icon:'🟩', price:'$23.50cD', inputs:['Terrastrix Gravel','Aerelium Dust Cluster'] },
   'Saturated Terrastrix': { machine:'T10+ Mixer',        icon:'🟩', price:'$250cD',   inputs:['Terrastrix Gravel','Aerelium Glitter Dust'] },
@@ -1364,14 +1360,10 @@ const recipes = {
   'Tough Coreodeon Ingot':{ machine:'T10+ Alloy Smelter',     icon:'🔷', price:'$2550cD',  inputs:['Living Coreodeon','Coreodeon Node'] },
   'Coreodeon Ingot':      { machine:'T10+ Tumbler',          icon:'🔷', price:'$3700cD',  inputs:['Tough Coreodeon Ingot','Heavy Fluid Garnet'], note:'+ 30L Heavy Fluid Garnet' },
   'Refined Coreodeon Ingot':{ machine:'T10+ Tumbler',        icon:'🔷', price:'$5050cD',  inputs:['Coreodeon Ingot','Light Fluid Garnet'], note:'+ 30L Light Fluid Garnet' },
-
-  // ── ALLOY INGOTS ──
   'Terrasteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.05NvD', inputs:['Refined Terrastrix Ingot','Enriched Stratosteel Sand'] },
   'Stratostrix Alloy Ingot': { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Stratosteel Ingot','Enriched Terrastrix Sand'] },
   'Coreostrix Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.15NvD', inputs:['Refined Coreodeon Ingot','Enriched Terrastrix Sand'] },
   'Coreosteel Alloy Ingot':  { machine:'T10+ Alloy Smelter', icon:'🟫', price:'$1.2NvD',  inputs:['Refined Coreodeon Ingot','Enriched Stratosteel Sand'] },
-
-  // ── END-GAME ──
   'Alto Alloy Core':       { machine:'T10+ Dual Assembler',      icon:'⚙', price:'$7.05NvD', inputs:['Crossed Alto Alloy','Crossed Alto Alloy'], note:'2x Crossed Alto Alloy → Alto Alloy Core' },
   'Gravisphere':           { machine:'T10+ Dual Assembler',      icon:'🌐', price:'$12.5NvD', inputs:['Concentrated Chromastone Gem','Alto Alloy Core'] },
   'Cloudy Sphere Field':   { machine:'T10+ Workstation',         icon:'🌐', price:'$25NvD',   inputs:['Gravisphere'] },
@@ -1418,11 +1410,48 @@ const recipes = {
   'Coreostrix Alloy Ring': { machine:'T10+ Assembler',           icon:'⭕', price:'$2.05NvD', inputs:['Coreostrix Alloy Pipe'] },
   'Olympus Tri-Axiom':     { machine:'T10+ Quadruple Assembler', icon:'🏆', price:'$15.4Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm'] },
   'Olympus Dyson Axiom':   { machine:'T10+ Quintuple Assembler',icon:'👑', price:'$42.5Vgn', inputs:['Divine Supergear','Celestial Supergear','Terra Alloy Axiom','Godspark Charm','Dome Field'] },
+  'Stud':                  { raw:true, icon:'🔩', source:'Stud Mine',                    type:'mine', price:'$20' },
+  'Redcliffian Metal Ore': { raw:true, icon:'⛏',  source:'Redcliffian Metal Mine',       type:'mine', price:'$60' },
+  'Astral Isles Geode':    { raw:true, icon:'💎', source:'Astral Isles Crystal Mine',     type:'mine', price:'$300' },
+  'Cut Stud':              { machine:'T0 Cutter',            icon:'🔩', price:'$45',   inputs:['Stud'] },
+  'Redcliffian Metal Dust':{ machine:'T0 Ore Crusher',       icon:'⛏',  price:'$100',  inputs:['Redcliffian Metal Ore'] },
+  'Astrum Crystal':        { machine:'Adv T0 Splitgate',     icon:'💠', price:'$600',  inputs:['Astral Isles Geode'] },
+  'Astral Isles Rock':     { machine:'Adv T0 Splitgate',     icon:'🪨', price:'$150',  inputs:['Astral Isles Geode'], note:'BYPRODUCT' },
+  'Astrum Dust':           { machine:'T0 Mechanical Mortar', icon:'✨', price:'$65',   inputs:['Astrum Crystal'] },
+  'Astral Isles Dust':     { machine:'T0 Mechanical Mortar', icon:'🌟', price:'$250',  inputs:['Astral Isles Rock'] },
+  'Blasted Stud':                  { machine:'T0 Furnace', icon:'🔩', price:'$80',  inputs:['Cut Stud'] },
+  'Forged Astrum':                 { machine:'T0 Furnace', icon:'✨', price:'$70',  inputs:['Astrum Dust'] },
+  'Glowing Redcliffian Metal Dust':{ machine:'T0 Furnace', icon:'⛏',  price:'$150', inputs:['Redcliffian Metal Dust'] },
+  'Cylindrical Stud':      { machine:'T0 Rolling Machine',   icon:'🔩', price:'$125',  inputs:['Cut Stud'] },
+  'Heat Treated Cylindrical Stud': { machine:'T0 Alloy Smelter', icon:'🔩', price:'$650',  inputs:['Cylindrical Stud','Blasted Stud'] },
+  'Redcliffian Steel':             { machine:'T0 Alloy Smelter', icon:'⚙',  price:'$750',  inputs:['Glowing Redcliffian Metal Dust','Blasted Stud'] },
+  'Cooled Redcliff Ingot': { machine:'T0 Cryo Chiller',      icon:'❄',  price:'$1k',   inputs:['Redcliffian Steel'] },
+  'Astral Alloy':          { machine:'T0 Triple Alloy Smelter', icon:'🌌', price:'$5k',  inputs:['Cooled Redcliff Ingot','Blasted Stud','Astral Isles Dust'] },
+  'Astral Alloy Capsule':  { machine:'Adv T0 Workstation',   icon:'🌌', price:'$18k',  inputs:['Astral Alloy'] },
+  'Periastron Core':       { machine:'Adv T0 Multi Form Injector', icon:'⭐', price:'$50k', inputs:['Astral Alloy Capsule','Forged Astrum','Glowing Redcliffian Metal Dust'] },
+  'Overseer Flesh':        { raw:true, icon:'🩸', source:'Overseer Flesh Mine',     type:'mine', price:'$150k' },
+  'Astral Soul Ore':       { raw:true, icon:'✨', source:'Astral Soul Ore Mine',    type:'mine', price:'$750k' },
+  'Gilded Silver Ore':     { raw:true, icon:'🥈', source:'Gilded Silver Mine',      type:'mine', price:'$750k' },
+  'Seething Overseer Flesh':   { machine:'T1 Cauterizer',        icon:'🩸', price:'$200k',  inputs:['Overseer Flesh'] },
+  'Compressed Overseer Flesh': { machine:'T1 Press',             icon:'🩸', price:'$300k',  inputs:['Seething Overseer Flesh'] },
+  'Chilled Overseer Flesh':    { machine:'T1 Cryo Chiller',      icon:'🩸', price:'$350k',  inputs:['Compressed Overseer Flesh'] },
+  'Overseer Chunk':            { machine:'T1 Laser Cutter',      icon:'🩸', price:'$400k',  inputs:['Chilled Overseer Flesh'] },
+  'Overseer Dust':             { machine:'T1 Ore Crusher',       icon:'🩸', price:'$500k',  inputs:['Chilled Overseer Flesh'] },
+  'Astral Soul Gravel':        { machine:'T1 Ore Crusher',       icon:'✨', price:'$1.25M', inputs:['Astral Soul Ore'] },
+  'Gilded Silver Gravel':      { machine:'T1 Ore Crusher',       icon:'🥈', price:'$1.25M', inputs:['Gilded Silver Ore'] },
+  'Astral Soul Essence':       { machine:'T1 Mechanical Mortar', icon:'✨', price:'$1.75M', inputs:['Astral Soul Gravel'] },
+  'Activated Gilded Silver':   { machine:'T1 Mixer',             icon:'🥈', price:'$3M',    inputs:['Gilded Silver Gravel','Astral Isles Dust'] },
+  'Glowing Overseer Chunk':    { machine:'T1 Furnace',           icon:'🩸', price:'$1M',    inputs:['Overseer Chunk'] },
+  'Gilded Silver Ingot':       { machine:'T1 Furnace',           icon:'🥈', price:'$5M',    inputs:['Activated Gilded Silver'] },
+  'Gamma Star Fragment':       { machine:'T1 Alloy Smelter',     icon:'⭐', price:'$750M',  inputs:['Astral Alloy Capsule','Glowing Overseer Chunk'] },
+  'Alpha Star Fragment':       { machine:'T1 Alloy Smelter',     icon:'⭐', price:'$1.5B',  inputs:['Astral Soul Holder','Astral Alloy Capsule'] },
+  'Astral Soul Holder':        { machine:'Adv T1 Packager',      icon:'✨', price:'$100M',  inputs:['Astral Soul Essence','Heat Treated Cylindrical Stud'] },
+  'Gilded Power Essence':      { machine:'Adv T1 Multi Form Injector', icon:'💛', price:'$10B', inputs:['Gilded Silver Ingot','Overseer Dust','Astral Soul Essence'] },
+  'Activated Periastron Core': { machine:'Adv T1 Form Injector', icon:'⭐', price:'$25B',   inputs:['Gilded Power Essence','Periastron Core'] },
+  'Azure Periastron, Alpha':       { machine:'Adv T1 Triple Packager', icon:'💙', price:'$50B',   inputs:['Astral Soul Essence','Alpha Star Fragment','Activated Periastron Core'] },
+  'Charteuse Periastron, Gamma':   { machine:'Adv T1 Triple Packager', icon:'💚', price:'$37.5B', inputs:['Activated Periastron Core','Gamma Star Fragment','Compressed Overseer Flesh'] },
 };
 
-// ═══════════════════════════════════════════════════════════
-//  TREE RENDERING
-// ═══════════════════════════════════════════════════════════
 let nodeIdCounter = 0;
 let summaryData = { raw:{}, machines:{}, items:{} };
 
@@ -1440,7 +1469,6 @@ function renderTree() {
   const seen = new Set();
   const html = buildNode(sel, true, seen, 0);
 
-  // Count total nodes rendered
   const totalNodes = nodeIdCounter;
   const rawCount = Object.keys(summaryData.raw).length;
   const machCount = Object.keys(summaryData.machines).length;
@@ -1516,7 +1544,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
     </div>`;
   }
 
-  // RAW RESOURCE
   if (r.raw) {
     const cls = r.type === 'byproduct' ? 'byproduct' : 'raw';
     const key = r.source;
@@ -1544,7 +1571,6 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   }
 
   const hasChildren = r.inputs && r.inputs.length > 0;
-  // Auto-collapse branches at depth >= 3 to keep initial view manageable
   const autoCollapse = depth >= 3;
   const toggleBtn = hasChildren
     ? `<button class="toggle-btn${autoCollapse ? ' collapsed' : ''}" id="tb_${nodeId}" onclick="toggle('${nodeId}')" title="collapse/expand">${autoCollapse ? '+' : '−'}</button>`
@@ -1610,11 +1636,8 @@ function collapseAll() {
 }
 
 function rawFocus() {
-  // Collapse everything first
   document.querySelectorAll('.tree-children').forEach(el => el.classList.add('tree-collapsed'));
   document.querySelectorAll('.toggle-btn').forEach(el => { el.textContent = '+'; el.classList.add('collapsed'); });
-
-  // Walk up from every raw node and expand only the path to it
   document.querySelectorAll('.node-header.raw').forEach(rawHeader => {
     let el = rawHeader.parentElement;
     while (el && el.id !== 'treeContainer') {
@@ -1691,12 +1714,258 @@ function filterItems(q) {
   }
 }
 
-// Init — populate T10 on load
+let flowZoom = 1;
+let flowPanX = 0, flowPanY = 0;
+let flowDragging = false;
+let flowDragStart = { x: 0, y: 0 };
+let flowPanStart  = { x: 0, y: 0 };
+const FC_ZOOM_STEP = 0.15;
+const FC_ZOOM_MIN  = 0.25;
+const FC_ZOOM_MAX  = 3.0;
+
+function updateFlowZoomDisplay() {
+  const d = document.getElementById('flowZoomDisplay');
+  if (d) d.textContent = Math.round(flowZoom * 100) + '%';
+}
+
+function applyFlowZoom() {
+  const wrap = document.getElementById('flowSvgWrap');
+  if (!wrap) return;
+  const svg = wrap.querySelector('svg');
+  if (svg) {
+    svg.style.transformOrigin = '0 0';
+    svg.style.transform = `translate(${flowPanX}px,${flowPanY}px) scale(${flowZoom})`;
+  }
+  updateFlowZoomDisplay();
+}
+
+function flowZoomIn()    { flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom + FC_ZOOM_STEP).toFixed(2)); applyFlowZoom(); }
+function flowZoomOut()   { flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom - FC_ZOOM_STEP).toFixed(2)); applyFlowZoom(); }
+function flowZoomReset() { flowZoom = 1; flowPanX = 0; flowPanY = 0; applyFlowZoom(); }
+
+document.addEventListener('wheel', function(e) {
+  const modal = document.getElementById('flowModal');
+  if (!modal || !modal.classList.contains('visible')) return;
+  if (!modal.contains(e.target)) return;
+  e.preventDefault();
+
+  const wrap = document.getElementById('flowSvgWrap');
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+   const svgX = (mouseX - flowPanX) / flowZoom;
+  const svgY = (mouseY - flowPanY) / flowZoom;
+
+  if (e.deltaY < 0) flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom + FC_ZOOM_STEP).toFixed(2));
+  else              flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom - FC_ZOOM_STEP).toFixed(2));
+
+  flowPanX = mouseX - svgX * flowZoom;
+  flowPanY = mouseY - svgY * flowZoom;
+  applyFlowZoom();
+}, { passive: false });
+
+(function setupFlowPan() {
+  const wrap = document.getElementById('flowSvgWrap');
+  if (!wrap) return;
+
+  wrap.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    flowDragging = true;
+    flowDragStart = { x: e.clientX, y: e.clientY };
+    flowPanStart  = { x: flowPanX,  y: flowPanY };
+    wrap.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    if (!flowDragging) return;
+    flowPanX = flowPanStart.x + (e.clientX - flowDragStart.x);
+    flowPanY = flowPanStart.y + (e.clientY - flowDragStart.y);
+    applyFlowZoom();
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (!flowDragging) return;
+    flowDragging = false;
+    const wrap = document.getElementById('flowSvgWrap');
+    if (wrap) wrap.classList.remove('dragging');
+  });
+})();
+
 updateTierItems();
 
-// ═══════════════════════════════════════════════════════════
-//  FLOWCHART MODAL
-// ═══════════════════════════════════════════════════════════
+const EVENT_TIERS = {
+  Halloween: ['T0','T1','T2','T3'],
+  Classic:   ['T0','T1','T2','T3','T4','T5']
+};
+
+const EVENT_STYLES = {
+  Christmas:     { border:'#39ff14', color:'#39ff14', bg:'rgba(57,255,20,0.08)',   icon:'🎄' },
+  NuclearSummer: { border:'#ff8c42', color:'#ff8c42', bg:'rgba(255,140,66,0.08)',  icon:'☢' },
+  Halloween:     { border:'#bf7fff', color:'#bf7fff', bg:'rgba(191,127,255,0.08)', icon:'🎃' },
+  Classic:       { border:'#ffd700', color:'#ffd700', bg:'rgba(255,215,0,0.08)',   icon:'🏛' }
+};
+
+function renderEventButtons() {
+  const row = document.getElementById('eventModeRow');
+  row.innerHTML = `
+    <button class="btn" onclick="hideEventSelector()" style="border-color:var(--dim);color:var(--dim);font-size:9px;">◀ Main Game</button>
+    <button class="btn" onclick="selectEvent('Christmas')"     style="border-color:#39ff14;color:#39ff14;background:rgba(57,255,20,0.08);">🎄 Christmas</button>
+    <button class="btn" onclick="selectEvent('NuclearSummer')" style="border-color:#ff8c42;color:#ff8c42;background:rgba(255,140,66,0.08);">☢ Nuclear Summer</button>
+    <button class="btn" onclick="selectEvent('Halloween')"     style="border-color:#bf7fff;color:#bf7fff;background:rgba(191,127,255,0.08);">🎃 Halloween</button>
+    <button class="btn" onclick="selectEvent('Classic')"       style="border-color:#ffd700;color:#ffd700;background:rgba(255,215,0,0.08);">🏛 Classic</button>
+  `;
+}
+
+function showEventSelector() {
+  document.getElementById('tierGroup').style.display = 'none';
+  document.getElementById('eventModeBtn').style.display = 'none';
+  renderEventButtons();
+  document.getElementById('eventModeRow').style.display = 'flex';
+  document.getElementById('itemSelect').innerHTML = '<option value="">— Choose an event above —</option>';
+  document.getElementById('treeContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="big">🎪</div>
+      <div style="color:var(--purple)">Choose an event above</div>
+      <div style="color:var(--dim2);">Christmas · Nuclear Summer · Halloween · Classic</div>
+    </div>`;
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+}
+
+function hideEventSelector() {
+  document.getElementById('tierGroup').style.display = '';
+  document.getElementById('eventModeBtn').style.display = '';
+  document.getElementById('eventModeRow').style.display = 'none';
+  updateTierItems();
+}
+
+function backToEvents() {
+  renderEventButtons();
+  document.getElementById('itemSelect').innerHTML = '<option value="">— Choose an event above —</option>';
+  document.getElementById('treeContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="big">🎪</div>
+      <div style="color:var(--purple)">Choose an event above</div>
+      <div style="color:var(--dim2);">Christmas · Nuclear Summer · Halloween · Classic</div>
+    </div>`;
+  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+}
+
+function selectEvent(eventName) {
+  const s = EVENT_STYLES[eventName];
+
+   if (EVENT_TIERS[eventName]) {
+    const tiers = EVENT_TIERS[eventName];
+    const row   = document.getElementById('eventModeRow');
+    const tierBtns = tiers.map(t =>
+      `<button class="btn" onclick="selectEventTier('${eventName}','${t}')"
+        style="border-color:${s.border};color:${s.color};background:${s.bg};">${t}</button>`
+    ).join('');
+    row.innerHTML = `
+      <button class="btn" onclick="backToEvents()" style="border-color:var(--dim);color:var(--dim);font-size:9px;">◀ Events</button>
+      ${tierBtns}
+    `;
+    document.getElementById('itemSelect').innerHTML = `<option value="">— Choose a tier above —</option>`;
+    document.getElementById('treeContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">${s.icon}</div>
+        <div style="color:${s.color}">${eventName} — pick a tier above (T0–T${tiers.length - 1})</div>
+        <div style="color:var(--dim2);">Select a tier to browse its items</div>
+      </div>`;
+    document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
+    document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+    document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+    return;
+  }
+
+   const eventKey = 'EVENT_' + eventName;
+  const sel = document.getElementById('itemSelect');
+  sel.innerHTML = '<option value="">— Choose an item —</option>';
+
+  const groups = tierItems[eventKey];
+  if (!groups || Object.keys(groups).length === 0) {
+    const opt = document.createElement('option');
+    opt.disabled = true; opt.textContent = '— No items yet —';
+    sel.appendChild(opt);
+    document.getElementById('treeContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">🚧</div>
+        <div style="color:var(--gold)">${eventName} items coming soon</div>
+        <div style="color:var(--dim2);">Check back later!</div>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('treeContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="big">${s.icon}</div>
+      <div style="color:${s.color}">${eventName} — select an item above</div>
+    </div>`;
+  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+
+  for (const [groupLabel, items] of Object.entries(groups)) {
+    const og = document.createElement('optgroup');
+    og.label = groupLabel;
+    items.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name; opt.textContent = name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  }
+}
+
+function selectEventTier(eventName, tier) {
+  const s      = EVENT_STYLES[eventName];
+  const sel    = document.getElementById('itemSelect');
+  const groups = tierItems['EVENT_' + eventName + '_' + tier];  // e.g. EVENT_Halloween_T0
+
+  sel.innerHTML = '<option value="">— Choose an item —</option>';
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+
+  if (!groups || Object.keys(groups).length === 0) {
+    const opt = document.createElement('option');
+    opt.disabled = true; opt.textContent = '— No items yet —';
+    sel.appendChild(opt);
+    document.getElementById('treeContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">🚧</div>
+        <div style="color:var(--gold)">${tier} items coming soon</div>
+        <div style="color:var(--dim2);">This tier hasn't been added yet</div>
+      </div>`;
+    return;
+  }
+
+  for (const [groupLabel, items] of Object.entries(groups)) {
+    const og = document.createElement('optgroup');
+    og.label = groupLabel;
+    items.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name; opt.textContent = name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  }
+
+  document.getElementById('treeContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="big">${s.icon}</div>
+      <div style="color:${s.color}">${eventName} · ${tier} — select an item above</div>
+    </div>`;
+}
+
 const FC_BOX_W = 220, FC_H_GAP = 24, FC_V_GAP = 76;
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFlowModal(); });
@@ -1711,9 +1980,14 @@ function openFlowModal(itemName) {
   const svgWrap = document.getElementById('flowSvgWrap');
   title.textContent = itemName;
   svgWrap.innerHTML = '<div style="padding:40px;font-family:Share Tech Mono,monospace;font-size:11px;color:var(--dim)">Building chart…</div>';
+  flowZoom = 1;
+  flowPanX = 0;
+  flowPanY = 0;
+  updateFlowZoomDisplay();
   modal.classList.add('visible');
   requestAnimationFrame(() => {
     svgWrap.innerHTML = renderFlowchartSVG(itemName);
+    applyFlowZoom();
   });
 }
 
@@ -1721,8 +1995,6 @@ function closeFlowModal() {
   document.getElementById('flowModal').classList.remove('visible');
 }
 
-/* ── Text wrapping helper ───────────────────────────────── */
-// Splits a string into lines of at most `maxChars` characters, breaking at spaces
 function fcWrapText(str, maxChars) {
   if (!str) return [''];
   if (str.length <= maxChars) return [str];
@@ -1737,14 +2009,10 @@ function fcWrapText(str, maxChars) {
   if (cur) lines.push(cur);
   return lines.length ? lines : [str];
 }
-
-// Dynamic box height: top-pad + name lines + machine line + price line + bottom-pad
 function fcBoxHeight(nameLines) {
-  // 10 top + 16*n name lines + 14 machine + 6 bottom
-  return 10 + nameLines * 16 + 14 + 12;
+    return 10 + nameLines * 16 + 14 + 12;
 }
 
-/* ── Tree Builder (no depth cap — circular detection guards loops) ── */
 function buildFlowTree(itemName, visited) {
   const r = recipes[itemName];
   const node = { name: itemName, r: r || null, children: [] };
@@ -1762,10 +2030,8 @@ function buildFlowTree(itemName, visited) {
   return node;
 }
 
-/* ── Layout ─────────────────────────────────────────────── */
 function calcNodeWidth(node) {
-  // Precompute name wrap lines and dynamic box height
-  const nameLines = fcWrapText(node.name, 24);
+    const nameLines = fcWrapText(node.name, 24);
   node.nameLines = nameLines;
   node.boxH = fcBoxHeight(nameLines.length);
 
@@ -1776,8 +2042,7 @@ function calcNodeWidth(node) {
 
 function assignPositions(node, left, depth) {
   node.x = left + node.w / 2 - FC_BOX_W / 2;
-  node.y = depth * (80 + FC_V_GAP);   // row height = tallest box + gap (approximate; looks fine)
-  let cx = left;
+  node.y = depth * (80 + FC_V_GAP);    let cx = left;
   for (const c of node.children) {
     assignPositions(c, cx, depth + 1);
     cx += c.w;
@@ -1787,8 +2052,7 @@ function assignPositions(node, left, depth) {
 function collectAll(node, nodes = [], edges = []) {
   nodes.push(node);
   for (const c of node.children) {
-    // Edge: from child top → parent bottom (arrow points UP to the parent)
-    edges.push({
+        edges.push({
       startX: c.x  + FC_BOX_W / 2,  startY: c.y,            // child top (path start)
       endX:   node.x + FC_BOX_W / 2, endY: node.y + node.boxH // parent bottom (arrowhead here)
     });
@@ -1797,7 +2061,6 @@ function collectAll(node, nodes = [], edges = []) {
   return { nodes, edges };
 }
 
-/* ── SVG Renderer ───────────────────────────────────────── */
 function renderFlowchartSVG(rootName) {
   const root = buildFlowTree(rootName, new Set());
   calcNodeWidth(root);
@@ -1811,8 +2074,7 @@ function renderFlowchartSVG(rootName) {
   out.push(`<svg viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}"
     xmlns="http://www.w3.org/2000/svg" style="min-width:${svgW}px;display:block;">`);
 
-  /* ── defs: arrowhead pointing right (orient="auto" rotates it along the path) ── */
-  out.push(`<defs>
+   out.push(`<defs>
     <marker id="fc-arr" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
       <polygon points="0 0,8 3,0 6" fill="rgba(0,229,255,0.7)"/>
     </marker>
@@ -1825,8 +2087,7 @@ function renderFlowchartSVG(rootName) {
     </filter>
   </defs>`);
 
-  /* ── edges: child top → parent bottom, arrowhead at parent (marker-end) ── */
-  for (const e of edges) {
+   for (const e of edges) {
     const my = (e.startY + e.endY) / 2;
     // Path goes FROM child top UP TO parent bottom; arrowhead sits at the parent end
     out.push(`<path d="M${e.startX},${e.startY} C${e.startX},${my} ${e.endX},${my} ${e.endX},${e.endY}"
@@ -1834,7 +2095,6 @@ function renderFlowchartSVG(rootName) {
       stroke-dasharray="5 3" marker-end="url(#fc-arr)"/>`);
   }
 
-  /* ── nodes ── */
   for (const n of nodes) {
     const r = n.r;
     const isRoot = (n === root);
@@ -1867,40 +2127,34 @@ function renderFlowchartSVG(rootName) {
     const bh   = n.boxH;
     const nl   = n.nameLines;
 
-    /* box */
     out.push(`<rect x="${n.x}" y="${n.y}" width="${FC_BOX_W}" height="${bh}" rx="2"
       fill="${bg}" stroke="${stroke}" stroke-width="${sw}"${glow}/>`);
 
-    /* left accent bar */
     out.push(`<rect x="${n.x}" y="${n.y + 4}" width="3" height="${bh - 8}" rx="1"
       fill="${stroke}" opacity="0.75"/>`);
 
-    /* icon on first name line */
     const nameStartY = n.y + 22;
     out.push(`<text x="${n.x + 10}" y="${nameStartY}"
       font-family="Exo 2,sans-serif" font-size="13" fill="${nameClr}" font-weight="700">${icon}</text>`);
 
-    /* name — potentially multi-line */
     nl.forEach((line, i) => {
       out.push(`<text x="${n.x + 28}" y="${nameStartY + i * 16}"
         font-family="Exo 2,sans-serif" font-size="11" font-weight="600" fill="${nameClr}">${line}</text>`);
     });
 
-    /* machine / source label */
     const machY = nameStartY + nl.length * 16;
     if (label2) {
       out.push(`<text x="${n.x + 10}" y="${machY}"
         font-family="Share Tech Mono,monospace" font-size="9" fill="${subClr}">${label2}</text>`);
     }
 
-    /* price — bottom-right */
+
     if (priceStr) {
       out.push(`<text x="${n.x + FC_BOX_W - 8}" y="${n.y + bh - 5}"
         font-family="Share Tech Mono,monospace" font-size="9" fill="#39ff14"
         text-anchor="end">${priceStr}</text>`);
     }
 
-    /* small dot below raw leaf nodes */
     if (n.isRaw) {
       out.push(`<circle cx="${n.x + FC_BOX_W / 2}" cy="${n.y + bh + 10}" r="3"
         fill="#39ff14" opacity="0.45"/>`);
@@ -1911,7 +2165,6 @@ function renderFlowchartSVG(rootName) {
   return out.join('\n');
 }
 
-/* ── Wire click-to-flowchart on rendered tree nodes ──── */
 function wireFlowchart() {
   const container = document.getElementById('treeContainer');
   if (container._fcListener) container.removeEventListener('click', container._fcListener);
