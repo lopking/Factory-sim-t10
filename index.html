@@ -675,8 +675,92 @@ const tierItems = {
       'Charteuse Periastron, Gamma'
     ]
   },
-  EVENT_Classic_T2: {},
-  EVENT_Classic_T3: {},
+  EVENT_Classic_T2: {
+    '🦷 T2 Drakkobloxxer Chain': [
+      'Seared Drakkobloxer Flesh',
+      'Compressed Drakkobloxer Flesh',
+      'Drakkobloxxer Teeth',
+      'Drakkobloxxer Teeth Dust',
+      'Fine Drakkobloxxer Teeth Dust',
+      'Finer Drakkobloxxer Teeth Dust',
+      'Essence of the Ancients'
+    ],
+    '🔥 T2 Firemetal & Gold Chain': [
+      'Korbloxian Firemetal Gravel',
+      'Korbloxian Firemetal Ingot',
+      'Essence of Power',
+      'Splintered Gold Dust',
+      'Astralized Splintered Gold Dust',
+      'Splintered Gold Ingot',
+      'Fragmented Splintered Gold',
+      'Awakened Splintered Gold'
+    ],
+    '🟥 T2 Crimson Chain': [
+      'Crimson Glass',
+      'Compressed Crimson Glass',
+      'Crimson Glass Shards',
+      'Crimral Sand',
+      'Firesun Fragment'
+    ],
+    '⭐ T2 End Chain': [
+      'Inferno Alloy',
+      'Inferno Alloy Plate',
+      'Beta Star Fragment',
+      'Blazing Sun Fragment',
+      'Mu Star Fragment',
+      'Periastron Energy Core',
+      'Grimgold Periastron, Beta',
+      'Crimson Periastron, Mu'
+    ]
+  },
+  EVENT_Classic_T3: {
+    '💎 T3 Emeralzan Chain': [
+      'Emeralzan Gem Gravel',
+      'Restructured Emeralzan Gem',
+      'Blazing Emeralzan Gem',
+      'Emeralzan Shard',
+      'Emeralzan Dust Cluster',
+      'Refined Emeralzan Dust',
+      'Frozen Emeralzan Dust'
+    ],
+    '❄ T3 Azure Ice Chain': [
+      'Azure Ice Shard',
+      'Azure Ice Cluster',
+      'Flaming Azurian Ice',
+      'Azurian Alloy',
+      'Blazing Azurian Alloy',
+      'Blazed Azurian Plate'
+    ],
+    '🔱 T3 Ferlion & Zirconite Chain': [
+      'Ferlion Gravel',
+      'Activated Ferlion Gravel',
+      'Ferlion Ingot',
+      'Ferlion Plate',
+      'Reinforced Ferlion Container',
+      'Zirconite Gravel',
+      'Activated Zirconite Gravel',
+      'Zirconite Ingot',
+      'Blazed Zirconite',
+      'Jaded Zirconite',
+      'Jaded Zirconite Fiber',
+      'Nebulous Zirconite'
+    ],
+    '🌟 T3 Asteroid & Star Chain': [
+      'Purple Glacier Block',
+      'Kappa Star Fragment',
+      'Asteroid Alloy',
+      'Asteroid Alloy String',
+      'Asteroid Element',
+      'Asteroid Element Dust',
+      'Asteroid Essence',
+      'Comet Shard',
+      'Controlled Azure Flame',
+      'Amethyst Periastron, Kappa'
+    ],
+    '🏆 T3 End Chain': [
+      'Astric Galaxy Fragment'
+    ]
+  },
   EVENT_Classic_T4: {},
   EVENT_Classic_T5: {},
 
@@ -1450,6 +1534,91 @@ const recipes = {
   'Activated Periastron Core': { machine:'Adv T1 Form Injector', icon:'⭐', price:'$25B',   inputs:['Gilded Power Essence','Periastron Core'] },
   'Azure Periastron, Alpha':       { machine:'Adv T1 Triple Packager', icon:'💙', price:'$50B',   inputs:['Astral Soul Essence','Alpha Star Fragment','Activated Periastron Core'] },
   'Charteuse Periastron, Gamma':   { machine:'Adv T1 Triple Packager', icon:'💚', price:'$37.5B', inputs:['Activated Periastron Core','Gamma Star Fragment','Compressed Overseer Flesh'] },
+
+  'Drakkobloxxer Flesh':            { raw:true, icon:'🩸', source:'Drakkobloxxer Flesh Mine',    type:'mine', price:'$500T' },
+  'Korbloxian Firemetal':           { raw:true, icon:'🔥', source:'Korbloxian Firemetal Mine',   type:'mine', price:'$1qd' },
+  'Splintered Gold Ore':            { raw:true, icon:'⛏',  source:'Splintered Gold Mine',        type:'mine', price:'$1qd' },
+  'CrimsonSand':                    { raw:true, icon:'🏜', source:'Crimson Sand Mine',            type:'mine', price:'$2.5qd' },
+
+  'Seared Drakkobloxer Flesh':      { machine:'T2 Cauterizer',            icon:'🩸', price:'$5.5qd',  inputs:['Drakkobloxxer Flesh'] },
+  'Compressed Drakkobloxer Flesh':  { machine:'T2 Press',                 icon:'🩸', price:'$6qd',    inputs:['Seared Drakkobloxer Flesh'] },
+  'Drakkobloxxer Teeth':            { machine:'T2 Cauterizer',            icon:'🦷', price:'$6.66qd', inputs:['Compressed Drakkobloxer Flesh'] },
+  'Drakkobloxxer Teeth Dust':       { machine:'T2 Mechanical Mortar',     icon:'🦷', price:'$7.77qd', inputs:['Drakkobloxxer Teeth'] },
+  'Fine Drakkobloxxer Teeth Dust':  { machine:'T2 Mechanical Mortar',     icon:'🦷', price:'$8.88qd', inputs:['Drakkobloxxer Teeth Dust'] },
+  'Finer Drakkobloxxer Teeth Dust': { machine:'T2 Mechanical Mortar',     icon:'🦷', price:'$9.99qd', inputs:['Fine Drakkobloxxer Teeth Dust'] },
+  'Essence of the Ancients':        { machine:'T2 Mechanical Mortar',     icon:'✨', price:'$11.1qd', inputs:['Finer Drakkobloxxer Teeth Dust'] },
+
+  'Korbloxian Firemetal Gravel':    { machine:'T2 Ore Crusher',           icon:'🔥', price:'$7.5qd',  inputs:['Korbloxian Firemetal'] },
+  'Korbloxian Firemetal Ingot':     { machine:'T2 Furnace',               icon:'🔥', price:'$12.5qd', inputs:['Korbloxian Firemetal Gravel'] },
+  'Essence of Power':               { machine:'T2 Mechanical Mortar',     icon:'⚡', price:'$10qd',   inputs:['Korbloxian Firemetal Ingot'] },
+
+  'Splintered Gold Dust':           { machine:'T2 Ore Crusher',           icon:'🥇', price:'$7.5qd',  inputs:['Splintered Gold Ore'] },
+  'Crimson Glass':                  { machine:'T2 Furnace',               icon:'🟥', price:'$10qd',   inputs:['CrimsonSand'] },
+  'Compressed Crimson Glass':       { machine:'T2 Press',                 icon:'🟥', price:'$10qd',   inputs:['Crimson Glass'] },
+  'Crimson Glass Shards':           { machine:'T2 Grinder',               icon:'🟥', price:'$4qd',    inputs:['Compressed Crimson Glass'] },
+  'Crimral Sand':                   { machine:'T2 Mixer',                 icon:'🏜', price:'$15qd',   inputs:['Astral Isles Dust','CrimsonSand'] },
+  'Astralized Splintered Gold Dust':{ machine:'T2 Mixer',                 icon:'🥇', price:'$27.5qd', inputs:['Astral Isles Dust','Splintered Gold Dust'] },
+  'Firesun Fragment':               { machine:'T2 Furnace',               icon:'🔥', price:'$30qd',   inputs:['Crimral Sand'] },
+  'Splintered Gold Ingot':          { machine:'T2 Furnace',               icon:'🥇', price:'$32.5qd', inputs:['Astralized Splintered Gold Dust'] },
+  'Fragmented Splintered Gold':     { machine:'T2 Furnace',               icon:'🥇', price:'$40qd',   inputs:['Splintered Gold Ingot'] },
+
+  'Inferno Alloy':                  { machine:'T2 Triple Alloy Smelter',  icon:'🔥', price:'$50qd',   inputs:['Firesun Fragment','Blasted Stud','Crimson Glass Shards'] },
+  'Inferno Alloy Plate':            { machine:'T2 Press',                 icon:'🔥', price:'$75qd',   inputs:['Inferno Alloy'] },
+  'Awakened Splintered Gold':       { machine:'T2 Triple Alloy Smelter',  icon:'🥇', price:'$65qd',   inputs:['Fragmented Splintered Gold','Essence of the Ancients','Korbloxian Firemetal Gravel'] },
+  'Beta Star Fragment':             { machine:'T2 Mechanical Mortar',     icon:'⭐', price:'$90qd',   inputs:['Awakened Splintered Gold'] },
+  'Blazing Sun Fragment':           { machine:'Adv T2 Form Injector',     icon:'🌟', price:'$1Qn',    inputs:['Essence of Power','Firesun Fragment'] },
+  'Mu Star Fragment':               { machine:'T2 Mechanical Mortar',     icon:'⭐', price:'$1.25Qn', inputs:['Blazing Sun Fragment'] },
+  'Periastron Energy Core':         { machine:'Adv T2 Multi Form Injector', icon:'⚡', price:'$30Qn', inputs:['Activated Periastron Core','Finer Drakkobloxxer Teeth Dust','Blazing Sun Fragment'] },
+  'Grimgold Periastron, Beta':      { machine:'Adv T2 Triple Packager',   icon:'🟡', price:'$50Qn',   inputs:['Beta Star Fragment','Awakened Splintered Gold','Periastron Energy Core'] },
+  'Crimson Periastron, Mu':         { machine:'Adv T2 Triple Packager',   icon:'🔴', price:'$75Qn',   inputs:['Mu Star Fragment','Inferno Alloy Plate','Periastron Energy Core'] },
+
+  'Emeralzan Ore':                  { raw:true, icon:'💎', source:'Emeralzan Mine',   type:'mine', price:'$37.45p' },
+  'Ferlion Ore':                    { raw:true, icon:'🔱', source:'Ferlion Mine',     type:'mine', price:'$125Sp' },
+  'Zirconite Ore':                  { raw:true, icon:'🟣', source:'Zirconite Mine',   type:'mine', price:'$125Sp' },
+  'Azure Ice':                      { raw:true, icon:'❄',  source:'Azure Ice Mine',   type:'mine', price:'$150Sp' },
+
+  'Emeralzan Gem Gravel':           { machine:'T3 Ore Crusher',           icon:'💎', price:'$755p',   inputs:['Emeralzan Ore'] },
+  'Ferlion Gravel':                 { machine:'T3 Ore Crusher',           icon:'🔱', price:'$200Sp',  inputs:['Ferlion Ore'] },
+  'Zirconite Gravel':               { machine:'T3 Ore Crusher',           icon:'🟣', price:'$200Sp',  inputs:['Zirconite Ore'] },
+  'Restructured Emeralzan Gem':     { machine:'T3 Furnace',               icon:'💎', price:'$125Sp',  inputs:['Emeralzan Gem Gravel'] },
+  'Blazing Emeralzan Gem':          { machine:'T3 Furnace',               icon:'💎', price:'$200Sp',  inputs:['Restructured Emeralzan Gem'] },
+  'Emeralzan Shard':                { machine:'T3 Grinder',               icon:'💎', price:'$42Sp',   inputs:['Restructured Emeralzan Gem'] },
+  'Emeralzan Dust Cluster':         { machine:'T3 Mechanical Mortar',     icon:'💎', price:'$100Sp',  inputs:['Emeralzan Shard'] },
+  'Refined Emeralzan Dust':         { machine:'T3 Furnace',               icon:'💎', price:'$120Sp',  inputs:['Emeralzan Dust Cluster'] },
+  'Frozen Emeralzan Dust':          { machine:'T3 Cooler',                icon:'💎', price:'$150Sp',  inputs:['Emeralzan Dust Cluster'] },
+
+  'Azure Ice Shard':                { machine:'T3 Grinder',               icon:'❄',  price:'$35Sp',   inputs:['Azure Ice'] },
+  'Azure Ice Cluster':              { machine:'T3 Mechanical Mortar',     icon:'❄',  price:'$505p',   inputs:['Azure Ice Shard'] },
+  'Flaming Azurian Ice':            { machine:'T3 Furnace',               icon:'❄',  price:'$755p',   inputs:['Azure Ice Cluster'] },
+
+  'Activated Ferlion Gravel':       { machine:'T3 Mixer',                 icon:'🔱', price:'$888Sp',  inputs:['Azure Ice Cluster','Ferlion Gravel'] },
+  'Activated Zirconite Gravel':     { machine:'T3 Mixer',                 icon:'🟣', price:'$888Sp',  inputs:['Azure Ice Cluster','Zirconite Gravel'] },
+  'Ferlion Ingot':                  { machine:'T3 Furnace',               icon:'🔱', price:'$1oct',   inputs:['Activated Ferlion Gravel'] },
+  'Zirconite Ingot':                { machine:'T3 Furnace',               icon:'🟣', price:'$1oct',   inputs:['Activated Zirconite Gravel'] },
+  'Ferlion Plate':                  { machine:'T3 Press',                 icon:'🔱', price:'$1.25oct',inputs:['Ferlion Ingot'] },
+
+  'Asteroid Alloy':                 { machine:'T3 Triple Alloy Smelter',  icon:'🌑', price:'$2.5oct', inputs:['Ferlion Ingot','Zirconite Ingot','Blazing Emeralzan Gem'] },
+  'Azurian Alloy':                  { machine:'T3 Triple Alloy Smelter',  icon:'❄',  price:'$2.25oct',inputs:['Ferlion Ingot','Zirconite Ingot','Flaming Azurian Ice'] },
+  'Blazed Zirconite':               { machine:'T3 Alloy Smelter',         icon:'🟣', price:'$2oct',   inputs:['Blasted Stud','Zirconite Ingot'] },
+  'Jaded Zirconite':                { machine:'T3 Triple Alloy Smelter',  icon:'🟣', price:'$3oct',   inputs:['Blazed Zirconite','Chilled Overseer Flesh','Refined Emeralzan Dust'] },
+  'Blazing Azurian Alloy':          { machine:'T3 Alloy Smelter',         icon:'❄',  price:'$5oct',   inputs:['Azurian Alloy','Glowing Redcliffian Metal Dust'] },
+  'Blazed Azurian Plate':           { machine:'T3 Press',                 icon:'❄',  price:'$8.5oct', inputs:['Blazing Azurian Alloy'] },
+
+  'Asteroid Alloy String':          { machine:'T3 Extruder',              icon:'🌑', price:'$4oct',   inputs:['Asteroid Alloy'] },
+  'Jaded Zirconite Fiber':          { machine:'T3 Extruder',              icon:'🟣', price:'$5oct',   inputs:['Jaded Zirconite'] },
+
+  'Purple Glacier Block':           { machine:'T3 Mixer',                 icon:'💜', price:'$250Sp',  inputs:['Azure Ice Shard','Crimson Glass Shards'] },
+  'Kappa Star Fragment':            { machine:'T3 Mechanical Mortar',     icon:'⭐', price:'$1.11oct',inputs:['Purple Glacier Block'] },
+  'Asteroid Element':               { machine:'Adv T3 Workstation',       icon:'🌑', price:'$49.9oct',inputs:['Asteroid Alloy String'] },
+  'Asteroid Element Dust':          { machine:'T3 Mechanical Mortar',     icon:'🌑', price:'$52.5oct',inputs:['Asteroid Element'] },
+  'Reinforced Ferlion Container':   { machine:'Adv T3 Workstation',       icon:'🔱', price:'$44.9oct',inputs:['Ferlion Plate'] },
+
+  'Comet Shard':                    { machine:'Adv T3 Triple Packager',   icon:'☄',  price:'$475oct', inputs:['Astrum Dust','Blazing Azurian Alloy','Asteroid Element'] },
+  'Controlled Azure Flame':         { machine:'Adv T3 Triple Packager',   icon:'❄',  price:'$444oct', inputs:['Flaming Azurian Ice','Reinforced Ferlion Container','Forged Astrum'] },
+  'Amethyst Periastron, Kappa':     { machine:'Adv T3 Triple Packager',   icon:'💜', price:'$499oct', inputs:['Kappa Star Fragment','Periastron Energy Core','Blazed Azurian Plate'] },
+  'Asteroid Essence':               { machine:'Adv T3 Multi Form Injector', icon:'🌑', price:'$349oct',inputs:['Astral Isles Geode','Blazing Sun Fragment','Asteroid Element Dust'] },
+  'Nebulous Zirconite':             { machine:'Adv T3 Multi Form Injector', icon:'🟣', price:'$1N',   inputs:['Jaded Zirconite Fiber','Astrum Dust','Frozen Emeralzan Dust'] },
+  'Astric Galaxy Fragment':         { machine:'Adv T3 Quintuple Assembler', icon:'🌌', price:'$60N',  inputs:['Comet Shard','Asteroid Essence','Nebulous Zirconite','Amethyst Periastron, Kappa','Controlled Azure Flame'] },
 };
 
 let nodeIdCounter = 0;
