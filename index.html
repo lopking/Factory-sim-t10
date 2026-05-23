@@ -217,7 +217,7 @@
     padding: 6px 16px; border-top: 1px solid var(--border); flex-shrink: 0; text-align: center;
   }
 
-  /* Click hint on tree nodes */
+  
   .node-header:not(.seen)::after {
     content: '⊞';
     position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
@@ -761,7 +761,55 @@ const tierItems = {
       'Astric Galaxy Fragment'
     ]
   },
-  EVENT_Classic_T4: {},
+  EVENT_Classic_T4: {
+    '⛏ T4 Classic Mines': [
+      'Frozen Aquamarine','Banned Soul','Raw Marble','Noired Tungsten Ore','Ivoric Ore'
+    ],
+    '🔄 Processing Chain': [
+      'Banned Soul Shard','Marble Shard','Aquamarine Shard','Aquamarine Gem Shard',
+      'Ivoric Gravel','Noired Tungsten Gravel',
+      'Polished Marble','Stable Banned Soul','Aquamarine Dust Cluster',
+      'Carburized Aquamarine','Aquamarine Gem',
+      'Splintered Marble Gold','Splintered Banned Gold',
+      'Gloomy Essence','Shining Essence',
+      'Gloomed Noir Tungsten','Shining Ivoric Gravel'
+    ],
+    '🔩 Ingots & Alloys': [
+      'Ivoric Ingot','Noired Tungsten Ingot',
+      'Aquamarine Alloy','Ivory Alloy','Noir Alloy','Duality Alloy','Banned Alloy'
+    ],
+    '🔲 Plates & Components': [
+      'Aquamarine Alloy Plate','Noir Alloy Plate','Ivory Alloy Plate',
+      'Duality Alloy Plate','Banned Alloy Plate',
+      'Constricted Duality Alloy Plate',
+      'Reinforced Aquamarine Alloy Plate','Reinforced Ivory Alloy Plate',
+      'Reinforced Noir Alloy Plate','Reinforced Duality Alloy Plate','Reinforced Banned Alloy Plate',
+      'Ivory Alloy Capsule','Duality Alloy Cylinder'
+    ],
+    '✨ Essences & Cores': [
+      'Essence of Noir','Essence of Ivory','Essence of Duality','Essence of Death',
+      'Dead Star Matter',
+      'Ivory Core','Noir Core','Aquamarine Core',
+      'Korbloxian Flame Core','Eternal Flame Hearth'
+    ],
+    '💎 Teeth, Marks & Special': [
+      'Ivory Infused Teeth','Death Marked Aquamarine','Stained Ivory Mark'
+    ],
+    '🌟 Star Fragments & Artifacts': [
+      'Psi Star Fragment','Ivory Star Fragment',
+      'Solar Soul Artifact','Midnight Soul Artifact',
+      'Midnight Soul Chalice','Supernovae Remnant',
+      'Stellar Remains','Stellarized Remnant'
+    ],
+    '🔥 Flame & Relocators': [
+      'The Eternal Flame',
+      'Reality Relocator','Duality Relocator',
+      'Duality Galaxy Fragment'
+    ],
+    '🌌 Periastrons & End-Game': [
+      'Ivory Periastron','Noir Periastron, Psi','Dao Galaxy Fragment'
+    ]
+  },
   EVENT_Classic_T5: {},
 
   EVENT_Christmas: {},
@@ -1246,7 +1294,7 @@ const recipes = {
   'Graphite Ore':    { raw:true, icon:'⛏', source:'Graphite Ore Mine',    type:'mine', price:'$3QnD' },
   'Painite Crystal': { raw:true, icon:'💎', source:'Painite Crystal Mine', type:'mine', price:'$1000qdD' },
   'Salt Shard':      { raw:true, icon:'🧂', source:'Shop / Mine',          type:'mine', price:'$19.9Sp' },
-  'Fuel Rod':        { raw:true, icon:'☢',  source:'Shop / Crafted',       type:'mine', price:'$1.76M' },
+
   'Turkey Slices':   { raw:true, icon:'🍗', source:'Shop / Farm',          type:'mine', price:'$100' },
   'Molybdenum Gravel': { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Molybdenum Ore'] },
   'Chromium Gravel':   { machine:'T9 Ore Crusher', icon:'🪨', price:'$10QnD',  inputs:['Chromium Ore'] },
@@ -1619,6 +1667,109 @@ const recipes = {
   'Asteroid Essence':               { machine:'Adv T3 Multi Form Injector', icon:'🌑', price:'$349oct',inputs:['Astral Isles Geode','Blazing Sun Fragment','Asteroid Element Dust'] },
   'Nebulous Zirconite':             { machine:'Adv T3 Multi Form Injector', icon:'🟣', price:'$1N',   inputs:['Jaded Zirconite Fiber','Astrum Dust','Frozen Emeralzan Dust'] },
   'Astric Galaxy Fragment':         { machine:'Adv T3 Quintuple Assembler', icon:'🌌', price:'$60N',  inputs:['Comet Shard','Asteroid Essence','Nebulous Zirconite','Amethyst Periastron, Kappa','Controlled Azure Flame'] },
+
+
+  'Frozen Aquamarine':    { raw:true, icon:'❄', source:'Adv Frozen Aquamarine Mine', type:'mine', price:'$3Ud' },
+  'Banned Soul':          { raw:true, icon:'💀', source:'Adv Banned Soul Mine',       type:'mine', price:'$1.5Ud' },
+  'Raw Marble':           { raw:true, icon:'🪨', source:'Adv Marble Mine',            type:'mine', price:'$1.5Ud' },
+  'Noired Tungsten Ore':  { raw:true, icon:'⛏',  source:'Adv Noired Tungsten Mine',  type:'mine', price:'$3.74Ud' },
+  'Ivoric Ore':           { raw:true, icon:'⛏',  source:'Adv Ivoric Mine',           type:'mine', price:'$3.74Ud' },
+  'Solar Soul Artifact':  { raw:true, icon:'☀', source:'Event Drop / Mine',          type:'mine', price:'$30DD' },
+  'Midnight Soul Artifact':{ raw:true,icon:'🌙', source:'Event Drop / Mine',          type:'mine', price:'$30DD' },
+  'Reality Relocator':    { raw:true, icon:'🔮', source:'Event Drop / Unknown',       type:'mine', price:'$359DD' },
+  'Duality Core':          { machine:'T4+ Triple Packager', icon:'⚖', price:'$1000DD', inputs:['Reinforced Duality Alloy Plate','Astrum Dust','Essence of Duality'] },
+  'Duality Galaxy Fragment':{ machine:'T4+ Buffer', icon:'🌌', price:'$1.34tdD', inputs:['Noir Periastron, Psi','Ivory Periastron'], note:'Also yields Periastron Energy Core as byproduct' },
+
+
+  'Ivoric Gravel':               { machine:'T4 Ore Crusher',       icon:'🪨', price:'$15Ud',   inputs:['Ivoric Ore'] },
+  'Noired Tungsten Gravel':      { machine:'T4 Ore Crusher',       icon:'⛏',  price:'$15Ud',   inputs:['Noired Tungsten Ore'] },
+
+
+  'Banned Soul Shard':           { machine:'T4 Grinder',           icon:'💀', price:'$2Ud',    inputs:['Banned Soul'] },
+  'Marble Shard':                { machine:'T4 Grinder',           icon:'🪨', price:'$2Ud',    inputs:['Raw Marble'] },
+  'Aquamarine Shard':            { machine:'T4 Grinder',           icon:'💎', price:'$2.2Ud',  inputs:['Carburized Aquamarine'] },
+  'Aquamarine Gem Shard':        { machine:'T4 Grinder',           icon:'💎', price:'$2.5Ud',  inputs:['Aquamarine Gem'] },
+
+
+  'Carburized Aquamarine':       { machine:'T4 Furnace',           icon:'💎', price:'$6Ud',    inputs:['Frozen Aquamarine'] },
+  'Aquamarine Gem':              { machine:'T4 Furnace',           icon:'💎', price:'$6.49Ud', inputs:['Aquamarine Dust Cluster'] },
+  'Noired Tungsten Ingot':       { machine:'T4 Furnace',           icon:'⛏',  price:'$200Ud',  inputs:['Gloomed Noir Tungsten'] },
+  'Ivoric Ingot':                { machine:'T4 Furnace',           icon:'🟡', price:'$200Ud',  inputs:['Shining Ivoric Gravel'] },
+
+
+  'Polished Marble':             { machine:'T4 Mechanical Mortar', icon:'🪨', price:'$5Ud',    inputs:['Marble Shard'] },
+  'Stable Banned Soul':          { machine:'T4 Mechanical Mortar', icon:'💀', price:'$5Ud',    inputs:['Banned Soul Shard'] },
+  'Aquamarine Dust Cluster':     { machine:'T4 Mechanical Mortar', icon:'💎', price:'$5.5Ud',  inputs:['Aquamarine Shard'] },
+  'Gloomy Essence':              { machine:'T4 Mechanical Mortar', icon:'💜', price:'$55Ud',   inputs:['Splintered Banned Gold'] },
+  'Shining Essence':             { machine:'T4 Mechanical Mortar', icon:'✨', price:'$55Ud',   inputs:['Splintered Marble Gold'] },
+
+
+  'Splintered Marble Gold':      { machine:'T4 Mixer',             icon:'🥇', price:'$44Ud',   inputs:['Marble Shard','Fragmented Splintered Gold'] },
+  'Splintered Banned Gold':      { machine:'T4 Mixer',             icon:'💀', price:'$44Ud',   inputs:['Banned Soul Shard','Fragmented Splintered Gold'] },
+  'Gloomed Noir Tungsten':       { machine:'T4 Mixer',             icon:'⛏',  price:'$100Ud',  inputs:['Stable Banned Soul','Noired Tungsten Gravel'] },
+  'Shining Ivoric Gravel':       { machine:'T4 Mixer',             icon:'🟡', price:'$100Ud',  inputs:['Polished Marble','Ivoric Gravel'] },
+
+
+  'Aquamarine Alloy':            { machine:'T4 Alloy Smelter',     icon:'💎', price:'$50Ud',   inputs:['Korbloxian Firemetal Ingot','Aquamarine Dust Cluster'] },
+  'Noir Alloy':                  { machine:'T4 Alloy Smelter',     icon:'⬛', price:'$1DD',    inputs:['Gloomy Essence','Noired Tungsten Ingot'] },
+  'Ivory Alloy':                 { machine:'T4 Alloy Smelter',     icon:'🟡', price:'$1DD',    inputs:['Ivoric Ingot','Shining Essence'] },
+  'Banned Alloy':                { machine:'T4 Alloy Smelter',     icon:'💀', price:'$200DD',  inputs:['Noir Alloy','Essence of Death'] },
+
+
+  'Duality Alloy':               { machine:'T4 Triple Alloy Smelter', icon:'⚖', price:'$180DD', inputs:['Aquamarine Alloy','Ivory Alloy','Noir Alloy'] },
+
+
+  'Aquamarine Alloy Plate':      { machine:'T4 Press',             icon:'💎', price:'$75Ud',   inputs:['Aquamarine Alloy'] },
+  'Noir Alloy Plate':            { machine:'T4 Press',             icon:'⬛', price:'$1.33DD', inputs:['Noir Alloy'] },
+  'Ivory Alloy Plate':           { machine:'T4 Press',             icon:'🟡', price:'$3.33DD', inputs:['Ivory Alloy'] },
+  'Duality Alloy Plate':         { machine:'T4 Press',             icon:'⚖', price:'$200DD',  inputs:['Duality Alloy'] },
+  'Banned Alloy Plate':          { machine:'T4 Press',             icon:'💀', price:'$224DD',  inputs:['Banned Alloy'] },
+  'Constricted Duality Alloy Plate':{ machine:'T4 Press',          icon:'⚖', price:'$240DD',  inputs:['Reinforced Duality Alloy Plate'] },
+
+
+  'Reinforced Aquamarine Alloy Plate':{ machine:'Adv T4 Workstation', icon:'💎', price:'$875Ud',  inputs:['Aquamarine Alloy Plate'] },
+  'Ivory Alloy Capsule':         { machine:'Adv T4 Workstation',   icon:'🟡', price:'$15DD',   inputs:['Ivory Alloy'] },
+  'Reinforced Ivory Alloy Plate':{ machine:'Adv T4 Workstation',   icon:'🟡', price:'$15.5DD', inputs:['Ivory Alloy Plate'] },
+  'Reinforced Noir Alloy Plate': { machine:'Adv T4 Workstation',   icon:'⬛', price:'$15.5DD', inputs:['Noir Alloy Plate'] },
+  'Psi Star Fragment':           { machine:'Adv T4 Workstation',   icon:'⭐', price:'$10DD',   inputs:['Essence of Noir'] },
+  'Ivory Star Fragment':         { machine:'Adv T4 Workstation',   icon:'⭐', price:'$30DD',   inputs:['Essence of Ivory'] },
+  'Reinforced Duality Alloy Plate':{ machine:'Adv T4 Workstation', icon:'⚖', price:'$224DD',  inputs:['Duality Alloy Plate'] },
+  'Reinforced Banned Alloy Plate':{ machine:'Adv T4 Workstation',  icon:'💀', price:'$275DD',  inputs:['Banned Alloy Plate'] },
+  'Duality Alloy Cylinder':      { machine:'Adv T4 Workstation',   icon:'⚖', price:'$300DD',  inputs:['Constricted Duality Alloy Plate'] },
+
+
+  'Dead Star Matter':            { machine:'Adv T4 Form Injector', icon:'💫', price:'$18DD',   inputs:['Asteroid Alloy','Noired Tungsten Ingot'] },
+  'Essence of Noir':             { machine:'Adv T4 Form Injector', icon:'⬛', price:'$22.5DD', inputs:['Stable Banned Soul','Noir Alloy'] },
+  'Essence of Ivory':            { machine:'Adv T4 Form Injector', icon:'🟡', price:'$22.5DD', inputs:['Ivory Alloy','Polished Marble'] },
+  'Essence of Duality':          { machine:'Adv T4 Form Injector', icon:'⚖', price:'$44.9DD', inputs:['Essence of Ivory','Essence of Noir'] },
+  'Death Marked Aquamarine':     { machine:'Adv T4 Form Injector', icon:'💀', price:'$250DD',  inputs:['Aquamarine Dust Cluster','Essence of Death'] },
+
+
+  'Essence of Death':            { machine:'Adv T4 Multi Form Injector', icon:'☠', price:'$150DD',  inputs:['Essence of Power','Essence of the Ancients','Reinforced Noir Alloy Plate'] },
+  'Stellar Remains':             { machine:'Adv T4 Multi Form Injector', icon:'💫', price:'$1.5tdD', inputs:['Reinforced Banned Alloy Plate','Essence of Death','Dead Star Matter'] },
+
+
+  'Ivory Core':                  { machine:'Adv T4 Dual Assembler', icon:'🟡', price:'$33DD',   inputs:['Astrum Dust','Reinforced Ivory Alloy Plate'] },
+  'Ivory Infused Teeth':         { machine:'Adv T4 Dual Assembler', icon:'🦷', price:'$15DD',   inputs:['Drakkobloxxer Teeth','Ivory Alloy Plate'] },
+  'Korbloxian Flame Core':       { machine:'Adv T4 Dual Assembler', icon:'🔥', price:'$75Ud',   inputs:['Korbloxian Firemetal Ingot','Aquamarine Core'] },
+  'Noir Core':                   { machine:'Adv T4 Dual Assembler', icon:'⬛', price:'$33DD',   inputs:['Reinforced Noir Alloy Plate','Astrum Dust'] },
+  'Stained Ivory Mark':          { machine:'Adv T4 Dual Assembler', icon:'🦷', price:'$333DD',  inputs:['Death Marked Aquamarine','Ivory Infused Teeth'] },
+  'Eternal Flame Hearth':        { machine:'Adv T4 Dual Assembler', icon:'🔥', price:'$1.24tdD',inputs:['Duality Core','Korbloxian Flame Core'] },
+  'Supernovae Remnant':          { machine:'Adv T4 Dual Assembler', icon:'💫', price:'$5tdD',   inputs:['Stellarized Remnant','Solar Soul Artifact'] },
+
+
+  'Aquamarine Core':             { machine:'Adv T4 Triple Packager', icon:'💎', price:'$224DD', inputs:['Reinforced Aquamarine Alloy Plate','Astrum Dust','Aquamarine Dust Cluster'] },
+  'Ivory Periastron':            { machine:'Adv T4 Triple Packager', icon:'🟡', price:'$500DD', inputs:['Periastron Energy Core','Ivory Star Fragment','Solar Soul Artifact'] },
+  'Noir Periastron, Psi':        { machine:'Adv T4 Triple Packager', icon:'⬛', price:'$500DD', inputs:['Periastron Energy Core','Psi Star Fragment','Midnight Soul Artifact'] },
+
+
+  'Stellarized Remnant':         { machine:'Adv T4 Quadruple Assembler', icon:'💫', price:'$2.75tdD', inputs:['Asteroid Element Dust','Ivory Core','Noir Core','Stellar Remains'] },
+  'Midnight Soul Chalice':       { machine:'Adv T4 Quadruple Assembler', icon:'🌙', price:'$3.6tdD',  inputs:['Midnight Soul Artifact','Duality Alloy Cylinder','Aquamarine Gem Shard','Reinforced Banned Alloy Plate'] },
+  'Duality Relocator':           { machine:'Adv T4 Quadruple Assembler', icon:'⚖', price:'$4.5tdD',  inputs:['Duality Core','Reinforced Noir Alloy Plate','Ivory Alloy Capsule','Reality Relocator'] },
+  'The Eternal Flame':           { machine:'Adv T4 Quadruple Assembler', icon:'🔥', price:'$40.0tdD', inputs:['Eternal Flame Hearth','Duality Relocator','Essence of Death','Controlled Azure Flame'] },
+
+
+  'Dao Galaxy Fragment':         { machine:'Adv T4 Quintuple Assembler', icon:'🌌', price:'$1.00qdD', inputs:['Midnight Soul Chalice','Duality Galaxy Fragment','Stained Ivory Mark','The Eternal Flame','Supernovae Remnant'] },
 };
 
 let nodeIdCounter = 0;
@@ -1812,7 +1963,7 @@ function rawFocus() {
     while (el && el.id !== 'treeContainer') {
       if (el.classList.contains('tree-children')) {
         el.classList.remove('tree-collapsed');
-        // Reopen the toggle button of the parent node
+
         const parentTreeNode = el.parentElement;
         if (parentTreeNode) {
           const tb = parentTreeNode.querySelector(':scope > .node-header .toggle-btn');
@@ -2096,7 +2247,7 @@ function selectEvent(eventName) {
 function selectEventTier(eventName, tier) {
   const s      = EVENT_STYLES[eventName];
   const sel    = document.getElementById('itemSelect');
-  const groups = tierItems['EVENT_' + eventName + '_' + tier];  // e.g. EVENT_Halloween_T0
+  const groups = tierItems['EVENT_' + eventName + '_' + tier];
 
   sel.innerHTML = '<option value="">— Choose an item —</option>';
   document.getElementById('breadcrumbBar').classList.remove('visible');
@@ -2222,8 +2373,8 @@ function collectAll(node, nodes = [], edges = []) {
   nodes.push(node);
   for (const c of node.children) {
         edges.push({
-      startX: c.x  + FC_BOX_W / 2,  startY: c.y,            // child top (path start)
-      endX:   node.x + FC_BOX_W / 2, endY: node.y + node.boxH // parent bottom (arrowhead here)
+      startX: c.x  + FC_BOX_W / 2,  startY: c.y,
+      endX:   node.x + FC_BOX_W / 2, endY: node.y + node.boxH
     });
     collectAll(c, nodes, edges);
   }
@@ -2258,7 +2409,7 @@ function renderFlowchartSVG(rootName) {
 
    for (const e of edges) {
     const my = (e.startY + e.endY) / 2;
-    // Path goes FROM child top UP TO parent bottom; arrowhead sits at the parent end
+
     out.push(`<path d="M${e.startX},${e.startY} C${e.startX},${my} ${e.endX},${my} ${e.endX},${e.endY}"
       fill="none" stroke="rgba(0,229,255,0.32)" stroke-width="1.5"
       stroke-dasharray="5 3" marker-end="url(#fc-arr)"/>`);
