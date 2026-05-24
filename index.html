@@ -814,8 +814,19 @@ const tierItems = {
 
   EVENT_Christmas: {},
   EVENT_NuclearSummer: {},
-  EVENT_Halloween: {},
-  EVENT_Classic: {};
+  EVENT_Halloween: {
+    '🎃 Halloween Items': [
+      'Jack-o-Lantern','Witch Hat','Candy Bag','Skeleton Key','Haunted Lantern',
+      'Spider Web','Potion Bottle','Ghost Sheet','Vampire Cape','Cursed Pumpkin'
+    ]
+  },
+  EVENT_Classic: {
+    '🏛 Classic Items': [
+      'Stone Slab','Wood Boards','Copper Ingot','Iron Ingot','Glass',
+      'Basic Circuit','Mechanical Assembly','Copper Gear','Iron Gear','Copper Plate'
+    ]
+  }
+};
 
 function updateTierItems() {
   const tier = document.getElementById('tierSelect').value;
