@@ -814,19 +814,8 @@ const tierItems = {
 
   EVENT_Christmas: {},
   EVENT_NuclearSummer: {},
-  EVENT_Halloween: {
-    '🎃 Halloween Items': [
-      'Jack-o-Lantern','Witch Hat','Candy Bag','Skeleton Key','Haunted Lantern',
-      'Spider Web','Potion Bottle','Ghost Sheet','Vampire Cape','Cursed Pumpkin'
-    ]
-  },
-  EVENT_Classic: {
-    '🏛 Classic Items': [
-      'Stone Slab','Wood Boards','Copper Ingot','Iron Ingot','Glass',
-      'Basic Circuit','Mechanical Assembly','Copper Gear','Iron Gear','Copper Plate'
-    ]
-  }
-};
+  EVENT_Halloween: {},
+  EVENT_Classic: {};
 
 function updateTierItems() {
   const tier = document.getElementById('tierSelect').value;
@@ -1674,9 +1663,9 @@ const recipes = {
   'Raw Marble':           { raw:true, icon:'🪨', source:'Adv Marble Mine',            type:'mine', price:'$1.5Ud' },
   'Noired Tungsten Ore':  { raw:true, icon:'⛏',  source:'Adv Noired Tungsten Mine',  type:'mine', price:'$3.74Ud' },
   'Ivoric Ore':           { raw:true, icon:'⛏',  source:'Adv Ivoric Mine',           type:'mine', price:'$3.74Ud' },
-  'Solar Soul Artifact':  { raw:true, icon:'☀', source:'Event Drop / Mine',          type:'mine', price:'$30DD' },
-  'Midnight Soul Artifact':{ raw:true,icon:'🌙', source:'Event Drop / Mine',          type:'mine', price:'$30DD' },
-  'Reality Relocator':    { raw:true, icon:'🔮', source:'Event Drop / Unknown',       type:'mine', price:'$359DD' },
+  'Solar Soul Artifact':   { machine:'T4+ Buffer',          icon:'☀', price:'$30DD',   inputs:['Essence of Noir','Essence of Ivory'] },
+  'Midnight Soul Artifact':{ machine:'T4+ Buffer',          icon:'🌙', price:'$30DD',   inputs:['Essence of Noir','Essence of Ivory'] },
+  'Reality Relocator':     { machine:'T4+ Triple Packager', icon:'🔮', price:'$359DD',  inputs:['Aquamarine Core','Purple Glacier Block','Activated Periastron Core'] },
   'Duality Core':          { machine:'T4+ Triple Packager', icon:'⚖', price:'$1000DD', inputs:['Reinforced Duality Alloy Plate','Astrum Dust','Essence of Duality'] },
   'Duality Galaxy Fragment':{ machine:'T4+ Buffer', icon:'🌌', price:'$1.34tdD', inputs:['Noir Periastron, Psi','Ivory Periastron'], note:'Also yields Periastron Energy Core as byproduct' },
 
