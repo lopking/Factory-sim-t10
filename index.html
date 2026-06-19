@@ -60,8 +60,7 @@
   .info-box { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15); padding: 10px 14px; margin-bottom: 24px; font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 1.8; }
   .info-box .ib-title { color: var(--accent); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
 
-  .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
-  @media(max-width:900px) { .main-grid { grid-template-columns: 1fr; } }
+  .main-grid { display: block; }
 
   #treeContainer { background: var(--panel2); border: 1px solid var(--border); padding: 18px 20px; min-height: 250px; overflow-x: auto; }
   
@@ -127,23 +126,6 @@
   .breadcrumb-bar .bc-item.bc-last { color: var(--accent); }
 
   .tree-collapsed { display: none; }
-
-  .summary-panel { position: sticky; top: 16px; max-height: calc(100vh - 40px); overflow-y: auto; }
-  .sum-section { margin-bottom: 16px; }
-  .sum-section-title { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
-  
-  .sum-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; margin-bottom: 3px; background: var(--panel2); border: 1px solid var(--border); font-family: 'Share Tech Mono', monospace; font-size: 11px; }
-  .sum-item .si-name { color: var(--text); }
-  .sum-item .si-count { font-weight: 700; font-size: 13px; padding: 1px 8px; background: rgba(0,229,255,0.08); color: var(--accent); }
-  
-  .sum-item.raw-mine .si-name  { color: var(--green); }
-  .sum-item.raw-mine .si-count { background: rgba(57,255,20,0.08); color: var(--green); }
-  .sum-item.raw-fluid .si-name { color: var(--orange); }
-  .sum-item.raw-fluid .si-count{ background: rgba(255,140,66,0.08); color: var(--orange); }
-  .sum-item.mach .si-name      { color: var(--purple); }
-  .sum-item.mach .si-count     { background: rgba(191,127,255,0.08); color: var(--purple); }
-
-  .sum-empty { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); padding: 8px; }
 
   footer { text-align: center; padding: 20px; color: var(--dim); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; border-top: 1px solid var(--border); margin-top: 40px; }
 
@@ -225,6 +207,137 @@
     transition: opacity 0.15s; pointer-events: none;
   }
   .node-header:not(.seen):hover::after { opacity: 0.7; }
+
+  .btn-bp {
+    background: rgba(255,140,66,0.08);
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    font-family: 'Orbitron', monospace;
+    font-size: 10px; padding: 8px 14px; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    transition: all 0.15s; white-space: nowrap;
+    align-self: flex-end;
+  }
+  .btn-bp:hover { background: rgba(255,140,66,0.18); }
+  .btn-bp.active {
+    background: var(--orange);
+    color: #1a0d05;
+    box-shadow: 0 0 12px rgba(255,140,66,0.5);
+  }
+	
+  .node-header.bp-warn {
+    border-color: var(--orange) !important;
+    box-shadow: 0 0 0 1px rgba(255,140,66,0.4), 0 0 14px rgba(255,140,66,0.25) !important;
+    animation: bp-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes bp-pulse {
+    0%,100% { box-shadow: 0 0 0 1px rgba(255,140,66,0.4), 0 0 8px rgba(255,140,66,0.18); }
+    50%     { box-shadow: 0 0 0 1px rgba(255,140,66,0.7), 0 0 18px rgba(255,140,66,0.45); }
+  }
+  .bp-tag {
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    color: #1a0d05; background: var(--orange);
+    padding: 2px 6px; border-radius: 2px;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .bp-helper {
+    background: rgba(255,140,66,0.06);
+    border: 1px solid rgba(255,140,66,0.3);
+    padding: 12px 16px; margin-bottom: 18px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    line-height: 1.7; color: var(--text);
+  }
+  .bp-helper .bp-title {
+    color: var(--orange); font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 6px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .bp-helper ul { margin: 6px 0 0 16px; padding: 0; }
+  .bp-helper li { margin-bottom: 3px; }
+  .bp-helper code {
+    background: rgba(255,140,66,0.15); color: var(--orange);
+    padding: 1px 5px; border-radius: 2px;
+  }
+
+  @keyframes fc-root-pulse {
+    0%   { filter: drop-shadow(0 0 0 rgba(255,215,0,0)); }
+    50%  { filter: drop-shadow(0 0 16px rgba(255,215,0,0.95)); }
+    100% { filter: drop-shadow(0 0 0 rgba(255,215,0,0)); }
+  }
+  .fc-root-box { animation: fc-root-pulse 1.6s ease-out 3; }
+  .fc-you-here {
+    font-family: 'Orbitron', sans-serif; font-size: 9px;
+    fill: #ffd700; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-row {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px; margin-top: 15px;
+  }
+  .nav-row a {
+    font-family: 'Orbitron', monospace; font-size: 10px;
+    padding: 8px 16px; letter-spacing: 2px; text-transform: uppercase;
+    background: rgba(0,229,255,0.1); border: 1px solid var(--accent); color: var(--accent);
+    text-decoration: none; transition: all 0.15s; white-space: nowrap;
+  }
+  .nav-row a:hover { background: rgba(0,229,255,0.2); }
+  .nav-row a.current { background: var(--accent); color: #051018; }
+
+  @media (max-width: 700px) {
+    .container { padding: 14px 10px 40px; }
+    .calc-row { gap: 8px; }
+    .calc-group { flex: 1 1 100% !important; min-width: 0 !important; }
+    #tierGroup { flex: 0 0 auto !important; }
+    .calc-row > .btn, .calc-row > .btn-bp, .calc-row > .btn-ghost { flex: 1 1 auto; align-self: stretch; text-align: center; padding: 10px 8px; }
+
+    header h1 { font-size: 15px; letter-spacing: 1px; }
+    header .subtitle { font-size: 11px; }
+    .nav-row { gap: 6px; margin-top: 12px; }
+    .nav-row a { padding: 7px 11px; font-size: 9px; letter-spacing: 1px; }
+    .info-box { font-size: 10px; line-height: 1.6; padding: 8px 10px; }
+    .node-depth { display: none !important; }
+    .node-header,
+    .node-header.raw,
+    .node-header.byproduct,
+    .node-header.seen {
+      grid-template-columns: 18px 18px 1fr auto !important;
+      gap: 6px !important;
+      padding: 7px 8px !important;
+    }
+    .node-header.raw, .node-header.byproduct {
+      grid-template-columns: 18px 1fr auto auto !important;
+    }
+    .node-name { font-size: 11px !important; }
+    .node-machine, .node-source { font-size: 8px !important; padding: 1px 5px !important; }
+    .node-note { font-size: 8px !important; padding: 1px 4px !important; }
+    .bp-tag { font-size: 8px !important; padding: 1px 4px !important; }
+    .tree-children { padding-left: 18px !important; margin-left: 9px !important; }
+    .tree-children > .tree-node::before { left: -10px !important; width: 9px !important; }
+    .tree-children > .tree-node:last-child::after { left: -18px !important; }
+    .tree-stats { gap: 10px !important; padding: 6px 8px !important; }
+    .tree-stat .ts-val { font-size: 12px !important; }
+    .tree-stat .ts-label { font-size: 8px !important; }
+    .breadcrumb-bar { font-size: 9px !important; }
+    .bp-helper { font-size: 10px !important; padding: 10px 12px !important; }
+    .bp-helper li { margin-bottom: 5px; }
+    .card-head { font-size: 9px !important; padding: 8px 12px !important; letter-spacing: 1.5px !important; }
+    .flow-modal-inner { min-width: 0 !important; max-width: 100vw !important; max-height: 100vh !important; width: 100vw !important; height: 100vh !important; border: none !important; }
+    .flow-modal-head { padding: 8px 12px !important; flex-wrap: wrap; gap: 6px; }
+    .flow-modal-title { font-size: 10px !important; letter-spacing: 1px !important; }
+    .flow-modal-subtitle { font-size: 9px !important; }
+    .flow-zoom-btn { width: 36px !important; height: 36px !important; font-size: 16px !important; } /* bigger tap target */
+    .flow-zoom-btn[style*="auto"] { padding: 0 10px !important; font-size: 9px !important; }
+    .flow-close { width: 36px !important; height: 36px !important; font-size: 18px !important; }
+    .flow-zoom-label { min-width: 44px !important; font-size: 11px !important; }
+    .flow-svg-wrap { padding: 8px !important; }
+    .flow-hint { font-size: 8px !important; padding: 5px 10px !important; line-height: 1.5 !important; }
+    .empty-state { padding: 40px 16px !important; }
+    .empty-state .big { font-size: 28px !important; }
+    .empty-state div { font-size: 11px !important; }
+  }
 </style>
 </head>
 <body>
@@ -233,36 +346,11 @@
   <div class="glow"></div>
   <h1>⛓ Factory Sim — Full Chain Viewer</h1>
   <div class="subtitle">Select a tier and item to see the complete ingredient tree — every machine, mine, and extractor needed</div>
-  <table>
-   <th>
-    <div style="margin-top: 15px;">
-     <a href="index.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	LIST
-     </a>
-    </th>
-    <th>
-     <td></td>
-     <td style="width: 30px;"></td> 
-     <td></td>
-    </th>
-    <th>
-     <div style="margin-top: 15px;">
-      <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	RATIOS
-      </a>
-     </div>
-      <th>
-     <td></td>
-     <td style="width: 30px;"></td> 
-     <td></td>
-      </th>
-     <th>
-    <div style="margin-top: 15px;">
-     <a href="calc2.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	CALCULATOR
-     </a>
-    </th>
-   </table>
+  <nav class="nav-row">
+    <a href="index.html" class="current">List</a>
+    <a href="calc.html">Ratios</a>
+    <a href="calc2.html">Calculator</a>
+  </nav>
 </header>
 
 <div class="container">
@@ -271,7 +359,7 @@
     <div class="ib-title">How to use</div>
     Pick a <strong style="color:var(--gold)">Tier</strong> then an item from the dropdown. The full dependency tree will expand showing <span style="color:var(--green)">🟢 Raw resources</span> (mines/farms),
     <span style="color:var(--accent)">🔵 Crafted items</span> with their machine, and
-    <span style="color:var(--orange)">🟠 Byproducts</span>. Click any node with a <strong style="color:#fff">[−]</strong> button to collapse that branch. The summary panel on the right tallies up all unique machines and raw resources needed.
+    <span style="color:var(--orange)">🟠 Byproducts</span>. Click any node with a <strong style="color:#fff">[−]</strong> button to collapse that branch. Click any node to open its flowchart — the item you clicked pulses gold so you can spot it instantly. Toggle <strong style="color:var(--orange)">⚠ Byproducts</strong> to highlight chains that produce side-resources.
   </div>
 
   <div class="card">
@@ -306,11 +394,23 @@
           <label>Or Search Name</label>
           <input type="text" id="searchInput" placeholder="e.g. Garnet..." oninput="filterItems(this.value)">
         </div>
+        <button class="btn-bp" id="bpToggleBtn" onclick="toggleByproducts()" title="Highlight chains that produce side-resources (byproducts)">⚠ Byproducts</button>
         <button class="btn btn-ghost" onclick="expandAll()">Expand All</button>
         <button class="btn btn-ghost" onclick="collapseAll()">Collapse All</button>
         <button class="btn btn-ghost" onclick="rawFocus()" title="Collapse everything — show only paths to raw resources">Raw Focus</button>
       </div>
     </div>
+  </div>
+
+  <div id="bpHelperBox" class="bp-helper" style="display:none;">
+    <div class="bp-title">⚠ Handling Byproducts</div>
+    Chains highlighted in <span style="color:var(--orange);font-weight:700;">orange</span> produce side-resources that can clog your factory lines if not vented or processed. Recommended approaches:
+    <ul>
+      <li><code>Storage buffer</code> — place a Chest / Tank after the machine to absorb the byproduct.</li>
+      <li><code>Recycle loop</code> — feed the byproduct back as an input to another recipe (e.g. <code>Used Filter</code> can be re-processed).</li>
+      <li><code>Active venting</code> — for fluids like <code>Heavy Fluid Garnet</code>, pipe to a Vent or Sink if no consumer exists.</li>
+      <li><code>Ratio balancing</code> — match downstream consumers to the byproduct output rate (e.g. <code>35L Eveready → 15L × 3 fractions</code> needs 3 consumers).</li>
+    </ul>
   </div>
 
   <div class="main-grid">
@@ -325,26 +425,6 @@
             <div>Select a tier and item above to see its full ingredient chain</div>
             <div style="color:var(--dim2);">Every machine, mine, and extractor will be shown</div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head purple">📋 Chain Summary</div>
-      <div class="card-body summary-panel" style="padding: 15px;">
-        <div class="sum-section">
-          <div class="sum-section-title">🌿 Mines / Farms / Extractors</div>
-          <div id="sumRaw"><div class="sum-empty">— select an item —</div></div>
-        </div>
-
-        <div class="sum-section">
-          <div class="sum-section-title">🏭 Machines Required</div>
-          <div id="sumMachines"><div class="sum-empty">— select an item —</div></div>
-        </div>
-
-        <div class="sum-section">
-          <div class="sum-section-title">🔄 Intermediate Items</div>
-          <div id="sumItems"><div class="sum-empty">— select an item —</div></div>
         </div>
       </div>
     </div>
@@ -366,12 +446,12 @@
         <button class="flow-zoom-btn" onclick="flowZoomOut()" title="Zoom out (−)">−</button>
         <span class="flow-zoom-label" id="flowZoomDisplay">100%</span>
         <button class="flow-zoom-btn" onclick="flowZoomIn()" title="Zoom in (+)">+</button>
-        <button class="flow-zoom-btn" onclick="flowZoomReset()" title="Reset zoom" style="width:auto;padding:0 8px;font-size:9px;letter-spacing:1px;">RESET</button>
+        <button class="flow-zoom-btn" onclick="flowZoomReset()" title="Fit chart to screen" style="width:auto;padding:0 8px;font-size:9px;letter-spacing:1px;">FIT</button>
         <button class="flow-close" onclick="closeFlowModal()" title="Close (Esc)">✕</button>
       </div>
     </div>
     <div class="flow-svg-wrap" id="flowSvgWrap"></div>
-    <div class="flow-hint">click a node in the tree → show its flowchart &nbsp;|&nbsp; scroll to zoom &nbsp;|&nbsp; drag to pan &nbsp;|&nbsp; +/− buttons or Esc to close</div>
+    <div class="flow-hint">click a tree node → flowchart &nbsp;|&nbsp; scroll / pinch to zoom &nbsp;|&nbsp; drag / swipe to pan &nbsp;|&nbsp; RESET refits &nbsp;|&nbsp; Esc to close</div>
   </div>
 </div>
 
@@ -842,9 +922,7 @@ function updateTierItems() {
   document.getElementById('breadcrumbBar').classList.remove('visible');
   document.getElementById('breadcrumbBar').innerHTML = '';
   document.getElementById('searchInput').value = '';
-  document.getElementById('sumRaw').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumItems').innerHTML = '<div class="sum-empty">— select an item —</div>';
+  applyByproductMode();
 
   const groups = tierItems[tier];
   if (!groups || Object.keys(groups).length === 0) {
@@ -858,9 +936,6 @@ function updateTierItems() {
         <div style="color:var(--gold)">${tier} items coming soon</div>
         <div style="color:var(--dim2);">This tier hasn't been added yet</div>
       </div>`;
-    document.getElementById('sumRaw').innerHTML = '<div class="sum-empty">— select an item —</div>';
-    document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-    document.getElementById('sumItems').innerHTML = '<div class="sum-empty">— select an item —</div>';
     return;
   }
 
@@ -1773,7 +1848,7 @@ const recipes = {
 };
 
 let nodeIdCounter = 0;
-let summaryData = { raw:{}, machines:{}, items:{} };
+let byproductMode = false;
 
 let maxDepthReached = 0;
 
@@ -1782,7 +1857,6 @@ function renderTree() {
   if (!sel) return;
 
   nodeIdCounter = 0;
-  summaryData = { raw:{}, machines:{}, items:{} };
   maxDepthReached = 0;
 
   const container = document.getElementById('treeContainer');
@@ -1790,20 +1864,16 @@ function renderTree() {
   const html = buildNode(sel, true, seen, 0);
 
   const totalNodes = nodeIdCounter;
-  const rawCount = Object.keys(summaryData.raw).length;
-  const machCount = Object.keys(summaryData.machines).length;
 
   const statsHtml = `<div class="tree-stats">
     <div class="tree-stat nodes"><span class="ts-val">${totalNodes}</span><span class="ts-label">nodes</span></div>
-    <div class="tree-stat machines"><span class="ts-val">${machCount}</span><span class="ts-label">machine types</span></div>
-    <div class="tree-stat raw"><span class="ts-val">${rawCount}</span><span class="ts-label">raw sources</span></div>
     <div class="tree-stat depth"><span class="ts-val">${maxDepthReached}</span><span class="ts-label">max depth</span></div>
   </div>`;
 
   container.innerHTML = statsHtml + `<div class="tree-root">${html}</div>`;
-  updateSummary();
   wireBreadcrumb();
   wireFlowchart();
+  applyByproductMode();
 }
 
 function wireBreadcrumb() {
@@ -1866,28 +1936,18 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
 
   if (r.raw) {
     const cls = r.type === 'byproduct' ? 'byproduct' : 'raw';
-    const key = r.source;
-    if (r.type !== 'byproduct') {
-      summaryData.raw[key] = (summaryData.raw[key] || { name: key, type: r.type, count: 0 });
-      summaryData.raw[key].count++;
-    }
+    const bpTag = (r.type === 'byproduct' || (r.note && /byproduct/i.test(r.note))) ? '<span class="bp-tag">BP</span>' : '';
     return `<div class="tree-node">
-      <div class="node-header ${cls} depth-${depth}" data-depth="${depth}">
+      <div class="node-header ${cls} depth-${depth}" data-depth="${depth}" data-item-name="${escapeAttr(itemName)}">
         <span class="node-icon">${r.icon || '⬤'}</span>
         <span class="node-name">${itemName}</span>
         <span class="node-price">${r.price || ''}</span>
         <span class="node-source">${r.source}</span>
         ${r.note ? `<span class="node-note">${r.note}</span>` : ''}
+        ${bpTag}
         ${depth > 0 ? `<span class="node-depth">L${depth}</span>` : ''}
       </div>
     </div>`;
-  }
-
-  if (!isRoot) {
-    summaryData.machines[r.machine] = (summaryData.machines[r.machine] || 0) + 1;
-    summaryData.items[itemName] = (summaryData.items[itemName] || 0) + 1;
-  } else {
-    summaryData.machines[r.machine] = (summaryData.machines[r.machine] || 0) + 1;
   }
 
   const hasChildren = r.inputs && r.inputs.length > 0;
@@ -1897,6 +1957,13 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
     : `<span style="width:18px;display:inline-block;"></span>`;
 
   const headerClass = isRoot ? 'target' : 'crafted';
+  const producesByproduct = !!(r.note && (
+    /byproduct/i.test(r.note) ||
+    /\+\s*\d+L/.test(r.note) ||
+    /also\s+yields/i.test(r.note) ||
+    /\d+L\s+.*?\+\s*\d+L/.test(r.note)
+  ));
+  const bpTag = producesByproduct ? '<span class="bp-tag">BP</span>' : '';
 
   let childrenHtml = '';
   if (hasChildren) {
@@ -1920,17 +1987,54 @@ function buildNode(itemName, isRoot, pathAncestors, depth) {
   }
 
   return `<div class="tree-node">
-    <div class="node-header ${headerClass} depth-${depth}" data-depth="${depth}">
+    <div class="node-header ${headerClass} depth-${depth}" data-depth="${depth}" data-item-name="${escapeAttr(itemName)}">
       ${toggleBtn}
       <span class="node-icon">${r.icon || '⚙'}</span>
       <span class="node-name">${itemName}</span>
       <span class="node-price">${r.price || ''}</span>
       <span class="node-machine">${r.machine}</span>
       ${r.note ? `<span class="node-note">${r.note}</span>` : ''}
+      ${bpTag}
       ${depth > 0 ? `<span class="node-depth">L${depth}</span>` : ''}
     </div>
     ${childrenHtml}
   </div>`;
+}
+
+function escapeAttr(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function hasByproductNote(itemName) {
+  const r = recipes[itemName];
+  if (!r) return false;
+  if (r.type === 'byproduct') return true;
+  if (!r.note) return false;
+  return /byproduct/i.test(r.note) ||
+    /\+\s*\d+L/.test(r.note) ||
+    /also\s+yields/i.test(r.note) ||
+    /\d+L\s+.*?\+\s*\d+L/.test(r.note);
+}
+
+function applyByproductMode() {
+  const helper = document.getElementById('bpHelperBox');
+  const headers = document.querySelectorAll('#treeContainer .node-header');
+  headers.forEach(h => {
+    const name = h.getAttribute('data-item-name');
+    if (byproductMode && name && hasByproductNote(name)) {
+      h.classList.add('bp-warn');
+    } else {
+      h.classList.remove('bp-warn');
+    }
+  });
+  if (helper) helper.style.display = byproductMode ? 'block' : 'none';
+}
+
+function toggleByproducts() {
+  byproductMode = !byproductMode;
+  const btn = document.getElementById('bpToggleBtn');
+  if (btn) btn.classList.toggle('active', byproductMode);
+  applyByproductMode();
 }
 
 function toggle(nodeId) {
@@ -1974,62 +2078,91 @@ function rawFocus() {
     }
   });
 }
-
-function updateSummary() {
-  const rawEl = document.getElementById('sumRaw');
-  const rawEntries = Object.values(summaryData.raw).sort((a,b) => b.count - a.count);
-  if (rawEntries.length === 0) {
-    rawEl.innerHTML = '<div class="sum-empty">none found</div>';
-  } else {
-    rawEl.innerHTML = rawEntries.map(e => {
-      const cls = e.type === 'fluid' ? 'raw-fluid' : 'raw-mine';
-      const icon = e.type === 'fluid' ? '💧' : '⛏';
-      return `<div class="sum-item ${cls}">
-        <span class="si-name">${icon} ${e.name}</span>
-        <span class="si-count">×${e.count}</span>
-      </div>`;
-    }).join('');
+	
+let _itemTierIndex = null;
+function getItemTierIndex() {
+  if (_itemTierIndex) return _itemTierIndex;
+  _itemTierIndex = {};
+  for (const tierKey of Object.keys(tierItems)) {
+    const groups = tierItems[tierKey];
+    if (!groups) continue;
+    for (const items of Object.values(groups)) {
+      for (const name of items) {
+        if (!_itemTierIndex[name]) _itemTierIndex[name] = [];
+        if (!_itemTierIndex[name].includes(tierKey)) _itemTierIndex[name].push(tierKey);
+      }
+    }
   }
+  return _itemTierIndex;
+}
 
-  const machEl = document.getElementById('sumMachines');
-  const machEntries = Object.entries(summaryData.machines).sort((a,b) => b[1]-a[1]);
-  if (machEntries.length === 0) {
-    machEl.innerHTML = '<div class="sum-empty">none found</div>';
-  } else {
-    machEl.innerHTML = machEntries.map(([name, cnt]) =>
-      `<div class="sum-item mach">
-        <span class="si-name">⚙ ${name}</span>
-        <span class="si-count">×${cnt}</span>
-      </div>`
-    ).join('');
+function currentTierKey() {
+  const tierGroup = document.getElementById('tierGroup');
+  if (tierGroup && tierGroup.style.display === 'none') {
+    const sel = document.getElementById('itemSelect');
+    const loaded = new Set(Array.from(sel.options).map(o => o.value).filter(Boolean));
+    if (loaded.size === 0) return null;
+    for (const k of Object.keys(tierItems)) {
+      if (!k.startsWith('EVENT_')) continue;
+      const groups = tierItems[k] || {};
+      const items = [];
+      for (const arr of Object.values(groups)) items.push(...arr);
+      if (items.length && items.every(it => loaded.has(it))) return k;
+    }
+    return null;
   }
-
-  const itemEl = document.getElementById('sumItems');
-  const itemEntries = Object.entries(summaryData.items).sort((a,b) => b[1]-a[1]).slice(0, 20);
-  if (itemEntries.length === 0) {
-    itemEl.innerHTML = '<div class="sum-empty">none</div>';
-  } else {
-    itemEl.innerHTML = itemEntries.map(([name, cnt]) => {
-      const r = recipes[name];
-      const price = r ? r.price || '' : '';
-      return `<div class="sum-item">
-        <span class="si-name">${name}</span>
-        <span class="si-count" style="font-size:10px;color:var(--green)">${price}</span>
-      </div>`;
-    }).join('');
-  }
+  return document.getElementById('tierSelect').value;
 }
 
 function filterItems(q) {
   const sel = document.getElementById('itemSelect');
-  const lower = q.toLowerCase();
+  const lower = q.toLowerCase().trim();
+
   Array.from(sel.options).forEach(opt => {
     if (!opt.value) return;
     opt.hidden = lower.length > 0 && !opt.value.toLowerCase().includes(lower);
   });
-  const match = Object.keys(recipes).find(k => k.toLowerCase() === lower);
-  if (match) {
-    sel.value = match;
+
+  if (!lower) return;
+
+  const index = getItemTierIndex();
+  let match = Object.keys(index).find(k => k.toLowerCase() === lower);
+  if (!match) match = Object.keys(index).find(k => k.toLowerCase().startsWith(lower));
+  if (!match) match = Object.keys(index).find(k => k.toLowerCase().includes(lower));
+  if (!match) return;
+
+  const currentKey = currentTierKey();
+  const tiers = index[match];
+  if (!currentKey || !tiers.includes(currentKey)) {
+    const targetTier = tiers[0];
+    if (targetTier.startsWith('EVENT_')) {
+      const m = targetTier.match(/^EVENT_([A-Za-z]+)_(T\d+)$/);
+      if (m) {
+		  
+        if (document.getElementById('tierGroup').style.display !== 'none') {
+          showEventSelector();
+        }
+        selectEventTier(m[1], m[2]);
+      } else {
+        const evName = targetTier.replace(/^EVENT_/, '');
+        if (document.getElementById('tierGroup').style.display !== 'none') {
+          showEventSelector();
+        }
+        selectEvent(evName);
+      }
+    } else {
+      if (document.getElementById('tierGroup').style.display === 'none') {
+        hideEventSelector();
+      }
+      document.getElementById('tierSelect').value = targetTier;
+      updateTierItems();
+    }
+  }
+
+  const freshSel = document.getElementById('itemSelect');
+  const opt = Array.from(freshSel.options).find(o => o.value === match);
+  if (opt) {
+    freshSel.value = match;
     renderTree();
   }
 }
@@ -2039,13 +2172,57 @@ let flowPanX = 0, flowPanY = 0;
 let flowDragging = false;
 let flowDragStart = { x: 0, y: 0 };
 let flowPanStart  = { x: 0, y: 0 };
-const FC_ZOOM_STEP = 0.15;
-const FC_ZOOM_MIN  = 0.25;
-const FC_ZOOM_MAX  = 3.0;
+const FC_ZOOM_FACTOR = 1.18;
+const FC_ZOOM_MIN  = 0.05;   
+const FC_ZOOM_MAX  = 4.0;
+const FC_EDGE_PAD = 80;
 
 function updateFlowZoomDisplay() {
   const d = document.getElementById('flowZoomDisplay');
   if (d) d.textContent = Math.round(flowZoom * 100) + '%';
+}
+
+function flowSvgSize() {
+  const wrap = document.getElementById('flowSvgWrap');
+  if (!wrap) return { w: 0, h: 0, wrapW: 0, wrapH: 0 };
+  const svg = wrap.querySelector('svg');
+  const wrapRect = wrap.getBoundingClientRect();
+  let w = 0, h = 0;
+  if (svg) {
+    w = svg.width.baseVal.value || svg.getBoundingClientRect().width || 0;
+    h = svg.height.baseVal.value || svg.getBoundingClientRect().height || 0;
+  }
+  return { w, h, wrapW: wrapRect.width, wrapH: wrapRect.height };
+}
+
+function clampFlowPan() {
+  const { w, h, wrapW, wrapH } = flowSvgSize();
+  if (!w || !h || !wrapW || !wrapH) return;
+  const scaledW = w * flowZoom;
+  const scaledH = h * flowZoom;
+
+  let minX, maxX;
+  if (scaledW <= wrapW) {
+    minX = -FC_EDGE_PAD;
+    maxX = wrapW - scaledW + FC_EDGE_PAD;
+  } else {
+    minX = wrapW - scaledW - FC_EDGE_PAD;
+    maxX = FC_EDGE_PAD;                   
+  }
+
+  let minY, maxY;
+  if (scaledH <= wrapH) {
+    minY = -FC_EDGE_PAD;
+    maxY = wrapH - scaledH + FC_EDGE_PAD;
+  } else {
+    minY = wrapH - scaledH - FC_EDGE_PAD;
+    maxY = FC_EDGE_PAD;
+  }
+
+  if (flowPanX < minX) flowPanX = minX;
+  if (flowPanX > maxX) flowPanX = maxX;
+  if (flowPanY < minY) flowPanY = minY;
+  if (flowPanY > maxY) flowPanY = maxY;
 }
 
 function applyFlowZoom() {
@@ -2059,9 +2236,30 @@ function applyFlowZoom() {
   updateFlowZoomDisplay();
 }
 
-function flowZoomIn()    { flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom + FC_ZOOM_STEP).toFixed(2)); applyFlowZoom(); }
-function flowZoomOut()   { flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom - FC_ZOOM_STEP).toFixed(2)); applyFlowZoom(); }
-function flowZoomReset() { flowZoom = 1; flowPanX = 0; flowPanY = 0; applyFlowZoom(); }
+function flowZoomIn()    { flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom * FC_ZOOM_FACTOR).toFixed(3)); clampFlowPan(); applyFlowZoom(); }
+function flowZoomOut()   { flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom / FC_ZOOM_FACTOR).toFixed(3)); clampFlowPan(); applyFlowZoom(); }
+function flowZoomReset() { fitFlowToViewport(); }
+function fitFlowToViewport() {
+  const { w, h, wrapW, wrapH } = flowSvgSize();
+  if (!w || !h || !wrapW || !wrapH) {
+    flowZoom = 1; flowPanX = 0; flowPanY = 0;
+    applyFlowZoom();
+    return;
+  }
+  const margin = 32; 
+  const fitW = (wrapW - margin * 2) / w;
+  const fitH = (wrapH - margin * 2) / h;
+  let fit = Math.min(fitW, fitH);
+  fit = Math.min(fit, 1.0);
+  fit = Math.max(fit, FC_ZOOM_MIN);
+  flowZoom = +fit.toFixed(3);
+  const scaledW = w * flowZoom;
+  const scaledH = h * flowZoom;
+  flowPanX = (wrapW - scaledW) / 2;
+  flowPanY = (wrapH - scaledH) / 2;
+  clampFlowPan();
+  applyFlowZoom();
+}
 
 document.addEventListener('wheel', function(e) {
   const modal = document.getElementById('flowModal');
@@ -2074,15 +2272,20 @@ document.addEventListener('wheel', function(e) {
   const rect = wrap.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
-
-   const svgX = (mouseX - flowPanX) / flowZoom;
+  const svgX = (mouseX - flowPanX) / flowZoom;
   const svgY = (mouseY - flowPanY) / flowZoom;
+  const oldZoom = flowZoom;
+  const intensity = Math.min(Math.abs(e.deltaY) / 100, 3); // 0.01..3
+  const step = Math.pow(FC_ZOOM_FACTOR, intensity);
+  if (e.deltaY < 0) flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom * step).toFixed(3));
+  else              flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom / step).toFixed(3));
 
-  if (e.deltaY < 0) flowZoom = Math.min(FC_ZOOM_MAX, +(flowZoom + FC_ZOOM_STEP).toFixed(2));
-  else              flowZoom = Math.max(FC_ZOOM_MIN, +(flowZoom - FC_ZOOM_STEP).toFixed(2));
+  if (flowZoom === oldZoom) { applyFlowZoom(); return; }
 
   flowPanX = mouseX - svgX * flowZoom;
   flowPanY = mouseY - svgY * flowZoom;
+
+  clampFlowPan();
   applyFlowZoom();
 }, { passive: false });
 
@@ -2090,6 +2293,7 @@ document.addEventListener('wheel', function(e) {
   const wrap = document.getElementById('flowSvgWrap');
   if (!wrap) return;
 
+  // === Mouse drag-to-pan ===
   wrap.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
     flowDragging = true;
@@ -2103,6 +2307,7 @@ document.addEventListener('wheel', function(e) {
     if (!flowDragging) return;
     flowPanX = flowPanStart.x + (e.clientX - flowDragStart.x);
     flowPanY = flowPanStart.y + (e.clientY - flowDragStart.y);
+    clampFlowPan();
     applyFlowZoom();
   });
 
@@ -2112,6 +2317,81 @@ document.addEventListener('wheel', function(e) {
     const wrap = document.getElementById('flowSvgWrap');
     if (wrap) wrap.classList.remove('dragging');
   });
+	
+  let touchMode = null;          
+  let touchPanStart = { x: 0, y: 0, panX: 0, panY: 0 };
+  let pinchStart = { dist: 0, zoom: 1, midSvgX: 0, midSvgY: 0, midScreenX: 0, midScreenY: 0 };
+
+  function touchDist(t1, t2) {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  wrap.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 1) {
+      touchMode = 'pan';
+      const t = e.touches[0];
+      const rect = wrap.getBoundingClientRect();
+      touchPanStart = {
+        x: t.clientX, y: t.clientY,
+        panX: flowPanX, panY: flowPanY
+      };
+      wrap.classList.add('dragging');
+    } else if (e.touches.length === 2) {
+      touchMode = 'pinch';
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const rect = wrap.getBoundingClientRect();
+      pinchStart.dist = touchDist(t1, t2);
+      pinchStart.zoom = flowZoom;
+      pinchStart.midScreenX = ((t1.clientX + t2.clientX) / 2) - rect.left;
+      pinchStart.midScreenY = ((t1.clientY + t2.clientY) / 2) - rect.top;
+      pinchStart.midSvgX = (pinchStart.midScreenX - flowPanX) / flowZoom;
+      pinchStart.midSvgY = (pinchStart.midScreenY - flowPanY) / flowZoom;
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  wrap.addEventListener('touchmove', function(e) {
+    if (!touchMode) return;
+    if (touchMode === 'pan' && e.touches.length === 1) {
+      const t = e.touches[0];
+      flowPanX = touchPanStart.panX + (t.clientX - touchPanStart.x);
+      flowPanY = touchPanStart.panY + (t.clientY - touchPanStart.y);
+      clampFlowPan();
+      applyFlowZoom();
+    } else if (touchMode === 'pinch' && e.touches.length === 2) {
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const newDist = touchDist(t1, t2);
+      if (pinchStart.dist > 0) {
+        const ratio = newDist / pinchStart.dist;
+        let newZoom = pinchStart.zoom * ratio;
+        newZoom = Math.max(FC_ZOOM_MIN, Math.min(FC_ZOOM_MAX, +newZoom.toFixed(3)));
+        const rect = wrap.getBoundingClientRect();
+        const midX = ((t1.clientX + t2.clientX) / 2) - rect.left;
+        const midY = ((t1.clientY + t2.clientY) / 2) - rect.top;
+        flowZoom = newZoom;
+        flowPanX = midX - pinchStart.midSvgX * flowZoom;
+        flowPanY = midY - pinchStart.midSvgY * flowZoom;
+        clampFlowPan();
+        applyFlowZoom();
+      }
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  function endTouch(e) {
+    if (e.touches.length === 0) {
+      touchMode = null;
+      wrap.classList.remove('dragging');
+    } else if (e.touches.length === 1 && touchMode === 'pinch') {
+      const t = e.touches[0];
+      touchMode = 'pan';
+      touchPanStart = { x: t.clientX, y: t.clientY, panX: flowPanX, panY: flowPanY };
+    }
+  }
+  wrap.addEventListener('touchend', endTouch);
+  wrap.addEventListener('touchcancel', endTouch);
 })();
 
 updateTierItems();
@@ -2152,9 +2432,7 @@ function showEventSelector() {
       <div style="color:var(--dim2);">Christmas · Nuclear Summer · Halloween · Classic</div>
     </div>`;
   document.getElementById('breadcrumbBar').classList.remove('visible');
-  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+  applyByproductMode();
 }
 
 function hideEventSelector() {
@@ -2173,9 +2451,7 @@ function backToEvents() {
       <div style="color:var(--purple)">Choose an event above</div>
       <div style="color:var(--dim2);">Christmas · Nuclear Summer · Halloween · Classic</div>
     </div>`;
-  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+  applyByproductMode();
 }
 
 function selectEvent(eventName) {
@@ -2199,9 +2475,7 @@ function selectEvent(eventName) {
         <div style="color:${s.color}">${eventName} — pick a tier above (T0–T${tiers.length - 1})</div>
         <div style="color:var(--dim2);">Select a tier to browse its items</div>
       </div>`;
-    document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
-    document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-    document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+    applyByproductMode();
     return;
   }
 
@@ -2228,9 +2502,7 @@ function selectEvent(eventName) {
       <div class="big">${s.icon}</div>
       <div style="color:${s.color}">${eventName} — select an item above</div>
     </div>`;
-  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+  applyByproductMode();
 
   for (const [groupLabel, items] of Object.entries(groups)) {
     const og = document.createElement('optgroup');
@@ -2251,9 +2523,7 @@ function selectEventTier(eventName, tier) {
 
   sel.innerHTML = '<option value="">— Choose an item —</option>';
   document.getElementById('breadcrumbBar').classList.remove('visible');
-  document.getElementById('sumRaw').innerHTML      = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumMachines').innerHTML = '<div class="sum-empty">— select an item —</div>';
-  document.getElementById('sumItems').innerHTML    = '<div class="sum-empty">— select an item —</div>';
+  applyByproductMode();
 
   if (!groups || Object.keys(groups).length === 0) {
     const opt = document.createElement('option');
@@ -2307,7 +2577,7 @@ function openFlowModal(itemName) {
   modal.classList.add('visible');
   requestAnimationFrame(() => {
     svgWrap.innerHTML = renderFlowchartSVG(itemName);
-    applyFlowZoom();
+    requestAnimationFrame(() => fitFlowToViewport());
   });
 }
 
@@ -2360,11 +2630,12 @@ function calcNodeWidth(node) {
   node.w = node.children.reduce((s, c) => s + c.w, 0);
 }
 
-function assignPositions(node, left, depth) {
+function assignPositions(node, left, depth, topPad) {
+  topPad = topPad || 0;
   node.x = left + node.w / 2 - FC_BOX_W / 2;
-  node.y = depth * (80 + FC_V_GAP);    let cx = left;
+  node.y = topPad + depth * (80 + FC_V_GAP);    let cx = left;
   for (const c of node.children) {
-    assignPositions(c, cx, depth + 1);
+    assignPositions(c, cx, depth + 1, topPad);
     cx += c.w;
   }
 }
@@ -2384,7 +2655,8 @@ function collectAll(node, nodes = [], edges = []) {
 function renderFlowchartSVG(rootName) {
   const root = buildFlowTree(rootName, new Set());
   calcNodeWidth(root);
-  assignPositions(root, FC_H_GAP / 2, 0);
+  const TOP_PAD = 20;
+  assignPositions(root, FC_H_GAP / 2, 0, TOP_PAD);
 
   const { nodes, edges } = collectAll(root);
   const svgW = Math.max(root.w + FC_H_GAP, FC_BOX_W + FC_H_GAP * 2);
@@ -2443,12 +2715,20 @@ function renderFlowchartSVG(rootName) {
 
     const icon = r ? (r.icon || '⚙') : '❓';
     const glow = isRoot ? ' filter="url(#fc-glow)"' : '';
+    const rootPulse = isRoot ? ' class="fc-root-box"' : '';
     const sw   = isRoot ? '2' : '1.5';
     const bh   = n.boxH;
     const nl   = n.nameLines;
+    const safeName = String(n.name).replace(/"/g,'&quot;');
 
     out.push(`<rect x="${n.x}" y="${n.y}" width="${FC_BOX_W}" height="${bh}" rx="2"
-      fill="${bg}" stroke="${stroke}" stroke-width="${sw}"${glow}/>`);
+      fill="${bg}" stroke="${stroke}" stroke-width="${sw}"${glow}${rootPulse} data-fc-name="${safeName}"/>`);
+
+    // "📍 You are here" badge above the root node so the user instantly sees where the clicked item sits
+    if (isRoot) {
+      out.push(`<text x="${n.x + FC_BOX_W / 2}" y="${n.y - 8}" text-anchor="middle"
+        class="fc-you-here">▼ you are here</text>`);
+    }
 
     out.push(`<rect x="${n.x}" y="${n.y + 4}" width="3" height="${bh - 8}" rx="1"
       fill="${stroke}" opacity="0.75"/>`);
