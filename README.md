@@ -1,4 +1,4 @@
-Factory Sim — Tier 10 Full Chain Viewer & Calculator
+Factory Sim — Full Chain Viewer & Calculator
 A comprehensive suite of tools designed for Factory Simulator Tier 10 optimization. This project helps players visualize complex production trees and calculate exact machine requirements for high-level automation.
 
 🚀 Overview
