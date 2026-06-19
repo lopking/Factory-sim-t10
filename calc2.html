@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,35 +9,45 @@
   
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
   :root {
-	  --bg: #080b0f;
-	  --panel: #0d1117;
-	  --panel2: #111720;
-	  --border: #1c2530; 
-	  --accent: #00e5ff;
-	  --green: #39ff14;
-	  --orange: #ff8c42;
-	  --purple: #bf7fff; 
-	  --gold: #ffd700;
-	  --text: #c8d8e8;
-	  --dim: #4a5a6a; }
+          --bg: #080b0f;
+          --panel: #0d1117;
+          --panel2: #111720;
+          --border: #1c2530;
+          --accent: #00e5ff;
+          --green: #39ff14;
+          --orange: #ff8c42;
+          --purple: #bf7fff;
+          --gold: #ffd700;
+          --red: #ff4466;
+          --text: #c8d8e8;
+          --dim: #4a5a6a;
+          --dim2: #2a3540;
+          /* RGB triplets for use in rgba() — kept in sync by applyTheme() */
+          --accent-rgb: 0, 229, 255;
+          --green-rgb:  57, 255, 20;
+          --orange-rgb: 255, 140, 66;
+          --purple-rgb: 191, 127, 255;
+          --gold-rgb:   255, 215, 0;
+          --red-rgb:    255, 68, 102;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body
-	{ background: var(--bg); color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 13px; min-height: 100vh;
-	}
+        { background: var(--bg); color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 13px; min-height: 100vh;
+        }
   
   header {
-	  padding: 28px 32px 22px; border-bottom: 2px solid var(--accent); background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f); position: relative; overflow: hidden;
+          padding: 28px 32px 22px; border-bottom: 2px solid var(--accent); background: linear-gradient(135deg, #080b0f, #0d1a24 60%, #080b0f); position: relative; overflow: hidden;
   }
   header .glow {
-	  position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 700px; height: 160px; background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%); pointer-events: none;
+          position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 700px; height: 160px; background: radial-gradient(ellipse, rgba(0,229,255,0.12), transparent 70%); pointer-events: none;
   }
   h1 {
-	  font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 24px rgba(0,229,255,0.5); 
+          font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 24px rgba(0,229,255,0.5); 
   }
   .subtitle {
-	  font-family: 'Share Tech Mono', monospace; color: var(--dim); font-size: 11px; letter-spacing: 2px; margin-top: 5px;
+          font-family: 'Share Tech Mono', monospace; color: var(--dim); font-size: 11px; letter-spacing: 2px; margin-top: 5px;
   }
-	
+        
   .container { max-width: 1300px; margin: 0 auto; padding: 28px 20px 60px; }
   .card { background: var(--panel); border: 1px solid var(--border); margin-bottom: 28px; }
   .card-head { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 10px 16px; border-bottom: 1px solid var(--border); }
@@ -82,6 +93,140 @@
   .col { flex: 1; background: var(--panel2); border: 1px solid var(--border); padding: 15px;}
   h3 { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--accent); margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;}
   .item-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); font-family: 'Share Tech Mono', monospace;}
+
+  .nav-row {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px; margin-top: 15px;
+  }
+  .nav-row a {
+    font-family: 'Orbitron', monospace; font-size: 10px;
+    padding: 8px 16px; letter-spacing: 2px; text-transform: uppercase;
+    background: rgba(0,229,255,0.1); border: 1px solid var(--accent); color: var(--accent);
+    text-decoration: none; transition: all 0.15s; white-space: nowrap;
+  }
+  .nav-row a:hover { background: rgba(0,229,255,0.2); }
+  .nav-row a.current { background: var(--accent); color: #051018; }
+
+  /* === Theme customization === */
+  #themeBtn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 500;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--accent);
+    color: var(--accent); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.5), 0 0 12px rgba(0,229,255,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #themeBtn:hover { transform: scale(1.08); box-shadow: 0 4px 20px rgba(0,0,0,0.7), 0 0 20px rgba(0,229,255,0.4); }
+  #themeBtn:active { transform: scale(0.95); }
+
+  #themePanel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 340px; max-width: 92vw;
+    background: var(--panel); border-left: 1px solid var(--border);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+    z-index: 1100;
+    transform: translateX(100%);
+    transition: transform 0.25s ease-out;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  #themePanel.visible { transform: translateX(0); }
+
+  .tp-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    background: rgba(0,229,255,0.05); flex-shrink: 0;
+  }
+  .tp-head h3 {
+    font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
+  }
+  .tp-close {
+    background: transparent; border: 1px solid var(--border); color: var(--dim);
+    font-size: 16px; width: 28px; height: 28px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .tp-close:hover { border-color: var(--red); color: var(--red); }
+
+  .tp-body { flex: 1; overflow-y: auto; padding: 16px; }
+  .tp-section { margin-bottom: 22px; }
+  .tp-section-title {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim);
+    margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px;
+  }
+
+  .tp-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tp-preset {
+    cursor: pointer; padding: 10px 6px; text-align: center;
+    background: var(--panel2); border: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    color: var(--text); letter-spacing: 1px; text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .tp-preset:hover { border-color: var(--accent); }
+  .tp-preset.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .tp-preset .swatch-row { display: flex; gap: 2px; margin-bottom: 6px; height: 14px; }
+  .tp-preset .swatch-row span { flex: 1; }
+
+  .tp-color { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .tp-color label {
+    flex: 1; font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    color: var(--text); cursor: pointer;
+  }
+  .tp-color input[type=color] {
+    width: 38px; height: 28px; padding: 0; border: 1px solid var(--border);
+    background: transparent; cursor: pointer; border-radius: 2px;
+  }
+  .tp-color input[type=color]::-webkit-color-swatch-wrapper { padding: 2px; }
+  .tp-color input[type=color]::-webkit-color-swatch { border: none; border-radius: 1px; }
+  .tp-color input[type=color]::-moz-color-swatch { border: none; border-radius: 1px; }
+  .tp-hex {
+    width: 84px; font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    background: var(--panel2); border: 1px solid var(--border); color: var(--text);
+    padding: 6px 8px; text-transform: uppercase;
+  }
+  .tp-hex:focus { border-color: var(--accent); outline: none; }
+
+  .tp-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .tp-action {
+    flex: 1; padding: 9px; cursor: pointer;
+    background: rgba(0,229,255,0.08); border: 1px solid var(--accent); color: var(--accent);
+    font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: all 0.15s;
+  }
+  .tp-action:hover { background: rgba(0,229,255,0.2); }
+  .tp-action.danger { border-color: var(--red); color: var(--red); background: rgba(255,68,102,0.08); }
+  .tp-action.danger:hover { background: rgba(255,68,102,0.2); }
+
+  /* === Mobile responsiveness === */
+  @media (max-width: 700px) {
+    .container { padding: 14px 10px 40px; }
+    header { padding: 18px 14px 16px; }
+    h1 { font-size: 16px !important; letter-spacing: 1.5px !important; }
+    .subtitle { font-size: 9px !important; letter-spacing: 1px !important; }
+    .nav-row { gap: 6px; margin-top: 12px; }
+    .nav-row a { padding: 7px 11px; font-size: 9px; letter-spacing: 1px; }
+
+    .controls { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px; }
+    .ctrl-group, .calc-group { min-width: 0 !important; max-width: 100% !important; flex: 1 1 100% !important; }
+    .controls > .btn, .calc-row > .btn { width: 100%; text-align: center; padding: 11px; }
+
+    .card-head { font-size: 9px !important; padding: 8px 12px !important; letter-spacing: 1.5px !important; }
+    .card-body { padding: 14px !important; }
+
+    .grid { flex-direction: column; gap: 14px; }
+    .col { padding: 12px; }
+    h3 { font-size: 10px !important; }
+    .item-row { font-size: 10px !important; padding: 6px 0 !important; }
+
+    select, input[type=text], input[type=number] { font-size: 11px !important; padding: 9px 11px !important; }
+
+    #themeBtn { bottom: 14px; right: 14px; width: 48px; height: 48px; }
+    #themePanel { width: 100vw; max-width: 100vw; }
+  }
 </style>
 </head>
 <body>
@@ -89,38 +234,12 @@
 <header>
   <div class="glow"></div>
   <h1>⚙ Factory Sim — Calculators</h1>
-   <div class="subtitle">MACHINE CALCULATOR · FULL CHAIN CALCULATOR</div>
- <table>
-   <th>
-    <div style="margin-top: 15px;">
-     <a href="index.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	LIST
-     </a>
-    </th>
-    <th>
-     <td></td>
-     <td style="width: 30px;"></td> 
-     <td></td>
-    </th>
-    <th>
-     <div style="margin-top: 15px;">
-      <a href="calc.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	RATIOS
-      </a>
-     </div>
-      <th>
-     <td></td>
-     <td style="width: 30px;"></td> 
-     <td></td>
-      </th>
-     <th>
-    <div style="margin-top: 15px;">
-     <a href="calc2.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
-	CALCULATOR
-     </a>
-    </th>
-   </table>
-
+  <div class="subtitle">MACHINE CALCULATOR · FULL CHAIN CALCULATOR</div>
+  <nav class="nav-row">
+    <a href="index.html">List</a>
+    <a href="calc.html">Ratios</a>
+    <a href="calc2.html" class="current">Calculator</a>
+  </nav>
 </header>
 
 <div class="container">
@@ -190,6 +309,99 @@
     </div>
   </div>
 
+</div>
+
+<button id="themeBtn" onclick="toggleThemePanel()" title="Customize colors">🎨</button>
+
+<div id="themePanel" aria-hidden="true">
+  <div class="tp-head">
+    <h3>🎨 Theme Studio</h3>
+    <button class="tp-close" onclick="toggleThemePanel()" title="Close">✕</button>
+  </div>
+  <div class="tp-body">
+
+    <div class="tp-section">
+      <div class="tp-section-title">⚡ Preset Themes</div>
+      <div class="tp-presets" id="tpPresets"></div>
+    </div>
+
+    <div class="tp-section">
+      <div class="tp-section-title">🎨 Custom Colors</div>
+
+      <div class="tp-color">
+        <label for="c-bg">Background</label>
+        <input type="color" id="c-bg" data-var="--bg" value="#080b0f">
+        <input type="text" class="tp-hex" id="h-bg" value="#080B0F" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-panel">Panel</label>
+        <input type="color" id="c-panel" data-var="--panel" value="#0d1117">
+        <input type="text" class="tp-hex" id="h-panel" value="#0D1117" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-panel2">Panel (alt)</label>
+        <input type="color" id="c-panel2" data-var="--panel2" value="#111720">
+        <input type="text" class="tp-hex" id="h-panel2" value="#111720" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-border">Border</label>
+        <input type="color" id="c-border" data-var="--border" value="#1c2530">
+        <input type="text" class="tp-hex" id="h-border" value="#1C2530" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-text">Text</label>
+        <input type="color" id="c-text" data-var="--text" value="#c8d8e8">
+        <input type="text" class="tp-hex" id="h-text" value="#C8D8E8" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-accent">Accent (cyan)</label>
+        <input type="color" id="c-accent" data-var="--accent" value="#00e5ff">
+        <input type="text" class="tp-hex" id="h-accent" value="#00E5FF" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-green">Raw / Green</label>
+        <input type="color" id="c-green" data-var="--green" value="#39ff14">
+        <input type="text" class="tp-hex" id="h-green" value="#39FF14" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-orange">Byproduct / Orange</label>
+        <input type="color" id="c-orange" data-var="--orange" value="#ff8c42">
+        <input type="text" class="tp-hex" id="h-orange" value="#FF8C42" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-purple">Machine / Purple</label>
+        <input type="color" id="c-purple" data-var="--purple" value="#bf7fff">
+        <input type="text" class="tp-hex" id="h-purple" value="#BF7FFF" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-gold">Target / Gold</label>
+        <input type="color" id="c-gold" data-var="--gold" value="#ffd700">
+        <input type="text" class="tp-hex" id="h-gold" value="#FFD700" maxlength="7">
+      </div>
+
+      <div class="tp-color">
+        <label for="c-red">Danger / Red</label>
+        <input type="color" id="c-red" data-var="--red" value="#ff4466">
+        <input type="text" class="tp-hex" id="h-red" value="#FF4466" maxlength="7">
+      </div>
+    </div>
+
+    <div class="tp-actions">
+      <button class="tp-action" onclick="exportTheme()">📋 Copy</button>
+      <button class="tp-action" onclick="importTheme()">📥 Paste</button>
+      <button class="tp-action danger" onclick="resetTheme()">↺ Reset</button>
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -661,6 +873,266 @@ function runFullChainCalc() {
   if (!machContent.innerHTML)  machContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
   if (!mineContent.innerHTML)  mineContent.innerHTML  = '<div style="color:var(--dim)">—</div>';
   if (!fluidContent.innerHTML) fluidContent.innerHTML = '<div style="color:var(--dim)">—</div>';
-}</script>
+}
+
+// ====================================================================
+// THEME STUDIO — preset themes + custom color pickers, saved to localStorage
+// (shared across index.html / calc.html / calc2.html via the same storage key)
+// ====================================================================
+const THEME_KEY = 'factorySimTheme';
+const DEFAULT_THEME = {
+  '--bg':      '#080b0f',
+  '--panel':   '#0d1117',
+  '--panel2':  '#111720',
+  '--border':  '#1c2530',
+  '--accent':  '#00e5ff',
+  '--green':   '#39ff14',
+  '--orange':  '#ff8c42',
+  '--purple':  '#bf7fff',
+  '--gold':    '#ffd700',
+  '--red':     '#ff4466',
+  '--text':    '#c8d8e8',
+};
+
+const PRESET_THEMES = {
+  'Cyber Dark': DEFAULT_THEME,
+  'Midnight': {
+    '--bg': '#0a0e1a', '--panel': '#121826', '--panel2': '#1a2236',
+    '--border': '#2a3144', '--accent': '#5e8eff', '--green': '#4ade80',
+    '--orange': '#fb923c', '--purple': '#a78bfa', '--gold': '#fbbf24',
+    '--red': '#f87171', '--text': '#cbd5e1'
+  },
+  'Light': {
+    '--bg': '#f5f7fa', '--panel': '#ffffff', '--panel2': '#eef1f6',
+    '--border': '#d0d7e2', '--accent': '#0066cc', '--green': '#16a34a',
+    '--orange': '#ea580c', '--purple': '#7c3aed', '--gold': '#ca8a04',
+    '--red': '#dc2626', '--text': '#1f2937'
+  },
+  'Slate': {
+    '--bg': '#0f172a', '--panel': '#1e293b', '--panel2': '#334155',
+    '--border': '#475569', '--accent': '#06b6d4', '--green': '#22c55e',
+    '--orange': '#f97316', '--purple': '#a855f7', '--gold': '#eab308',
+    '--red': '#ef4444', '--text': '#e2e8f0'
+  },
+  'Forest': {
+    '--bg': '#0c1410', '--panel': '#142019', '--panel2': '#1c2c23',
+    '--border': '#2a4035', '--accent': '#7fb069', '--green': '#a3e635',
+    '--orange': '#d97706', '--purple': '#9d4edd', '--gold': '#fbbf24',
+    '--red': '#ef4444', '--text': '#d1e7d8'
+  },
+  'Crimson': {
+    '--bg': '#14080a', '--panel': '#1f1012', '--panel2': '#2a1518',
+    '--border': '#3d1f23', '--accent': '#ff4466', '--green': '#39ff14',
+    '--orange': '#fb923c', '--purple': '#c084fc', '--gold': '#fbbf24',
+    '--red': '#dc2626', '--text': '#f0d4d8'
+  },
+  'Solar': {
+    '--bg': '#1a1208', '--panel': '#241808', '--panel2': '#2e2009',
+    '--border': '#3d2c10', '--accent': '#fbbf24', '--green': '#84cc16',
+    '--orange': '#f97316', '--purple': '#a855f7', '--gold': '#fde047',
+    '--red': '#ef4444', '--text': '#f5e6c8'
+  },
+  'Pastel': {
+    '--bg': '#1c1b29', '--panel': '#252437', '--panel2': '#2e2c43',
+    '--border': '#3f3d5c', '--accent': '#fda4af', '--green': '#86efac',
+    '--orange': '#fdba74', '--purple': '#c4b5fd', '--gold': '#fde68a',
+    '--red': '#fca5a5', '--text': '#e9d5ff'
+  },
+  'Mono': {
+    '--bg': '#000000', '--panel': '#0a0a0a', '--panel2': '#141414',
+    '--border': '#262626', '--accent': '#ffffff', '--green': '#a3a3a3',
+    '--orange': '#737373', '--purple': '#525252', '--gold': '#e5e5e5',
+    '--red': '#ff4444', '--text': '#d4d4d4'
+  }
+};
+
+function hexToRgbTriplet(hex) {
+  const h = (hex || '').replace('#','').padEnd(6, '0').slice(0, 6);
+  const r = parseInt(h.slice(0,2), 16) || 0;
+  const g = parseInt(h.slice(2,4), 16) || 0;
+  const b = parseInt(h.slice(4,6), 16) || 0;
+  return `${r}, ${g}, ${b}`;
+}
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  for (const [k, v] of Object.entries(theme)) {
+    root.style.setProperty(k, v);
+    root.style.setProperty(k + '-rgb', hexToRgbTriplet(v));
+  }
+  document.querySelectorAll('#themePanel input[type=color]').forEach(inp => {
+    const varName = inp.dataset.var;
+    if (theme[varName] !== undefined) {
+      inp.value = theme[varName];
+      const hexBox = document.getElementById('h-' + inp.id.replace('c-',''));
+      if (hexBox) hexBox.value = theme[varName].toUpperCase();
+    }
+  });
+  highlightMatchingPreset(theme);
+}
+
+function highlightMatchingPreset(theme) {
+  const presets = document.querySelectorAll('#tpPresets .tp-preset');
+  presets.forEach(el => {
+    const name = el.dataset.theme;
+    const presetTheme = PRESET_THEMES[name];
+    if (!presetTheme) { el.classList.remove('active'); return; }
+    const matches = Object.keys(DEFAULT_THEME).every(k =>
+      (theme[k] || '').toLowerCase() === (presetTheme[k] || '').toLowerCase()
+    );
+    el.classList.toggle('active', matches);
+  });
+}
+
+function saveTheme(theme) {
+  try { localStorage.setItem(THEME_KEY, JSON.stringify(theme)); } catch (e) {}
+}
+
+function loadTheme() {
+  try {
+    const raw = localStorage.getItem(THEME_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && parsed['--bg']) return parsed;
+    return null;
+  } catch (e) { return null; }
+}
+
+function getCurrentTheme() {
+  const theme = {};
+  for (const k of Object.keys(DEFAULT_THEME)) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+    if (v) theme[k] = v;
+  }
+  return theme;
+}
+
+function toggleThemePanel() {
+  const panel = document.getElementById('themePanel');
+  const isVisible = panel.classList.toggle('visible');
+  panel.setAttribute('aria-hidden', !isVisible);
+}
+
+function applyPresetTheme(name) {
+  const theme = PRESET_THEMES[name];
+  if (!theme) return;
+  applyTheme(theme);
+  saveTheme(theme);
+}
+
+function resetTheme() {
+  const root = document.documentElement;
+  for (const k of Object.keys(DEFAULT_THEME)) {
+    root.style.removeProperty(k);
+    root.style.removeProperty(k + '-rgb');
+  }
+  applyTheme(DEFAULT_THEME);
+  saveTheme(DEFAULT_THEME);
+}
+
+function exportTheme() {
+  const theme = getCurrentTheme();
+  const json = JSON.stringify(theme, null, 2);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(json).then(() => {
+      flashThemeBtn('✓ Copied!');
+    }).catch(() => {
+      window.prompt('Copy this theme JSON:', json);
+    });
+  } else {
+    window.prompt('Copy this theme JSON:', json);
+  }
+}
+
+function importTheme() {
+  const json = window.prompt('Paste theme JSON to import:');
+  if (!json) return;
+  try {
+    const theme = JSON.parse(json);
+    const clean = {};
+    for (const k of Object.keys(DEFAULT_THEME)) {
+      if (typeof theme[k] === 'string' && /^#[0-9a-fA-F]{6}$/.test(theme[k])) {
+        clean[k] = theme[k].toLowerCase();
+      }
+    }
+    if (!clean['--bg']) {
+      alert('Invalid theme JSON — missing --bg or wrong format.');
+      return;
+    }
+    applyTheme(clean);
+    saveTheme(clean);
+    flashThemeBtn('✓ Imported!');
+  } catch (e) {
+    alert('Could not parse JSON: ' + e.message);
+  }
+}
+
+function flashThemeBtn(text) {
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  const original = btn.textContent;
+  btn.textContent = text;
+  setTimeout(() => { btn.textContent = original; }, 1200);
+}
+
+function initThemeInputs() {
+  document.querySelectorAll('#themePanel input[type=color]').forEach(colorBox => {
+    const varName = colorBox.dataset.var;
+    const hexBox = document.getElementById('h-' + colorBox.id.replace('c-',''));
+    if (!hexBox) return;
+
+    colorBox.addEventListener('input', () => {
+      const val = colorBox.value;
+      hexBox.value = val.toUpperCase();
+      const theme = getCurrentTheme();
+      theme[varName] = val;
+      applyTheme(theme);
+      saveTheme(theme);
+    });
+
+    hexBox.addEventListener('input', () => {
+      let v = hexBox.value.trim();
+      if (!v.startsWith('#')) v = '#' + v;
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+        colorBox.value = v.toLowerCase();
+        const theme = getCurrentTheme();
+        theme[varName] = v.toLowerCase();
+        applyTheme(theme);
+        saveTheme(theme);
+      }
+    });
+    hexBox.addEventListener('blur', () => {
+      const cur = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      hexBox.value = cur.toUpperCase();
+    });
+  });
+}
+
+function renderPresetButtons() {
+  const wrap = document.getElementById('tpPresets');
+  if (!wrap) return;
+  wrap.innerHTML = Object.entries(PRESET_THEMES).map(([name, t]) => {
+    const swatches = ['--bg','--panel','--accent','--green','--orange','--purple','--gold']
+      .map(k => `<span style="background:${t[k]}"></span>`).join('');
+    return `<div class="tp-preset" data-theme="${name}" onclick="applyPresetTheme('${name}')">
+      <div class="swatch-row">${swatches}</div>
+      ${name}
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const tp = document.getElementById('themePanel');
+  if (tp && tp.classList.contains('visible')) toggleThemePanel();
+});
+
+(function initThemeStudio() {
+  renderPresetButtons();
+  initThemeInputs();
+  const saved = loadTheme();
+  applyTheme(saved || DEFAULT_THEME);
+})();
+</script>
 </body>
 </html>
